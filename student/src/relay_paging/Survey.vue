@@ -316,9 +316,7 @@ export default {
   },
   //销毁前清除滚动
   created() {
-    console.log("请求列表信息")
     curlist().then(res=>{
-      console.log(res)
       this.course=res.data.object
     })
     

@@ -25,7 +25,7 @@
               min-width="200"
             ></el-table-column>
             <el-table-column prop="taskExperimentTemplate.name" sortable label="任务名称" min-width="200"></el-table-column>
-            <el-table-column prop="id" label="类型" min-width="120"></el-table-column>
+            <el-table-column prop="experimentType.name" label="类型" min-width="120"></el-table-column>
             <el-table-column label="实验模板名称" min-width="250">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="查看指导文件" placement="top">
@@ -91,7 +91,7 @@
               min-width="200"
             ></el-table-column>
             <el-table-column prop="taskExperimentTemplate.name" sortable label="任务名称" min-width="200"></el-table-column>
-            <el-table-column prop="id" label="类型" min-width="120"></el-table-column>
+            <el-table-column prop="experimentType.name" label="类型" min-width="120"></el-table-column>
             <el-table-column label="实验模板名称" min-width="250">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="查看指导文件" placement="top">
@@ -205,7 +205,6 @@ export default {
         id: id
       })
         .then(res => {
-          console.log(res);
           this.download(res.data.object.path, res.data.object.name);
         })
         .catch(() => {
@@ -218,7 +217,6 @@ export default {
     },
     // 下载文件
     download(src, name) {
-      console.log(src,name,'下载')
       let data = src;
 
       if (!data) {
@@ -227,11 +225,9 @@ export default {
       let courseUrl = "";
       if (JSON.parse(sessionStorage.getItem("course"))) {
         courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-        console.log(courseUrl, "课程服");
       }
       const fileName = name;
       let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      console.log(url);
       const elink = document.createElement("a");
       // elink.download = fileName;
       elink.style.display = "none";
@@ -243,7 +239,6 @@ export default {
     },
     // 到场景文件详情页
     go3D(id) {
-      console.log(id);
       this.tasks.id = id;
       this.innerVisible = true;
     },
@@ -314,10 +309,10 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(res => {
-        console.log(res.data.object, "列表");
         //   this.tableDataOK=[
         //   {name:1},{name:1},{name:1},{name:1},{name:1},{name:1}
         // ]
+        console.log(res)
         let boxtrue = [];
         let boxfalse = [];
         // this.tableDataOK = res.data.object;
@@ -347,7 +342,6 @@ export default {
       examine.sourcePath = this.$route.path;
       examine.name = name;
       examine.path = path;
-      console.log(examine);
       sessionStorage.setItem("examine", JSON.stringify(examine));
       let user = JSON.parse(sessionStorage.getItem("user"));
       // console.log(user, user.role);

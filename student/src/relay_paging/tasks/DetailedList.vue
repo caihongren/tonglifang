@@ -136,7 +136,6 @@ export default {
       };
     },
     handleSelect(item) {
-      console.log(item);
     },
     // 表格
     handleSelectionChange(val) {
@@ -151,7 +150,6 @@ export default {
   limit:10
 
     }).then(res=>{
-      console.log(res,'任务列表')
     })
   },
   mounted() {

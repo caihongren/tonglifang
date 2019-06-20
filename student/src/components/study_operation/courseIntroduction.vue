@@ -15,9 +15,9 @@
         </el-dialog>
         <h3><i class="el-icon-s-data"></i> 课程大纲 </h3>
         <div class="outline-c" v-for="item in chapterUnitDate" :key="item.id">
-          <span style="font-size:16px">{{ item.name }}</span>
+          <span style="font-size:16px">{{ item.section }}{{"."}}{{ item.name }}</span>
           <div v-for="unitItem in item.units" :key="unitItem.id">
-            <span style="padding-left: 20px;">{{ unitItem.name }}</span>
+            <span style="padding-left: 20px;">{{ unitItem.section }}{{"."}}{{ unitItem.name }}</span>
           </div>
         </div>
         <div class="target">
@@ -51,7 +51,7 @@ export default {
     return {
       courseOverview: "", //课程概述内容
       teachingObjectives: "", //授课目标内容
-      chapterUnitDate: [{ id: null, name: "" }], //章节目录数据
+      chapterUnitDate: [{ id: null, name: "", section: 1 }], //章节目录数据
       teacherStudentShow: false, //老师还是学生是否显示编组件
       courseOverviewDialogVisible: false, //修改课程概述弹出框是否显示
       teachingObjectivesDialogVisible: false, //修改课程概述弹出框是否显示
@@ -70,7 +70,7 @@ export default {
           this.teachingObjectives = res.data.object.objectives; //将授课目标绑定到页面相应位置
         })
         .catch(function(error) {
-          console.log(error);
+          // console.log(error);
         });
     },
     //修改授课目标
@@ -82,14 +82,34 @@ export default {
           this.teachingObjectives = res.data.object.objectives; //将课程介绍内容绑定到页面相应位置
         })
         .catch(function(error) {
-          console.log(error);
+          // console.log(error);
         });
     },
     //获取所有章节
     getChapterAnd_UnitList() {
       get_chapter_and_unit_list()
         .then(res => {
-          this.chapterUnitDate = res.data.object; //将章节内容绑定到页面相应位置
+          let obj = res.data.object;
+          let databox = [];
+          for (let i = 0; i < obj.length; i++) {
+            let item = res.data.object[i];
+            databox[i] = {};
+
+            databox[i].id = item.id;
+            databox[i].name = item.name;
+            databox[i].section = i + 1;
+            let units = [];
+            for (let j = 0; j < item.units.length; j++) {
+              units[j] = {};
+              units[j].id = item.units[j].id;
+              units[j].name = item.units[j].name;
+              units[j].section = i + 1 + "." + (j + 1);
+            }
+            databox[i].units = units;
+          }
+          if (databox.length > 0) {
+            this.chapterUnitDate = databox;//将章节内容绑定到页面相应位置
+          }
         })
         .catch(function(error) {
           console.log(error);

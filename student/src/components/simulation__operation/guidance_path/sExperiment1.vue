@@ -80,6 +80,7 @@
               <router-link :to="'/sExperiment1/guidance/'+id">
                 <div :style="{color:twoChick==4?'red':''}" class="el-icon-view"></div>
                 <span :style="{color:twoChick==4?'red':''}">实验指导</span>
+                
               </router-link>
             </li>
           </ul>
@@ -117,15 +118,10 @@ export default {
       herdernone: true,
       twoChick: 4,
       red: { color: "red" },
+      grend:{ color: "pink" },
       websock: null,
       show2: false,
-      // wsUrl: "ws://localhost:65100/creator",
-      wsUrl: "ws://192.168.2.105:65100/creator",
-      lockReconnect: false, //是否真正建立连接
-      timeout: 60000, //30秒一次心跳
-      timeoutObj: null, //心跳心跳倒计时
-      serverTimeoutObj: null, //心跳倒计时
-      timeoutnum: 10000, //断开 重连倒计时
+     
       agentData: {
         name: "mode",
         mode: "task_experiment_exercise_instance_editor",
@@ -149,8 +145,6 @@ export default {
     this.$router.push('/sExperiment1/snapshot/'+this.id)
   },
     gounity(id) {
-      console.log("进入快照", id);
-      console.log(this.id);
       //获取本地缓存中的令牌mytoken
       let token = localStorage.getItem("token");
       this.agentData.token = token;
@@ -166,7 +160,6 @@ export default {
     threadPoxi(id) {
       // 实际调用的方法
       //参数
-      console.log("我的任务3D发送");
          this.$emit("threadPoxi",this.agentData)
      
       
@@ -197,7 +190,7 @@ export default {
         limit: this.limit,
         taskExperimentId: this.id
       }).then(res => {
-        console.log(res, "实验快照");
+ console.log(res)
         if (res.data.object.length > 0) {
           this.tableData = res.data.object;
         } else {
@@ -207,14 +200,16 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.params)
     // this.initWebSocket();
-    snalist({
+    
+  },
+  mounted() {
+          snalist({
       offset: this.offset,
       limit: this.limit,
       taskExperimentId: this.id
     }).then(res => {
-      console.log(res, "实验快照");
+      console.log(res)
       if (res.data.object.length > 0) {
         this.tableData = res.data.object;
       } else {
@@ -222,7 +217,6 @@ export default {
       }
     });
   },
-  mounted() {},
   destroyed() {
    
   }

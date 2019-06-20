@@ -60,11 +60,9 @@ export default {
       let courseUrl = "";
       if (JSON.parse(sessionStorage.getItem("course"))) {
         courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-        console.log(courseUrl, "课程服");
       }
       const fileName = this.name;
       let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      console.log(url)
       const elink = document.createElement("a");
       // elink.download = fileName;
       elink.style.display = "none";
@@ -85,7 +83,6 @@ export default {
       examine.sourcePath = this.$route.path;
       examine.name = name;
       examine.path = path;
-      console.log(examine);
       sessionStorage.setItem("examine", JSON.stringify(examine));
       let user = JSON.parse(sessionStorage.getItem("user"));
       // console.log(user, user.role);
@@ -99,7 +96,6 @@ export default {
   },
   watch: {},
   created() {
-    console.log(this.id);
     let examine = JSON.parse(sessionStorage.getItem("examine"));
     this.name = examine.name;
     this.sourcePath = examine.sourcePath;

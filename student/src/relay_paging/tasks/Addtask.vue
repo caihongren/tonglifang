@@ -178,7 +178,6 @@ export default {
         .catch(_ => {});
     },
     open2(id) {
-        console.log(id);
       this.$message({
         message: "下发成功",
         type: "success"

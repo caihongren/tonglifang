@@ -104,10 +104,8 @@ export default {
       };
     },
     handleSelect(item) {
-      console.log(item);
     },
     Highlight(resourceName) {
-      console.log(resourceName);
 
       this.active = resourceName;
     }

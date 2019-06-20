@@ -148,12 +148,10 @@ export default {
     }
   },
   created() {
-    console.log("加载列表");
     simulist({
       offset: this.offset,
       limit: this.limit
     }).then(res => {
-      console.log(res, "加载任务列表成功");
 
       this.itemArr = res.data.object;
     });

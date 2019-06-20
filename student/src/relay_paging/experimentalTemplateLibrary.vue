@@ -706,19 +706,18 @@ export default {
             deleteTemplate({
               id: row.id
             }).then(res => {
-              console.log(res)
-              if(res.data.code==0){
-                  this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.templateListadd();
-              }else if(res.data.code==-1){
-                  this.$message.error("该模板正在使用，无法删除");
-              }else{
-                  this.$message.error("删除失败");
+              console.log(res);
+              if (res.data.code == 0) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.templateListadd();
+              } else if (res.data.code == -1) {
+                this.$message.error("该模板正在使用，无法删除");
+              } else {
+                this.$message.error("删除失败");
               }
-              
             });
           } else {
             this.updateTemplateMy(row.id, type, "");
@@ -1210,8 +1209,6 @@ export default {
   line-height: 50px;
   font-size: 20px;
   font-weight: 700;
-}
-.el-date-picker {
 }
 </style>
 

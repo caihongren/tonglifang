@@ -18,6 +18,7 @@ import curriculumLearning from './components/study_operation/curriculumLearning.
 import simulation from './components/cur__nav/simulation.vue'
 import study from './components/cur__nav/study.vue'
 import my__note from './components/cur__nav/my__note.vue'
+import my__notedemo from './components/cur__nav/my__notedemo.vue'
 import my__data from './components/cur__nav/my__data.vue'
 import my__Submission from './components/cur__nav/my__Submission.vue'
 import componentLibrary from './components/cur__nav/componentLibrary.vue'
@@ -124,6 +125,19 @@ export default new Router({
             path: '/relay',
             name: 'relay',
             component: relay,
+            beforeEnter:((to, from, next) => {
+                if (to.path === '/login') {
+                  next();
+                } else {
+                  let token = localStorage.getItem('token');
+              
+                  if (token === 'null' || token === '') {
+                    next('/login');
+                  } else {
+                    next();
+                  }
+                }
+              }),
             children: [{
                     path: '/relay',
                     redirect: '/relay/simulation'
@@ -248,6 +262,12 @@ export default new Router({
                     path: '/relay/my__Submission',
                     name: 'my__Submission',
                     component: my__Submission
+                },
+                // 我的笔记demo
+                {
+                    path: '/relay/my__notedemo',
+                    name: 'my__notedemo',
+                    component: my__notedemo
                 },
                 // 详情
                 {
@@ -458,11 +478,12 @@ export default new Router({
 
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
+
 // router.beforeEach((to, from, next) => {
 //   if (to.path === '/login') {
 //     next();
 //   } else {
-//     let token = localStorage.getItem('Authorization');
+//     let token = localStorage.getItem('token');
 
 //     if (token === 'null' || token === '') {
 //       next('/login');
@@ -471,3 +492,4 @@ export default new Router({
 //     }
 //   }
 // })
+

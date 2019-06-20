@@ -62,14 +62,12 @@ export default {
     },
     // 关闭webpack和unity3D
     detunity3D(id){
-        console.log('关闭3Dhewebsokt')
         this. on_click_hide_unity_window()
         //  this.websock.close();
     },
   },
   created() {
     this.initWebSocket();
-    console.log(this.tasks)
     this.agentData.type=this.tasks.type
     this.agentData.Expname=this.tasks.name
     this.agentData.id=this.tasks.id
@@ -77,11 +75,9 @@ export default {
   mounted() {
 
     this.threadPoxi()
-    console.log('打开3D')
     this.on_click_show_unity_window()
   },
   destroyed() {
-    console.log("离开路由之后断开websocket连接")
     this.websock.close(); // 离开路由之后断开websocket连接\
     
 

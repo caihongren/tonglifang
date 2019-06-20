@@ -1,8 +1,8 @@
 <template>
   <div class="relaybanner">
-    <div class="Breadcrumb">
+    <div class="Breadcrumb" @click="guizone">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home' }" >首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{course}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -31,6 +31,7 @@
         <el-menu-item index="3">实验任务管理</el-menu-item>
       </router-link>-->
       <router-link to="/relayteacher/taskManagement">
+      
         <el-menu-item index="2">实验任务管理</el-menu-item>
       </router-link>
       <!-- <router-link to="/addstudent/teacher">
@@ -85,9 +86,16 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);
-      this.activeIndex2=key
-      console.log("存储页面",key)
-      sessionStorage.setItem("page",key)
+      this.activeIndex = key;
+      console.log("存储页面", key);
+      sessionStorage.setItem("pageTeacher", key);
+    },
+    // 回首页归零
+    guizone(){
+      console.log("归零")
+         this.activeIndex = "1";
+      console.log("存储页面", "1");
+      sessionStorage.setItem("pageTeacher", "1");
     },
     gounity(row) {
       console.log("进入3d", row);
@@ -118,8 +126,8 @@ export default {
       this.threadPoxi(data);
       let cmd =
         // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
-         "{'opcode':4,'LocationX': 755,'LocationY':135,'LocationX_Right': 15,'LocationY_Buttom':10,'SizeX': 1620,'SizeY':760}";
-        // "{'opcode':4,'LocationX': 950,'LocationY':150,'LocationX_Right': 10,'LocationY_Buttom':100,}";
+        "{'opcode':4,'LocationX': 755,'LocationY':135,'LocationX_Right': 15,'LocationY_Buttom':10,'SizeX': 1620,'SizeY':760}";
+      // "{'opcode':4,'LocationX': 950,'LocationY':150,'LocationX_Right': 10,'LocationY_Buttom':100,}";
 
       wfapp.start(cmd);
     },
@@ -270,12 +278,16 @@ export default {
   },
   created() {
     let course = JSON.parse(sessionStorage.getItem("course"));
-    console.log(course);
+    // console.log(course);
     this.course = course.course;
     this.initWebSocket();
-    if(sessionStorage.getItem("page")){
-      console.log("当前也面",this.activeIndex2,sessionStorage.getItem("page"))
-        this.activeIndex=sessionStorage.getItem("page")
+    if (sessionStorage.getItem("page")) {
+      console.log(
+        "当前页面",
+        this.activeIndex,
+        sessionStorage.getItem("pageTeacher")
+      );
+      this.activeIndex = sessionStorage.getItem("pageTeacher");
     }
   },
   destroyed() {

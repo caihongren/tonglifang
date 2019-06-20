@@ -7,9 +7,7 @@
       <el-col :span="11"></el-col>
       <el-col :span="2"></el-col>
       <el-col :span="4">
-        <div class="grid-content">
-         
-        </div>
+        <div class="grid-content"></div>
       </el-col>
       <el-col :span="2">
         <!-- <div class="grid-content">
@@ -22,6 +20,13 @@
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <button   @click="login"><el-dropdown-item>退出登录</el-dropdown-item></button>
+            <!-- <el-dropdown-item>
+              <div @click="login">退出登录</div>
+            </el-dropdown-item> -->
+            <!-- 个人中心 -->
+            <!-- <el-dropdown-item><div @click="login"> 个人中心 </div></el-dropdown-item> -->
+
+            <!-- <button   @click="login"><el-dropdown-item>退出登录</el-dropdown-item></button> -->
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
@@ -29,74 +34,64 @@
     <router-view/>
     <!-- <a id="autoRun" href="CreatorShell://" style="visibility: hidden;"  ref="autoRun" @runUnity="showU3d" /> -->
   </div>
-
-  
 </template>
 <script>
-import {mapState,mapActions} from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-     logintype:false,
-    }
+      logintype: false
+    };
   },
   methods: {
-   ...mapActions([
-      "user"
-    ]),
+    ...mapActions(["user"]),
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    login(){
+    login() {
       // 退出清除缓存信息
-      console.log('登出')
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("user")
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("user");
 
-        let userupdata={
-          // name:'请登录'
-        }
-              sessionStorage.setItem("user",JSON.stringify(userupdata))
-              
-              this.user();
-              this.$router.push("/login");
+      let userupdata = {
+        // name:'请登录'
+      };
+      sessionStorage.setItem("user", JSON.stringify(userupdata));
+
+      this.user();
+      this.$router.push("/login");
     }
   },
-  watch:{
+  watch: {
     $route: {
-    handler: function(val, oldVal){
-      // console.log(val,"路由变化",val.path);
-      if(val.path=="/register"||val.path=="/login"){
-        this.logintype=false;
-      }else{
-        this.logintype=true;
-      }
-    },
-    // 深度观察监听
-    deep: true
-  }
+      handler: function(val, oldVal) {
+        // console.log(val,"路由变化",val.path);
+        if (val.path == "/register" || val.path == "/login") {
+          this.logintype = false;
+        } else {
+          this.logintype = true;
+        }
+      },
+      // 深度观察监听
+      deep: true
+    }
   },
-  computed:{
-     ...mapState([
-      "userlist"
-    ]),
-    
+  computed: {
+    ...mapState(["userlist"])
   },
   created() {
-    
-        // console.log(this.$route)
-      if(this.$route.path=="/register"||this.$route.path=="/login"){
-        this.logintype=false;
-      }else{
-        this.logintype=true;
-      }
-      this.user()
+    // console.log(this.$route)
+    if (this.$route.path == "/register" || this.$route.path == "/login") {
+      this.logintype = false;
+    } else {
+      this.logintype = true;
+    }
+    this.user();
 
-      // window.location.href="CreatorShell://";
-
+    // window.location.href="CreatorShell://";
 
     // console.debug("run feiq");
     //     if (document.all) {
@@ -108,12 +103,8 @@ export default {
     //         // this.$refs.autoRun.dispatchEvent(evt);
     //         this.$refs.autoRun.click();
     //     }
-
-
   },
-  mounted() {
-      console.log("加载后")
-  },
+  mounted() {}
 };
 </script>
 
@@ -144,7 +135,7 @@ li {
   height: 100%;
   margin: 0 auto;
 }
-button{
+button {
   border: 0px solid red;
 }
 #app img {
@@ -156,17 +147,15 @@ button{
   margin-left: 10px;
 } */
 
-
 /* 账户的下拉菜单样式 */
- .el-dropdown {
-    vertical-align: top;  
-    line-height: 60px;
-  }
-  .el-dropdown + .el-dropdown {
-    margin-left: 15px;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
-
+.el-dropdown {
+  vertical-align: top;
+  line-height: 60px;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 </style>

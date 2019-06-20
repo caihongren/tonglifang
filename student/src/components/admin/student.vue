@@ -175,7 +175,7 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      this.offset = val * this.limit;
+      this.offset = (val-1) * this.limit;
       this.getStudentListNew();
     },
     interface(id) {
@@ -210,7 +210,7 @@ export default {
           });
       } else {
         this.$message.error({
-          message: "名称，学号或电话号码格式错误",
+          message: "名称.学号或电话号码格式错误",
           type: "warning"
         });
       }

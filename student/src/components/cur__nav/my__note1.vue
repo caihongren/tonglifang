@@ -5,23 +5,24 @@
         <el-row :gutter="20">
           <el-col :span="4">
             <div class="grid-content bg-purple" style="padding:15px 30px">
-              <el-button type="primary" @click="dialogFormVisibleadd = true">新增老师</el-button>
+              <!-- <el-button type="primary" @click="dialogFormVisibleadd = true" >新增老师</el-button> -->
             </div>
           </el-col>
           <el-col :span="14">
             <div class="grid-content bg-purple">
-              <h2>老师管理</h2>
+              <h2>我的笔记</h2>
             </div>
           </el-col>
         </el-row>
       </div>
       <template>
         <el-table :data="tableData" border style="width: 90%;margin:5px 3%">
-          <el-table-column fixed prop="name" label="教师名称" min-width="200"></el-table-column>
-          <el-table-column prop="gender" label="性别" min-width="120"></el-table-column>
-          <el-table-column prop="age" label="年龄" min-width="120"></el-table-column>
-          <el-table-column prop="phone" label="电话" min-width="200"></el-table-column>
-          <el-table-column prop="email" label="邮箱" min-width="400"></el-table-column>
+            <el-table-column fixed type="index" label="序号" :index="indexMethod" min-width="100"></el-table-column>
+          <el-table-column fixed prop="name" label="笔记名称" min-width="200"></el-table-column>
+          <el-table-column prop="gender" label="修改时间" min-width="120"></el-table-column>
+          <el-table-column prop="age" label="笔记信息" min-width="120"></el-table-column>
+          <el-table-column prop="phone" label="批阅情况" min-width="200"></el-table-column>
+          <el-table-column prop="email" label="任务信息" min-width="400"></el-table-column>
 
           <el-table-column label="操作" min-width="200">
             <template slot-scope="scope">
@@ -282,18 +283,18 @@ export default {
   },
   mounted() {},
   created() {
-    this.getTeacherListNew();
+    // this.getTeacherListNew();
   }
 };
 </script>
 
 <style lang="less" scoped>
 .box {
-  width: 99%;
-  margin: 5px 0.5%;
+  width: 90%;
+  margin: 5px 5%;
   border: 1px solid #ccc;
   border-radius: 5px;
-  height: 790px;
+  height: 800px;
   overflow: auto
 }
 .add {

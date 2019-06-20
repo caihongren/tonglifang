@@ -1,6 +1,6 @@
 <template>
   <div class="banner">
-    <div class="Breadcrumb">
+    <div class="Breadcrumb" @click="guizone">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{course}}</el-breadcrumb-item>
@@ -19,19 +19,22 @@
         <el-menu-item index="1">课程学习</el-menu-item>
       </router-link>
       <router-link to="/relay/componentLibrary">
-        <el-menu-item index="6">元件库</el-menu-item>
+        <el-menu-item index="2">元件库</el-menu-item>
       </router-link>
       <router-link to="/relay/simulation">
-        <el-menu-item index="2">仿真实验</el-menu-item>
+        <el-menu-item index="3">仿真实验</el-menu-item>
       </router-link>
       <router-link to="/relay/my__note">
-        <el-menu-item index="3">我的笔记</el-menu-item>
+        <el-menu-item index="4">我的笔记</el-menu-item>
       </router-link>
       <router-link to="/relay/my__data">
-        <el-menu-item index="4">我的资料</el-menu-item>
+        <el-menu-item index="5">我的资料</el-menu-item>
       </router-link>
       <router-link to="/relay/my__Submission">
-        <el-menu-item index="5">我的提交</el-menu-item>
+        <el-menu-item index="6">我的提交</el-menu-item>
+      </router-link>
+      <router-link to="/relay/my__notedemo">
+        <el-menu-item index="7">我的笔记demo</el-menu-item>
       </router-link>
     </el-menu>
     <router-view  @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity" @threadPoxi="threadPoxi"></router-view>
@@ -81,12 +84,16 @@ export default {
       // console.log(key, keyPath);
       // 刷新存储导航页面
       this.activeIndex2=key
-      console.log("存储页面",key)
       sessionStorage.setItem("page",key)
     },
+    // 回首页归零
+    guizone(){
+      console.log("归零")
+         this.activeIndex2 = "1";
+      console.log("存储页面", "1");
+      sessionStorage.setItem("page", "1");
+    },
     gounity(row) {
-      console.log("进入3d", row);
-      console.log(this.id);
       //获取本地缓存中的令牌mytoken
       let token = localStorage.getItem("token");
       this.agentData.token = token;
@@ -125,7 +132,6 @@ export default {
     threadPoxi(row) {
       // 实际调用的方法
       //参数
-      console.log("发送");
       let data = {};
       if (row) {
         data = row;
@@ -201,13 +207,11 @@ export default {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.websock.readyState == 1) {
           //如果连接正常
-          console.log("正常连姐");
           let data = { name: "heartbeat" };
           let str = JSON.stringify(data);
           self.websock.send(str);
         } else {
           //否则重连
-          console.log("重连");
           self.reconnect();
         }
         self.serverTimeoutObj = setTimeout(function() {
@@ -229,7 +233,6 @@ export default {
     websocketonerror(e) {
       //连接失败事件
       //错误
-      console.log("WebSocket连接发生错误");
       //错误提示
       // s.error("Websocket error, Check you internet!");
       //重连
@@ -238,16 +241,13 @@ export default {
     websocketonmessage(e) {
       //数据接收
       const redata = JSON.parse(e.data);
-      console.log(redata.value);
     },
     websocketsend(agen) {
       //数据发送
-        console.log(agen,"数据发送")
       this.websock.send(JSON.stringify(agen));
     },
     websocketclose(e) {
       //关闭
-      console.log("connection closed (" + e.code + ")");
     },
     on_click_hide_unity_window() {
       var cmd = "{'opcode':3}";
@@ -265,11 +265,9 @@ export default {
   },
   created() {
     let course = JSON.parse(sessionStorage.getItem("course"));
-    console.log(course);
     this.course = course.course;
     this.initWebSocket();
     if(sessionStorage.getItem("page")){
-      console.log("当前也面",this.activeIndex2)
         this.activeIndex2=sessionStorage.getItem("page")
     }
   },

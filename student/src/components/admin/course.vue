@@ -49,12 +49,22 @@
           </el-form-item>
           <el-form-item label="授课老师：" :label-width="formLabelWidth">
             <el-select v-model="formadd.teachers" multiple placeholder="请选择老师">
-              <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in teachers" ></el-option>
+              <el-option
+                :label="item.name"
+                :value="item.id"
+                :key="item.id"
+                v-for="item in teachers"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="授课班级：" :label-width="formLabelWidth">
             <el-select v-model="formadd.classId" multiple placeholder="请选择班级">
-              <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in getClass"></el-option>
+              <el-option
+                :label="item.name"
+                :value="item.id"
+                :key="item.id"
+                v-for="item in getClass"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="开设学期：" :label-width="formLabelWidth">
@@ -84,13 +94,23 @@
           <el-form-item label="授课老师：" :label-width="formLabelWidth">
             <template>
               <el-select v-model="form.teachers" placeholder="请选择老师" multiple>
-                <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in teachers" ></el-option>
+                <el-option
+                  :label="item.name"
+                  :value="item.id"
+                  :key="item.id"
+                  v-for="item in teachers"
+                ></el-option>
               </el-select>
             </template>
           </el-form-item>
           <el-form-item label="授课班级：" :label-width="formLabelWidth">
             <el-select v-model="form.classId" placeholder="请选择班级" multiple>
-              <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in getClass"></el-option>
+              <el-option
+                :label="item.name"
+                :value="item.id"
+                :key="item.id"
+                v-for="item in getClass"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="开设学期：" :label-width="formLabelWidth">
@@ -179,7 +199,7 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      this.offset = val * this.limit;
+      this.offset = (val-1) * this.limit;
       getCourseListNew();
     },
     interface(id) {
@@ -190,26 +210,7 @@ export default {
     },
     // 编辑
     compileClick(row) {},
-    // 删除
-    det(row) {
-      this.$confirm("此操作将永久删除该老师, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
+ 
     // 教师span化
     listspan(row, column) {
       let list = row[column.property];
@@ -256,11 +257,31 @@ export default {
     },
     addCourse() {
       console.log(this.formadd);
-      addCourse(this.formadd).then(res => {
-        console.log(res);
-        this.getCourseListNew();
-        this.dialogFormVisibleadd = false;
-      });
+      addCourse(this.formadd)
+        .then(res => {
+          console.log(res);
+          if (res.data.code == "0") {
+            this.getCourseListNew();
+            this.dialogFormVisibleadd = false;
+          } else if (res.data.code == "-1") {
+            // this.$message.error('错了哦，这是一条错误消息');
+            this.$message.error({
+              message: "课程命名重复，添加失败",
+             
+            });
+          } else {
+            this.$message.error({
+              message: "错误，添加失败",
+             
+            });
+          }
+        })
+        .catch(() => {
+          this.$message.error({
+            message: "课程命名重复，添加失败",
+           
+          });
+        });
     },
 
     // 进入编辑
@@ -308,7 +329,7 @@ export default {
       } else {
         this.$message.error({
           message: "专业或班级名称填写错误",
-          type: "warning"
+          // type: "warning"
         });
       }
     },

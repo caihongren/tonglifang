@@ -68,7 +68,7 @@
 // }
 
 
-
+// 本地使用代理
 
 module.exports = {
         publicPath: './', //publicPath取代了baseUrl
@@ -88,9 +88,9 @@ module.exports = {
             hotOnly: false,
             proxy: { // 配置跨域
                 '/api': {　　　　　　　　　 //要访问的跨域的api的域名
-                    target: 'http://192.168.2.223:8080',
+                    // target: 'http://192.168.2.223:8080',
                     // target: 'http://192.168.0.104:8080',
-                    // target: 'http://192.168.2.200:8080/creatoraccount',
+                    target: 'http://192.168.2.200:8080/creatoraccount',
                     // target: 'http://sso.icubespace.com/account',
                     ws: true,
 
@@ -100,8 +100,9 @@ module.exports = {
                     }
                 },
                 '/img': {
-                    target: 'http://192.168.2.223:8081',
+                    // target: 'http://192.168.2.223:8081',
                     //target: 'http://192.168.0.104:8081', //
+                    target: 'http://192.168.2.200:8080/creatorcourse',
                     // target: 'http://sso.icubespace.com/course',
 
 

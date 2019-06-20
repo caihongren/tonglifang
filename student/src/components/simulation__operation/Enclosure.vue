@@ -60,7 +60,6 @@ export default {
   methods: {
      // 下载文件
     download(row) {
-      console.log(row)
       let data = row.path;
       // window.location.href = this.downloadSrc;
       // window.open(this.downloadSrc, '_blank'); // 新开窗口下载
@@ -94,7 +93,6 @@ export default {
       annex({
           taskExperimentId:this.id,
       }).then(res=>{
-          console.log(res,'获取附件')
           this.annexList=res.data.object
       })
   },

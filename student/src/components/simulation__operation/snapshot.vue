@@ -2,8 +2,8 @@
   <div style="margin-top:20px;padding:20px">
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column label="序号" width="150" fixed type="index" :index="indexMethod"></el-table-column>
-      <el-table-column prop="updatedAt" label="实验时间" width="500">
-        <template slot-scope="scope">{{scope.row.updatedAt|dateformat}}</template>
+      <el-table-column prop="updated_at" label="实验时间" width="500">
+        <template slot-scope="scope">{{scope.row.updated_at|dateformat}}</template>
       </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
@@ -13,7 +13,7 @@
             @click="downloadProject(scope.row.id, $event)"
             :loading="false"
           >导出</el-button>
-          <el-button type="info" @click="eacher(scope.row.simPath)">详情数据</el-button>
+          <el-button type="info" @click="eacher(scope.row.sim_path)">详情数据</el-button>
           <el-button type="primary" @click="goexperiment(scope.row.id)">打开快照</el-button>
         </template>
       </el-table-column>
@@ -195,24 +195,28 @@ export default {
     },
     // 删除快照
     deletecls(id) {
+      console.log(id)
       this.$confirm("你确定要删除", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          snadel(id).then(res => {
-            if (res.data.status == 200) {
+          snadel({
+            id:id
+          }).then(res => {
+            if (res.data.code=="0") {
               this.$message({
                 type: "success",
                 message: "删除成功!"
               });
-              this.showclass(
-                this.offset,
-                this.limit,
-                this.tableData,
-                this.total
-              );
+              this.getListNew()
+              // this.showclass(
+              //   this.offset,
+              //   this.limit,
+              //   this.tableData,
+              //   this.total
+              // );
             } else {
               this.$message({
                 type: "error",

@@ -145,7 +145,7 @@ export default {
           });
         return 
       }
-      this.addIssued.startTime = formatDate(new Date().setTime(new Date().getTime() +3600 * 1000 * 8));
+      this.addIssued.startTime = formatDate(new Date().setTime(new Date().getTime()));
       this.addIssued.finishTime = formatDate(finishTime);
       // console.log(this.addIssued.startTime,this.addIssued.finishTime)
       // console.log(this.addIssued.accountIds.length);

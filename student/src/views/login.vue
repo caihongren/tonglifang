@@ -66,10 +66,8 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           login(this.loginUser).then(res=>{
-            console.log(res,"登录信息");
+            // console.log(res,"登录信息");
             if(res.data.code==0){
-              console.log("登录成功");
-              console.log(res.data.object.account);
               var token=res.data.object.token;
               var user=res.data.object.account;
               localStorage.setItem("token",token);
@@ -103,7 +101,13 @@ export default {
         });
           
         } else {
-          alert("您输入的账号或密码输入不正确");
+          this.$message.error({
+                showClose:true,
+                message:'您输入的账号或密码输入不正确',
+                type: 'warning',
+               
+              })
+         
         }
       });
     }

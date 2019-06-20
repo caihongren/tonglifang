@@ -9,18 +9,20 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "echarts": "^4.2.1",
     "element-ui": "^2.8.2",
-    "moment": "^2.24.0",
     "iview": "^3.4.1",
     "lib-flexible": "^0.3.2",
+    "moment": "^2.24.0",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "wangeditor": ">=3.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",

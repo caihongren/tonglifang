@@ -102,6 +102,7 @@ background-color: rgb(35,38,41);
         }
       }
       .top {
+        text-align:center;
         height: 100%;
         display: flex;
         flex-direction: column;

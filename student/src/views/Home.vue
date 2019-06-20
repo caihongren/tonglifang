@@ -27,11 +27,9 @@ export default {
   methods: {
     goClass(index) {
       let user = JSON.parse(sessionStorage.getItem("user"));
-      console.log(user, user.role);
 
       let course = this.curlist[index];
       sessionStorage.setItem("course", JSON.stringify(course));
-      console.log(course);
        if (user.role == "teacher") {
           this.$router.push("/relayteacher/study/courseIntroduction");
         } else if (user.role == "student") {
@@ -45,7 +43,6 @@ export default {
 
   created() {
     curlist().then(res => {
-      console.log(res.data.object);
       this.curlist = res.data.object;
     });
   }

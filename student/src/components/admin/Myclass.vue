@@ -237,7 +237,7 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      this.offset = val * this.limit;
+      this.offset = (val-1) * this.limit;
       this.getClassListNew();
     },
     // 修改编辑学生
@@ -296,11 +296,30 @@ export default {
         //  this.formadd.students.splice(0, 1);
 
         console.log(this.formadd);
-        addClass(this.formadd).then(res => {
-          console.log(res);
-
-          this.getClassListNew();
-        });
+        addClass(this.formadd)
+          .then(res => {
+            console.log(res);
+            if (res.data.code == "0") {
+              this.getStudentListNew();
+              this.getClassListNew();
+            } else if (res.data.code == "-1") {
+              this.$message.error({
+                message: "专业班级命名重复，添加失败",
+                type: "warning"
+              });
+            } else {
+              this.$message.error({
+                message: "专业班级错误，添加失败",
+                type: "warning"
+              });
+            }
+          })
+          .catch(() => {
+            this.$message.error({
+              message: "专业班级命名重复，添加失败",
+              type: "warning"
+            });
+          });
       } else {
         this.$message.error({
           message: "专业或班级名称填写错误",
@@ -358,6 +377,7 @@ export default {
           students.push(res.data.object[i]);
         }
         this.data = students;
+        this.getStudentListNew();
       });
 
       this.dialogFormVisible = true;
@@ -398,6 +418,7 @@ export default {
             id: row.id
           }).then(res => {
             this.getClassListNew();
+            this.getStudentListNew();
             this.$message({
               type: "success",
               message: "删除成功!"
