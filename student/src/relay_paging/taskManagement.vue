@@ -1,6 +1,7 @@
 <template>
   <div style="height:100%;overflow: auto;">
     <div class="box">
+      <!-- 已经下发的任务 -->
       <div style="border:1px solid #ccc;margin:10px; border-radius: 10px; padding:5px;">
         <el-row :gutter="20">
           <el-col :span="3" :offset="1">
@@ -15,7 +16,7 @@
           </el-col>
         </el-row>
         <template>
-          <el-table :data="tableDatafalse" border style="width: 100%">
+          <el-table :data="tableDatafalse" border :default-sort="{prop:'taskExperiment.startTime', order: 'descending'}" style="width: 100%">
             <el-table-column fixed label="序号" type="index" min-width="120"></el-table-column>
             <el-table-column
               prop="taskExperiment.startTime"
@@ -24,9 +25,14 @@
               :formatter="formatSex"
               min-width="200"
             ></el-table-column>
-            <el-table-column prop="taskExperimentTemplate.name" sortable label="任务名称" min-width="200"></el-table-column>
+            <el-table-column
+              prop="taskExperimentTemplate.name"
+              sortable
+              label="任务名称"
+              min-width="200"
+            ></el-table-column>
             <el-table-column prop="experimentType.name" label="类型" min-width="120"></el-table-column>
-            <el-table-column label="实验模板名称" min-width="250">
+            <el-table-column label="实验模板" min-width="250">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="查看指导文件" placement="top">
                   <el-button
@@ -61,6 +67,7 @@
             <el-table-column prop="taskExperiment.complete" label="已提交报告人数" min-width="120"></el-table-column>
             <el-table-column label="操作" min-width="100">
               <template slot-scope="scope">
+                <el-button @click="readOver(scope.row)" type="text" size="small">批阅</el-button>
                 <el-button @click="stop(scope.row.taskExperiment.id)" type="text" size="small">停止</el-button>
               </template>
             </el-table-column>
@@ -81,7 +88,7 @@
           </el-col>
         </el-row>
         <template>
-          <el-table :data="tableDatatrue" border style="width: 100%">
+          <el-table :data="tableDatatrue" border style="width: 100%"  :default-sort="{prop:'taskExperiment.startTime', order: 'descending'}">
             <el-table-column fixed label="序号" type="index" min-width="120"></el-table-column>
             <el-table-column
               prop="taskExperiment.startTime"
@@ -90,9 +97,14 @@
               :formatter="formatSex"
               min-width="200"
             ></el-table-column>
-            <el-table-column prop="taskExperimentTemplate.name" sortable label="任务名称" min-width="200"></el-table-column>
+            <el-table-column
+              prop="taskExperimentTemplate.name"
+              sortable
+              label="任务名称"
+              min-width="200"
+            ></el-table-column>
             <el-table-column prop="experimentType.name" label="类型" min-width="120"></el-table-column>
-            <el-table-column label="实验模板名称" min-width="250">
+            <el-table-column label="实验模板" min-width="250">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="查看指导文件" placement="top">
                   <el-button
@@ -127,6 +139,7 @@
             <el-table-column prop="taskExperiment.complete" label="已提交报告人数" min-width="120"></el-table-column>
             <el-table-column label="操作" min-width="100">
               <template slot-scope="scope">
+                <el-button @click="readOver(scope.row)" type="text" size="small">批阅</el-button>
                 <el-button
                   @click="deleteTask(scope.row.taskExperiment.id)"
                   type="text"
@@ -144,6 +157,17 @@
           <Unity3D v-bind:tasks="tasks"></Unity3D>
         </div>
       </el-dialog>
+
+      <el-dialog width="90%" title="指导文件" top="5vh" :visible.sync="innerVisibleNew" append-to-body>
+        <div style="height:800px">
+          <Examine ref="child"></Examine>
+        </div>
+      </el-dialog>
+      <el-dialog width="90%" title="新增任务" top="10vh" :visible.sync="innerVisibleadd" append-to-body>
+        <div style="height:40vh">
+          <Editor  if='innerVisibleadd' @taskissue='taskissue'></Editor>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -153,17 +177,20 @@ import {
   formatDate,
   deletedaTask,
   stopTask,
-  getResource_by_id,
- 
+  getResource_by_id
 } from "../API/api";
 import Unity3D from "./uity3D";
-
+import Examine from "../views/Examine";
+import Editor from "./tasks/Editor";
 export default {
   data() {
     return {
       offset: 0,
       limit: 50,
       innerVisible: false,
+      innerVisibleNew: false,
+      innerVisibleadd: false,
+      ChangeFlageEdit: false,
       tableDataOK: [],
       tableDatatrue: [],
 
@@ -177,7 +204,9 @@ export default {
     };
   },
   components: {
-    Unity3D
+    Unity3D,
+    Examine,
+    Editor
   },
 
   methods: {
@@ -189,19 +218,21 @@ export default {
       })
         .then(res => {
           // console.log(res);
-          this.goExamine(res.data.object.name, res.data.object.path);
+          if (res.data.code == "0") {
+            this.innerVisibleNew = true;
+            this.goExamine(res.data.object.name, res.data.object.path);
+            this.$refs.child.gopdf();
+          } else {
+            this.$message.error({
+              message: "该资源不存在"
+            });
+          }
         })
-        .catch(() => {
-          this.$message.error({
-            showClose: true,
-            message: "该资源不存在",
-            type: "warning"
-          });
-        });
+        .catch(() => {});
     },
-  // 根据id获取资源详细信息
-    getResources(id){
-          getResource_by_id({
+    // 根据id获取资源详细信息
+    getResources(id) {
+      getResource_by_id({
         id: id
       })
         .then(res => {
@@ -250,7 +281,8 @@ export default {
       return formatDate(row.taskExperiment.finishTime);
     },
     goadd() {
-      this.$router.push("/task/Editor");
+      // this.$router.push("/task/Editor");
+      this.innerVisibleadd = true;
     },
     stop(id) {
       this.$confirm("此操作将停止该任务, 是否继续?", "提示", {
@@ -276,7 +308,16 @@ export default {
           });
         });
     },
-
+    // 批改
+    readOver(row) {
+      console.log(row);
+        this.$router.push({
+          path: '/task/Presentationteacher',
+          query: {
+            id: row.taskExperiment.id
+          }
+        })
+    },
     deleteTask(id) {
       this.$confirm("此操作将永久删除该任务, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -302,9 +343,14 @@ export default {
           });
         });
     },
-
+    // 任务下发
+    taskissue(){
+        this.innerVisibleadd=false;
+        this.masters();
+    },
     // 加载列表
     masters() {
+       console.log('aaaa')
       master({
         offset: this.offset,
         limit: this.limit
@@ -312,7 +358,7 @@ export default {
         //   this.tableDataOK=[
         //   {name:1},{name:1},{name:1},{name:1},{name:1},{name:1}
         // ]
-        console.log(res)
+        console.log(res);
         let boxtrue = [];
         let boxfalse = [];
         // this.tableDataOK = res.data.object;
@@ -345,17 +391,18 @@ export default {
       sessionStorage.setItem("examine", JSON.stringify(examine));
       let user = JSON.parse(sessionStorage.getItem("user"));
       // console.log(user, user.role);
-      if (user.role == "teacher") {
-        this.$router.push("/relayteacher/Examine");
-      } else if (user.role == "student") {
-        this.$router.push("/relay/Examine");
-      } else {
-      }
+      // if (user.role == "teacher") {
+      //   this.$router.push("/relayteacher/Examine");
+      // } else if (user.role == "student") {
+      //   this.$router.push("/relay/Examine");
+      // } else {
+      // }
     }
   },
   mounted() {},
   created() {
     this.masters();
+   
   }
   // 创建前设置增加滚动条
   // beforeCreate() {

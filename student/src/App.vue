@@ -109,7 +109,7 @@ export default {
 </script>
 
 
-<style>
+<style >
 html,
 body {
   width: 100%;
@@ -118,6 +118,7 @@ body {
   padding: 0px !important;
   margin: 0px;
   overflow: hidden;
+  
 }
 a {
   display: inline-block;
@@ -138,9 +139,7 @@ li {
 button {
   border: 0px solid red;
 }
-#app img {
-  /* margin-left: 5%; */
-}
+
 /* //login */
 
 /* .loginout {
@@ -158,4 +157,31 @@ button {
 .el-icon-arrow-down {
   font-size: 12px;
 }
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar
+{
+    width: 8px;
+    height: 8px;
+    background-color: #F5F5F5;
+}
+ 
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 5px;
+    background-color: #F5F5F5;
+}
+ 
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb
+{
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #ccc;
+}
+.el-upload-list--text{
+  display: none;
+}
+
 </style>

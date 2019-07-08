@@ -36,9 +36,11 @@
                     style="position: relative;display: block;"
                   >
                     <router-link :to="'/sExperiment1/guidance/'+item.id">
+                    <!-- src="./../../image/nisfunbduhf.png" -->
                       <img
                         class="img"
-                        src="./../../image/nisfunbduhf.png"
+                        
+                        :src="judge(item.path)"
                         :style="{border:(istest==index?redcolor:color)}"
                       >
                       <i class="status" style="background-color:red;" v-if="item.status=='new'"></i>
@@ -91,7 +93,7 @@
                     <router-link :to="'/sExperiment1/guidance/'+item.id">
                       <img
                         class="img"
-                        src="./../../image/nisfunbduhf.png"
+                        :src="judge(item.path)"
                         :style="{border:(istest==index?redcolor:color)}"
                       >
                       <span>{{item.name}}</span>
@@ -114,6 +116,7 @@
 <script>
 import { simulist, project } from "@/API/api";
 import { log } from "util";
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -137,6 +140,9 @@ export default {
     };
   },
   methods: {
+     ...mapActions([
+      'task'
+    ]),
     istests(index, inner, type) {
       
       this.istest = index;
@@ -145,16 +151,37 @@ export default {
     },
     threadPoxi(type) {
       this.$emit("threadPoxi", type);
-    }
-  },
-  created() {
-    simulist({
+    },
+    // 任务图片
+    judge(path){
+          if(path==null||path==""){
+              return require("./../../image/nisfunbduhf.png");
+          }else{
+              return path;
+          } 
+
+      
+    },
+    simulist(){
+         simulist({
       offset: this.offset,
       limit: this.limit
     }).then(res => {
-
+      console.log(res,'任务列表')
       this.itemArr = res.data.object;
+      this.task(res.data.object)
     });
+    }
+  },
+   computed: {
+    ...mapState(["taskList"])
+  },
+  created() {
+    if(this.taskList.length>0){
+      this.itemArr=this.taskList
+    }else{
+        this.simulist();
+    }
   },
   mounted() {
     // this.istests(0)

@@ -35,7 +35,7 @@
 
 
 <script>
-import { guidelist, demo, snalist,download } from "../../API/api";
+import { guidelist, demo, snalist,fileDownload } from "../../API/api";
 import { promises } from "fs";
 import { parse } from "path";
 
@@ -52,29 +52,58 @@ export default {
   methods: {
    
      // 下载文件
-    download(src) {
-      let data = src;
+    // download(src) {
+    //   let data = src;
 
-      if (!data) {
-        return;
-      }
-      let courseUrl = "";
-      if (JSON.parse(sessionStorage.getItem("course"))) {
-        courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-        // console.log(courseUrl, "课程服");
-      }
-      const fileName = this.name;
-      let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      // console.log(url)
-      const elink = document.createElement("a");
-      // elink.download = fileName;
-      elink.style.display = "none";
-      elink.href = url;
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
-    },
+    //   if (!data) {
+    //     return;
+    //   }
+    //   let courseUrl = "";
+    //   if (JSON.parse(sessionStorage.getItem("course"))) {
+    //     courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
+    //     // console.log(courseUrl, "课程服");
+    //   }
+    //   const fileName = this.name;
+    //   let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
+    //   // console.log(url)
+    //   const elink = document.createElement("a");
+    //   // elink.download = fileName;
+    //   elink.style.display = "none";
+    //   elink.href = url;
+    //   document.body.appendChild(elink);
+    //   elink.click();
+    //   URL.revokeObjectURL(elink.href); // 释放URL 对象
+    //   document.body.removeChild(elink);
+    // },
+     download(src,name){
+           fileDownload({
+              // method: "post",
+              responseType: "blob",
+              // url:`${baseUrl}/app/party-event/statistics-export?id=`+this.eventId,
+              // timeout: 10000,
+              // withCredentials: false //跨域
+              name:'demo.pdf',
+              path:"http://192.168.2.200:8080/creatorcourse/download_test?url=http://192.168.2.200:8080/creatorcourse/static/report/e9150eb0-7ff8-4b66-8e63-6a665f959d78.docx&name=实验七报告模板 .docx"
+              // headers: {'Content-Type': 'application/json;charset=UTF-8'},
+            }).then(res => {
+              console.log(res);
+              // if (res.status == 200) {
+              //   const link = document.createElement("a");
+              //   let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
+              //   link.style.display = "none";
+              //   link.href = URL.createObjectURL(blob);
+              //   let num = "";
+              //   for (let i = 0; i < 10; i++) {
+              //     num += Math.ceil(Math.random() * 10);
+              //   }
+              //   link.setAttribute("download", "图例数据" + num + ".xls");
+              //   document.body.appendChild(link);
+              //   link.click();
+              //   document.body.removeChild(link);
+              // }
+          });
+
+      },
     type(puah){
 
     },
@@ -88,7 +117,7 @@ export default {
         guidelist({
           taskExperimentId: this.id
         }).then(res => {
-          // console.log(res, 1111);
+          console.log(res, 1111);
           this.name = res.data.object.name;
           this.pdfId=res.data.object.id;
       let path=res.data.object.path
@@ -111,7 +140,7 @@ export default {
     guidelist({
       taskExperimentId: this.id
     }).then(res => {
-      // console.log(res, 1111);
+      console.log(res, 1111);
       this.name = res.data.object.name;
       this.pdfId=res.data.object.id;
     

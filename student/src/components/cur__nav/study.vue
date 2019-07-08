@@ -8,13 +8,13 @@
           <div class="top">
             <el-menu default-active="1" class="el-menu-vertical-demo" background-color="rgb(35,38,41)" text-color="#fff" active-text-color="#ffd04b" router >
               <el-menu-item :index="courseIntroductionPath">
-                <i class="el-icon-menu"></i>
-                <span slot="title" class="introduce">课程介绍</span>
+                <!-- <i class="el-icon-menu"></i> -->
+                <span slot="title" class="introduce"><i class="icon iconfont" style="font-size:20px">&#xe501;</i> 课程介绍</span>
               </el-menu-item>
               <el-menu-item :index="curriculumLearningPath">
                 <div class="two" >
-                  <i class="el-icon-menu"></i>
-                  <span slot="title" class="introduce">课程学习</span>
+                  <!-- <i class="el-icon-menu"></i> -->
+                  <span slot="title" class="introduce">  <i class="icon iconfont" style="font-size:20px">&#xe622;</i> 课程学习</span>
                 </div>
               </el-menu-item>
             </el-menu>
@@ -85,7 +85,7 @@ background-color: rgb(35,38,41);
 }
 .box {
   margin-top: -1px;
-  height: 95%;
+  height: 100%;
   .row-bg {
     height: 100%;
     box-sizing: border-box;
@@ -95,10 +95,10 @@ background-color: rgb(35,38,41);
       height: 98%;
       .Catalog-img {
         width: 100%;
-        height: 150px;
+        // height: 150px;
         img {
           width: 100%;
-          height: 150px;
+          // height: 150px;
         }
       }
       .top {

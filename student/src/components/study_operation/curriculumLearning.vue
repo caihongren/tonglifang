@@ -4,29 +4,19 @@
     <el-row type="flex" class="row-bg">
       <!-- 左侧目录块 -->
       <el-col :span="5" class="leftCol">
-        <div class="twoButton">
+        <div>
           <!-- 目录操作按钮 -->
           <el-row :gutter="10">
             <el-col :span="12">
               <div class="grid-content bg-purple-dark" style="padding-left:20px">
-                <el-button type="primary" @click="get_all_materials(), zhuangjieZone()" class="whole">全部</el-button>
+                <el-button type="primary" @click="get_all_materials(), chapterReset()" v-show="teacherStudentShow">全部</el-button>
               </div>
             </el-col>
-            <el-col :span="12" class="erddsed">
+            <el-col :span="12">
               <div v-show="teacherStudentShow">
                 <el-button type="primary" @click="addDialog()" class="addButton">新增</el-button>
-                <el-button
-                  type="primary"
-                  @click="showEdit = !showEdit"
-                  class="edit"
-                  v-show="!showEdit"
-                >编辑</el-button>
-                <el-button
-                  type="primary"
-                  @click="showEdit = !showEdit"
-                  class="edit"
-                  v-show="showEdit"
-                >完成</el-button>
+                <el-button type="primary" @click="showEdit = !showEdit" class="edit" v-show="!showEdit">编辑</el-button>
+                <el-button type="primary" @click="showEdit = !showEdit" class="edit" v-show="showEdit">完成</el-button>
               </div>
             </el-col>
           </el-row>
@@ -35,26 +25,12 @@
             <el-form :model="addForm">
               <el-form-item label="新增类型" :label-width="formLabelWidth">
                 <el-select v-model="addForm.type" placeholder="请选择" @change="appendSelect()">
-                  <el-option
-                    v-for="item in typeselectData"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  ></el-option>
+                  <el-option v-for="item in typeselectData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="章" :label-width="formLabelWidth" v-if="chapterSelectVisible">
-                <el-select
-                  v-model="addForm.chapter"
-                  placeholder="请选择"
-                  @change="chapterChange(addForm.chapter)"
-                >
-                  <el-option
-                    v-for="item in chapterSelectData"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  ></el-option>
+                <el-select v-model="addForm.chapter" placeholder="请选择" @change="chapterChange(addForm.chapter)">
+                  <el-option v-for="item in chapterSelectData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="名称" :label-width="formLabelWidth">
@@ -72,44 +48,23 @@
             </div>
           </el-dialog>
         </div>
-        
-        
+
+        <!-- 目录顶部操作按钮 -->
         <div class="menu1">
-          <!-- 目录顶部操作按钮 -->
- <div class="Catalog-t" @click="openCloseAllMenu()"><i class="icon iconfont" style="font-size:22px;">&#xe601;</i>目录</div>
           <!-- 章节目录 -->
-         
+          <div class="Catalog-t" @click="openCloseAllMenu()">
+            <i class="icon iconfont" style="font-size:22px;">&#xe601;</i>目录</div>
+          <el-button type="primary" size="small" @click="get_all_materials(), chapterReset()" class="wholeStudent" v-show="!teacherStudentShow">全部</el-button>
           <div class="chapter">
-            <!-- 章节目录 -->
-            <el-tree
-              :data="data"
-              node-key="id"
-              :default-expanded-keys="[data[0].id]"
-              :expand-on-click-node="false"
-              :props="defaultProps"
-              ref="menuTree"
-            >
-              <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span
-                  @click="handleNodeClick(node)"
-                  class="menuContext"
-                >{{ node.data.section}}{{"."}}{{ node.label }}</span>
+            <el-tree :data="data" node-key="id" :default-expanded-keys="expandedKeys" :expand-on-click-node="false" :props="defaultProps" ref="menuTree">
+              <span class="custom-tree-node" :title=node.label slot-scope="{ node, data }">
+                <span @click="handleNodeClick(node)" class="menuContext">{{ node.data.section}}{{"."}}{{ node.label }}</span>
                 <!-- 目录右侧修改删除操作按钮 -->
                 <span v-show="showEdit">
                   <!-- 修改章节 -->
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="updateMenuButton(node)"
-                    class="updateButton"
-                  ></el-button>
+                  <el-button type="text" size="mini" @click="updateMenuButton(node)" class="updateButton"></el-button>
                   <!-- 删除章节 -->
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => remove(node, data)"
-                    class="deleteButton"
-                  ></el-button>
+                  <el-button type="text" size="mini" @click="() => remove(node, data)" class="deleteButton"></el-button>
                   <!-- 修改章节弹出框form表单 -->
                   <el-dialog title="修改章节" :visible.sync="updateDialogVisible" class="modifyForm">
                     <el-input v-model="updateMenuLabelInput" autocomplete="off" class="addInput"></el-input>
@@ -130,12 +85,7 @@
         <div class="grid-content bg-purple right" id="right">
           <!-- 顶部文件操作按钮 -->
           <div class="operationButtons">
-            <el-button
-              type="primary"
-              @click="fileUpdateBlock()"
-              v-show="teacherStudentShow"
-              class="rename"
-            >
+            <el-button type="primary" @click="fileUpdateBlock()" v-show="teacherStudentShow" class="rename">
               重命名
               <i class="el-icon-edit el-icon--edit"></i>
             </el-button>
@@ -160,11 +110,7 @@
               <i class="el-icon-download"></i>
             </el-button>
             <div class="uploadDiv" v-show="teacherStudentShow">
-              <el-upload
-                class="upload-demo"
-                action="/img/upload_material"
-                :before-upload="beforeUpload"
-              >
+              <el-upload class="upload-demo" action="/img/upload_material" :before-upload="beforeUpload">
                 <el-button size="small" type="primary" class="upload">
                   上传
                   <i class="el-icon-upload el-icon--right"></i>
@@ -178,25 +124,12 @@
             <!-- 文件移动弹出框 -->
             <el-dialog title="移动资料" :visible.sync="fileMoveVisible" class="move">
               章
-              <el-select
-                v-model="fileMoveChapterSelect"
-                placeholder="请选择"
-                @change="fileMoveChapterChange(fileMoveChapterSelect)"
-              >
-                <el-option
-                  v-for="item in chapterSelectData"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                ></el-option>
-              </el-select>节
+              <el-select v-model="fileMoveChapterSelect" placeholder="请选择" @change="fileMoveChapterChange(fileMoveChapterSelect)">
+                <el-option v-for="item in chapterSelectData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              </el-select>
+              节
               <el-select v-model="fileMoveUnitSelect" placeholder="请选择">
-                <el-option
-                  v-for="item in unitData"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                ></el-option>
+                <el-option v-for="item in unitData" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="fileMoveVisible = false">取 消</el-button>
@@ -208,27 +141,14 @@
           <div class="fileContext">
             <!-- 文件罗列卡片 -->
 
-            <div
-              class="fileCard"
-              v-for="item in fileArray"
-              :key="item.id"
-              align="center"
-              @mouseover="fileCardMouseover(item.id)"
-              @mouseout="fileCardMouseout(item.id)"
-            >
+            <div class="fileCard" v-for="item in fileArray" :key="item.id" align="center" @mouseover="fileCardMouseover(item.id)" @mouseout="fileCardMouseout(item.id)">
               <!-- 文件图标 -->
               <img :src="judge(item.path)">
               <!-- 文件名 -->
-              <el-tooltip :content="item.name" placement="bottom" effect="light">
-                <span class="text" :id="'span'+item.id" style="display:block;">{{ item.name }}</span>
-              </el-tooltip>
+              <span class="text" :title=item.name :id="'span'+item.id" style="display:block;">{{ item.name }}</span>
               <!-- 遮罩层 -->
               <div :id="'bmbox'+item.id" class="bmbox" align="left">
-                <input
-                  type="checkbox"
-                  :id="'checkbox'+item.id"
-                  @change="fileCheckboxChange(item.id)"
-                >
+                <input type="checkbox" :id="'checkbox'+item.id" @change="fileCheckboxChange(item.id)">
                 <div style="width:100px;height:60px;" @click="preview(item.path)"></div>
               </div>
             </div>
@@ -242,15 +162,7 @@
             </el-dialog>
           </div>
           <div class="paging">
-            <el-pagination
-              @size-change="fileHandleSizeChange"
-              @current-change="fileHandleCurrentChange"
-              :current-page="currentPage4"
-              :page-sizes="[10, 20, 30, 50, 100]"
-              :page-size="nowPageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="fileTotal"
-            ></el-pagination>
+            <el-pagination @size-change="fileHandleSizeChange" @current-change="fileHandleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 50, 100]" :page-size="nowPageSize" layout="total, sizes, prev, pager, next, jumper" :total="fileTotal"></el-pagination>
           </div>
         </div>
         <div class="filePreview" id="filePreview">
@@ -281,12 +193,13 @@ import {
   fileDownload, //资源下载
   modify_material_chapter_and_unit //移动文件
 } from "@/API/api";
-let id = 1000;
+//let id = 1000;
 export default {
   data() {
     return {
       showEdit: false, //目录模块顶部编辑编辑按钮是否显示(是否处于编辑状态)
       data: [{ id: null, name: "" }], //章节目录数据
+      expandedKeys: [], //默认展开的章节
       defaultProps: {
         children: "children",
         label: "label",
@@ -333,12 +246,40 @@ export default {
       fileTotal: 0, //分页文件总数
       nowCurrent: 0, //当前所在页
       nowPageSize: 30, //当前每页显示数量
-       currentPage4: 1,
-      zhuangType:1, //章，节，还是全不
-      zhuangjieId: "" //当前章节id
+      currentPage4: 1,
+      chapterType: 1, //章，节，还是全不
+      chapterResetId: "" //当前章节id
     };
   },
   methods: {
+    //获取所有章节
+    get_chaptersMy() {
+      get_chapter_and_unit_list().then(res => {
+        let obj = res.data.object;
+        let databox = [];
+        for (let i = 0; i < obj.length; i++) {
+          let item = res.data.object[i];
+          databox[i] = {};
+
+          databox[i].id = item.id;
+          databox[i].label = item.name;
+          databox[i].section = i + 1;
+          let units = [];
+
+          for (let j = 0; j < item.units.length; j++) {
+            units[j] = {};
+            units[j].id = item.units[j].id;
+            units[j].label = item.units[j].name;
+            units[j].section = i + 1 + "." + (j + 1);
+          }
+          databox[i].children = units;
+        }
+        if (databox.length > 0) {
+          this.data = databox;
+          this.expandedKeys[0] = this.data[0].id; //默认展开第一章
+        }
+      });
+    },
     //获取所有章
     get_chaptersAll() {
       get_chapters().then(res => {
@@ -349,8 +290,7 @@ export default {
         }
       });
     },
-
-    //获取某一章下的所有节
+    //获取所有节
     get_unit_list_all(chapterId) {
       get_unit_list({
         chapterId: chapterId
@@ -362,6 +302,69 @@ export default {
         }
       });
     },
+
+    //获取全部学习资料
+    get_all_materials() {
+      this.chapterType = 1;
+      this.currentChapter = "";
+      this.currentUnit = "";
+      get_all_materials({
+        offset: this.nowCurrent,
+        limit: this.nowPageSize
+      }).then(res => {
+        this.fileArray = res.data.object;
+        this.fileTotal = res.data.length; //获取分页全部总数
+      });
+    },
+    //获取学习资料
+    handleNodeClick(node) {
+      this.node = node;
+      this.chapterReset();
+      if (node.level == 1) {
+        this.get_materials_by_chapter(node.key);
+        this.currentChapter = node.parent.key;
+        this.currentChapter = node.key;
+        this.currentUnit = "";
+      } else if (node.level == 2) {
+        this.get_materials_by_unit(node.key);
+        this.currentChapter = node.parent.key;
+        this.currentUnit = node.key;
+      }
+    },
+    //根据章获取学习资料
+    get_materials_by_chapter(chapterId) {
+      this.chapterResetId = chapterId;
+      this.chapterType = 2;
+      get_materials_by_chapter({
+        chapterId: chapterId,
+        offset: this.nowCurrent,
+        limit: this.nowPageSize
+      }).then(res => {
+        if (res.data.code == 0) {
+          this.fileArray = res.data.object;
+          this.fileTotal = res.data.length;
+        } else {
+        }
+      });
+    },
+    //根据节获取学习资料
+    get_materials_by_unit(unitId) {
+      this.chapterResetId = unitId;
+      this.chapterType = 3;
+      get_materials_by_unit({
+        unitId: unitId,
+        offset: this.nowCurrent,
+        limit: this.nowPageSize
+      }).then(res => {
+        if (res.data.code == 0) {
+          this.fileArray = res.data.object;
+          this.fileTotal = res.data.length;
+        } else {
+        }
+      });
+    },
+
+    //点击全部 展开所有章节
     openCloseAllMenu() {
       for (
         var i = 0;
@@ -477,7 +480,6 @@ export default {
         type: "warning"
       })
         .then(() => {
-          //node.level == 1删除章
           if (node.level == 1) {
             delete_chapter({
               chapterId: node.key
@@ -494,7 +496,6 @@ export default {
               this.get_chaptersMy();
             });
           } else if (node.level == 2) {
-            //node.level == 2删除节
             delete_unit({
               unitId: node.key
             }).then(res => {
@@ -515,77 +516,27 @@ export default {
         });
     },
 
-    //获取所有章节
-    get_chaptersMy() {
-      get_chapter_and_unit_list().then(res => {
-        let obj = res.data.object;
-        let databox = [];
-        for (let i = 0; i < obj.length; i++) {
-          let item = res.data.object[i];
-          databox[i] = {};
-
-          databox[i].id = item.id;
-          databox[i].label = item.name;
-          databox[i].section = i + 1;
-          let units = [];
-
-          for (let j = 0; j < item.units.length; j++) {
-            units[j] = {};
-            units[j].id = item.units[j].id;
-            units[j].label = item.units[j].name;
-            units[j].section = i + 1 + "." + (j + 1);
-          }
-          databox[i].children = units;
-        }
-        if (databox.length > 0) {
-          this.data = databox;
-        }
-      });
-    },
-    //获取全部学习资料
-    get_all_materials() {
-      this.zhuangType = 1;
-     
-      this.currentChapter = "";
-      this.currentUnit = "";
-      get_all_materials({
-        offset: this.nowCurrent,
-        limit: this.nowPageSize
-      }).then(res => {
-        // console.log(res)
-        this.fileArray = res.data.object;
-        this.fileTotal = res.data.length; //获取分页全部总数
-      });
-    },
     //学习资料分页改变每页显示数量时触发此函数
     fileHandleSizeChange(val) {
-      // console.log(val,'条',this.zhuangType)
       this.nowPageSize = val;
-      
-      if (this.zhuangType == 1) {
+      if (this.chapterType == 1) {
         this.get_all_materials(); //获取全部学习资料
-      } else if (this.zhuangType == 2) {
-        this.get_materials_by_chapter(this.zhuangjieId);
-      } else if (this.zhuangType == 3) {
-        this.get_materials_by_unit(this.zhuangjieId);
+      } else if (this.chapterType == 2) {
+        this.get_materials_by_chapter(this.chapterResetId);
+      } else if (this.chapterType == 3) {
+        this.get_materials_by_unit(this.chapterResetId);
       }
-
-      // this. get_chaptersAll()
-      //  this.get_unit_list_all(chapterId)
     },
     //学习资料分页改变页码时触发此函数
     fileHandleCurrentChange(val) {
-      console.log(val,'ye')
-      this.nowCurrent = (val-1)*this.nowPageSize;
-      console.log(this.nowCurrent)
-      if (this.zhuangType ==1) {
+      this.nowCurrent = (val - 1) * this.nowPageSize;
+      if (this.chapterType == 1) {
         this.get_all_materials(); //获取全部学习资料
-      } else if (this.zhuangType == 2) {
-        this.get_materials_by_chapter(this.zhuangjieId);
-      } else if (this.zhuangType == 3) {
-        this.get_materials_by_unit(this.zhuangjieId);
+      } else if (this.chapterType == 2) {
+        this.get_materials_by_chapter(this.chapterResetId);
+      } else if (this.chapterType == 3) {
+        this.get_materials_by_unit(this.chapterResetId);
       }
-     
     },
 
     //删除文件
@@ -632,7 +583,8 @@ export default {
         ).checked = false;
         document.getElementById(
           "bmbox" + this.fileOperationArray[i]
-        ).style.display = "none";
+        ).style.display =
+          "none";
       }
       this.fileOperationArray = []; //清空已选中文件
     },
@@ -770,7 +722,8 @@ export default {
         ).checked = false;
         document.getElementById(
           "bmbox" + this.fileOperationArray[i]
-        ).style.display = "none";
+        ).style.display =
+          "none";
       }
       //调用接口修改文件名
       modify_material_name({
@@ -792,63 +745,13 @@ export default {
       });
       this.clearFileOperation(); //清空已选中文件
     },
-    //获取学习资料
-    handleNodeClick(node) {
-      this.node = node;
-      this.zhuangjieZone()
-      if (node.level == 1) {
-        this.get_materials_by_chapter(node.key);
-        this.currentChapter = node.parent.key;
-        this.currentChapter = node.key;
-        this.currentUnit = "";
-      } else if (node.level == 2) {
-        this.get_materials_by_unit(node.key);
-        this.currentChapter = node.parent.key;
-        this.currentUnit = node.key;
-      }
-    },
+
     // 章节重置
-    zhuangjieZone(){
-       this.nowCurrent = 0;
+    chapterReset() {
+      this.nowCurrent = 0;
       this.nowPageSize = 30;
     },
-    //根据章获取学习资料
-    get_materials_by_chapter(chapterId) {
-      console.log(chapterId);
-      this.zhuangjieId = chapterId;
-      this.zhuangType = 2;
-     
 
-      // this.fileTotal = 0; //分页文件总数
-      get_materials_by_chapter({
-        chapterId: chapterId,
-        offset: this.nowCurrent,
-        limit: this.nowPageSize
-      }).then(res => {
-        // console.log(res, "章");
-        if (res.data.code == 0) {
-          this.fileArray = res.data.object;
-          this.fileTotal = res.data.length;
-        } else {
-        }
-      });
-    },
-    //根据节获取学习资料
-    get_materials_by_unit(unitId) {
-      this.zhuangjieId = unitId;
-      this.zhuangType = 3;
-      get_materials_by_unit({
-        unitId: unitId,
-        offset: this.nowCurrent,
-        limit: this.nowPageSize
-      }).then(res => {
-        if (res.data.code == 0) {
-          this.fileArray = res.data.object;
-          this.fileTotal = res.data.length;
-        } else {
-        }
-      });
-    },
     //文件上传
     beforeUpload(file) {
       if (this.currentUnit != "") {
@@ -988,7 +891,7 @@ export default {
         this.$confirm("文件暂不支持，请下载", "提示", {
           confirmButtonText: "确定",
           type: "info"
-        }).then(() => {});
+        }).then(() => { });
       }
     },
     //取消文件预览
@@ -1014,69 +917,41 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.Catalog-t:hover{
-           background-color:#ffd04b;
-             cursor: pointer;
-             overflow:hidden;
-          }
-.newlyAddedForm {
-  width: 800px;
-}
-.el-button el-button--primary {
-  margin-left: 14px;
-}
-.el-upload {
-  .el-button--small {
-    padding: 0 0;
-    font-size: 14px;
-    height: 39px;
-    width: 90px;
-  }
-}
-.el-dialog__wrapper {
-  left: 20%;
-  top: 10%;
-}
-.fileUpdateDialog {
-  width: 800px;
-  height: 600px;
-}
 .introduceBox {
   height: 100%;
+  width: 100%;
   .row-bg {
     height: 100%;
     .leftCol {
       min-width: 350px;
       overflow: hidden;
       .menu1 {
+        position: relative;
         border-right: 1px solid #dddddd;
         height: 100%;
         min-width: 366px;
         overflow-y: scroll;
-         .Catalog-t {
-            width:65px;
-           height:25px;
-           color:#66b1ff;
+        .Catalog-t {
+          width: 65px;
+          height: 25px;
+          color: #66b1ff;
           border: none;
           font-size: 18px;
-          margin:10px 0px  10px 22px;
+          margin: 10px 0px 10px 22px;
         }
-        .twoButton {
-          height: 50px;
-
-          .whole {
-            float: left;
-            margin-left: 10px;
+        .wholeStudent {
+          position: absolute;
+          top: 8px;
+          right: 15px;
+        }
+        .menuTopButton {
+          float: right;
+          width: 160px;
+          .addButton {
+            margin-right: 10px;
           }
-          .menuTopButton {
-            float: right;
-            width: 160px;
-            .addButton {
-              margin-right: 10px;
-            }
-            .edit {
-              margin-right: 10px;
-            }
+          .edit {
+            margin-right: 10px;
           }
         }
         .addInput {
@@ -1085,10 +960,11 @@ export default {
         .el-dialog {
           width: 30%;
         }
-       
+
         .chapter {
           .menuContext {
-            width: 100%;
+            width: 205px;
+            overflow: hidden;
           }
           .modifyForm {
             width: 800px;
@@ -1133,7 +1009,7 @@ export default {
           display: inline-block;
         }
         .move {
-          width: 1020px;
+          width: 1030px;
         }
       }
       .fileContext {
@@ -1165,8 +1041,8 @@ export default {
         }
       }
       .paging {
-        text-align:center;
-        margin-right:30%;
+        text-align: center;
+        margin-right: 30%;
       }
     }
     .filePreview {
@@ -1190,9 +1066,35 @@ export default {
     font-family: "微软雅黑";
   }
 }
+.Catalog-t:hover {
+  background-color: #ffd04b;
+  cursor: pointer;
+  overflow: hidden;
+}
+.newlyAddedForm {
+  width: 800px;
+}
+.el-upload {
+  .el-button--small {
+    font-size: 14px;
+    height: 39px;
+    width: 90px;
+  }
+}
+.el-dialog__wrapper {
+  left: 20%;
+  top: 10%;
+}
+.fileUpdateDialog {
+  width: 800px;
+  height: 600px;
+}
 </style>
 <style>
 .addInput .el-input__inner {
   width: 217px;
+}
+.text:hover {
+  color: #09aaff;
 }
 </style>

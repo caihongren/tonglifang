@@ -1,6 +1,9 @@
 <template>
   <div class="box">
     <h2>我的资料</h2>
+     <!-- <input    type="file" name="file"  @change="get"  multiple/>
+     <input    type="file" name="file"  @change="get"  multiple/>
+     <input    type="file" name="file"  @change="get"  multiple/> -->
   </div>
 </template>
  
@@ -18,6 +21,7 @@ export default {
       limit: 10,
       currentPage4: 1,
       length: 40,
+      file:[],
       tableData: [
        
       ],
@@ -67,6 +71,12 @@ export default {
     },
     interface(id) {
       console.log(id);
+    },
+    get(){
+        let file=event.target.files;
+       
+        this.file.push(file)
+         console.log(file,this.file)
     },
     // 序号
     indexMethod(index) {

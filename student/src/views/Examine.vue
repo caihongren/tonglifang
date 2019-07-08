@@ -1,11 +1,11 @@
 <template>
-  <div class="box" style="margin:20px;padding:20px">
+  <div class="box" style=" width: 96%;margin:0 2%">
     <div class="headline">
       <el-row type="flex" class="row-bg" justify="space-between">
         <!-- 二维码 -->
         <el-col :span="2">
           <div class="grid-content bg-purple right">
-            <el-button type="primary" @click="getback()">返回</el-button>
+            <!-- <el-button type="primary" @click="getback()">返回</el-button> -->
           </div>
         </el-col>
         <!-- 标题 -->
@@ -25,7 +25,7 @@
     </div>
     <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实验二：电机点动控制实验指导书.pdf" style="width:100%;height:100%" ></iframe>
     -->
-    <iframe :src="pdfPath" class="iframe" style="width:100%;height:100%"></iframe>
+    <iframe :src="pdfPath" class="iframe" style="width:100%;height:95%"></iframe>
   </div>
 
   <!-- v-if="pdfType" -->
@@ -45,15 +45,21 @@ export default {
       pdfId: "",
       pdfPath: "",
       pdfType: true,
+      changeFlageEdit: true,
       sourcePath: "",
       tableData: []
     };
+  },
+  props: {
+    isChangeFlageEdit: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
     // 下载文件
     download(src) {
       let data = src;
-
       if (!data) {
         return;
       }
@@ -72,7 +78,11 @@ export default {
       URL.revokeObjectURL(elink.href); // 释放URL 对象
       document.body.removeChild(elink);
     },
-    type(puah) {},
+    
+    type(puah,name) {
+      console.log('pdf')
+      this. gopdf()
+    },
     getback() {
       this.$router.push(this.sourcePath);
     },
@@ -92,31 +102,44 @@ export default {
         this.$router.push("/relay/Examine");
       } else {
       }
+    },
+    // pdf来源
+    gopdf() {
+      console.log("进入pdf详情");
+      let examine = JSON.parse(sessionStorage.getItem("examine"));
+      this.name = examine.name;
+      this.sourcePath = examine.sourcePath;
+      this.pdfPath = examine.path;
+      let url = this.pdfPath;
+      let source = url.substring(url.lastIndexOf(".") + 1, url.length);
+
+      if (
+        source == "gif" ||
+        source == "jpg" ||
+        source == "jpeg" ||
+        source == "png" ||
+        source == "tif" ||
+        source == "PDF" ||
+        source == "pdf"
+      ) {
+        this.pdfType = true;
+      } else {
+        this.pdfType = false;
+      }
     }
   },
-  watch: {},
-  created() {
-    let examine = JSON.parse(sessionStorage.getItem("examine"));
-    this.name = examine.name;
-    this.sourcePath = examine.sourcePath;
-    this.pdfPath = examine.path;
-    let url = this.pdfPath;
-    let source = url.substring(url.lastIndexOf(".") + 1, url.length);
-
-    if (
-      source == "gif" ||
-      source == "jpg" ||
-      source == "jpeg" ||
-      source == "png" ||
-      source == "tif" ||
-      source == "PDF" ||
-      source == "pdf"
-    ) {
-      this.pdfType = true;
-    } else {
-      this.pdfType = false;
+  watch: {
+    changeFlageEdit: function(newValue) {
+       this.gopdf();
+      console.log("pdfbianfa");
     }
-
+  },
+  mounted() {
+    this.gopdf();
+  },
+  created() {
+    this.gopdf();
+    this.changeFlageEdit = this.isChangeFlageEdit;
     // if (this.pdfPath.indexOf("pdf") != -1) {
     //   this.pdfType = true;
     // } else {
@@ -131,14 +154,14 @@ export default {
   width: 95%;
   height: 760px;
   border: 1px solid black;
-  margin: 0 1%;
+  margin: 0 2%;
 }
 .headline {
   width: 96%;
 
   padding: 0 2%;
-  height: 100px;
-  background-color: pink;
+  height: 75px;
+  background-color: #ccc;
   .lift {
     width: 80px;
     height: 80px;

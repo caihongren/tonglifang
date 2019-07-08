@@ -12,7 +12,7 @@
         <el-button type="primary" size="mini">下发批阅</el-button>
         <el-button type="primary" size="mini" class="batch">批量下载实验报告</el-button>
         <el-button type="primary" size="mini">撤回</el-button>
-        <router-link to="/task/Presentation">
+        <router-link to="/task/Presentationteacher">
           <el-button type="primary" size="mini" class="Marking">批阅报告</el-button>
         </router-link>
         <el-button type="primary" size="mini" class="details">详情</el-button>

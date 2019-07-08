@@ -29,6 +29,7 @@ export default {
       let user = JSON.parse(sessionStorage.getItem("user"));
 
       let course = this.curlist[index];
+      console.log(course)
       sessionStorage.setItem("course", JSON.stringify(course));
        if (user.role == "teacher") {
           this.$router.push("/relayteacher/study/courseIntroduction");

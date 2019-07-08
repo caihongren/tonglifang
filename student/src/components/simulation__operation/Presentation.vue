@@ -162,12 +162,14 @@ export default {
       let fd = new FormData();
       fd.append("file", file); //传文件
       console.log(file);
-      fd.append("resourceTypeId", "e15356e5-79d8-11e9-a6ab-7085c206b232");
-      fd.append("resourceTypeName", "annex");
+      fd.append("resourceTypeId", "");
+      fd.append("resourceTypeName", "");
       // fd.append('id',this.srid);//传其他参数
       resource(fd).then(res => {
         console.log(res, 2224);
+        console.log(this.fileList)
         this.fileList.push({
+          
           name: res.data.object.name,
           id: res.data.object.id
         });
@@ -199,7 +201,7 @@ export default {
 
     handleRemove(file, fileList) {
       console.log(file, fileList);
-      this.fileList=fileList
+      this.fileList = fileList;
     },
     handlePreview(file) {
       console.log(file);
@@ -216,7 +218,7 @@ export default {
     },
 
     // 下载文件
-    download(src,name) {
+    download(src, name) {
       let data = src;
 
       if (!data) {
@@ -226,10 +228,14 @@ export default {
       if (JSON.parse(sessionStorage.getItem("course"))) {
         courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
         console.log(courseUrl, "课程服");
+      } else {
+        this.$message.error({
+          message: "下载失败"
+        });
       }
       const fileName = name;
       let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      console.log(url)
+      console.log(url);
       const elink = document.createElement("a");
       // elink.download = fileName;
       elink.style.display = "none";
@@ -283,7 +289,7 @@ export default {
       //   type
       // );
       // 判断附件信息和快照信息
-      console.log(this.fileList)
+      console.log(this.fileList);
       this.isSave = true;
       report({
         taskExperimentId: this.id,
@@ -300,7 +306,7 @@ export default {
           });
           this.isSave = false;
           this.reportlistNew();
-          this.snalistNew()
+          this.snalistNew();
         }
       });
     },
@@ -322,12 +328,12 @@ export default {
         if (res.data.msg == "SUCCESS") {
           this.isSubmit = false;
           // 提交报告后不准点击
-           this.$message({
+          this.$message({
             message: "提交成功",
             type: "success"
           });
-           this.reportlistNew();
-          this.snalistNew()
+          this.reportlistNew();
+          this.snalistNew();
           // console.log("提交成功");
         }
       });
@@ -350,12 +356,11 @@ export default {
           this.status = false;
         }
         // 判断附件存在
-        if(this.fileList.length>0){
-
-        }else{
-            this.fileList = tonumber(res.data.object.annexs);
+        if (this.fileList.length > 0) {
+        } else {
+          this.fileList = tonumber(res.data.object.annexs);
         }
-        
+
         //  this.projectId = tostring(res.data.object.report.id);
       });
     },

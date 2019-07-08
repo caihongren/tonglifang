@@ -1,43 +1,23 @@
 <template>
   <div style="height:100%;overflow: auto;">
     <div class="box">
-      <!-- <router-link to="/relayteacher/task">
-      <el-button type="primary" size="small" icon="el-icon-back" style="margin-top:20px">返回</el-button>
-      </router-link>-->
       <el-aside width="90%" border="true" style="margin:10px 5%">
         <div style="border:1px solid #ccc;margin:10px; border-radius: 10px; padding:5px;">
           <div style="height:50px" class="bottonbox">
             <el-row>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
-                  <el-button
-                    type="primary"
-                    icon="el-icon-search"
-                    class="search"
-                    style=" right: 340px;"
-                    @click="dialogVisiblecopy = true,open3()"
-                  >从内置模板克隆</el-button>
+                  <el-button type="primary" icon="el-icon-search" class="search" style=" right: 340px;" @click="dialogVisiblecopy = true,open3()">从内置模板克隆</el-button>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
-                  <el-button
-                    type="primary"
-                    icon="el-icon-edit-outline"
-                    @click="dialogVisible = true,zone()"
-                    class="search"
-                    style=" right: 180px;"
-                  >新增实验模板</el-button>
+                  <el-button type="primary" icon="el-icon-edit-outline" @click="dialogVisible = true,zone()" class="search" style=" right: 180px;">新增实验模板</el-button>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
-                  <el-button
-                    type="primary"
-                    icon="el-icon-plus"
-                    @click="dialogVisiblecopyscene = true"
-                    class="search"
-                  >新建场景文件</el-button>
+                  <el-button type="primary" icon="el-icon-plus" @click="dialogVisiblecopyscene = true" class="search">新建场景文件</el-button>
                 </div>
               </el-col>
               <el-col :span="6">
@@ -50,48 +30,19 @@
           <div>
             <!-- 表格 -->
             <!-- 我的实验 -->
-            <el-table
-              ref="singleTable"
-              :data="tableDataFalse"
-              border
-              highlight-current-row
-              @current-change="handleCurrentChange"
-              class="tablebox"
-            >
+            <el-table ref="singleTable" :data="tableDataFalse" border highlight-current-row @current-change="handleCurrentChange" class="tablebox">
               <el-table-column prop="index" label="序号" min-width="100" class="table1" type="index"></el-table-column>
               <el-table-column prop="name" label="名称" min-width="250"></el-table-column>
               <el-table-column prop="experimentType" label="实验类型" min-width="249"></el-table-column>
-              <!-- <el-table-column prop="sceneName" label="实验场景文件" width="249"></el-table-column>
-        <el-table-column prop="guideName" label="实验指导书" width="249"></el-table-column>
-              <el-table-column prop="reportName" label="实验报告" width="249"></el-table-column>-->
-
-              <!--         
-        <el-table-column prop="kong" label="附件" width="150">
-          <Button type="primary" @click="dialogVisible = true">详情展开</Button>
-          <Modal v-model="modal3" title="选择附件" @on-ok="addok" @on-cancel="addcancel">
-            <Tree :data="data2" show-checkbox multiple></Tree>
-          </Modal>
-        </el-table-column>
-              -->
 
               <el-table-column label="实验场景文件" min-width="200">
                 <template slot-scope="scope">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="scope.row.sceneName"
-                    placement="top"
-                  >
+                  <el-tooltip class="item" effect="dark" :content="scope.row.sceneName" placement="top">
                     <el-button type="text" icon="el-icon-search" @click="go3D(scope.row.sceneId)"></el-button>
                   </el-tooltip>
                   <el-button type="text" @click="deleteTemplate(scope.row,2)" size="small">删除</el-button>
 
-                  <el-upload
-                    class="upload-demo"
-                    action="/img/add_resource"
-                    :before-upload="beforeUploadword"
-                    style="display: inline-block"
-                  >
+                  <el-upload class="upload-demo" action="/img/add_resource" :before-upload="beforeUploadword" style="display: inline-block">
                     <el-button type="text" size="small" @click="UploadTheSource(scope.row.id,2)">更换</el-button>
                   </el-upload>
                 </template>
@@ -99,25 +50,11 @@
 
               <el-table-column label="实验指导书" min-width="200">
                 <template slot-scope="scope">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="scope.row.guideName"
-                    placement="top"
-                  >
-                    <el-button
-                      type="text"
-                      icon="el-icon-picture"
-                      @click="handleChange(scope.row.guideId)"
-                    ></el-button>
+                  <el-tooltip class="item" effect="dark" :content="scope.row.guideName" placement="top">
+                    <el-button type="text" icon="el-icon-picture" @click="handleChange(scope.row.guideId)"></el-button>
                   </el-tooltip>
                   <el-button type="text" @click="deleteTemplate(scope.row,0)" size="small">删除</el-button>
-                  <el-upload
-                    class="upload-demo"
-                    action="/img/add_resource"
-                    :before-upload="beforeUploadword"
-                    style="display: inline-block"
-                  >
+                  <el-upload class="upload-demo" action="/img/add_resource" :before-upload="beforeUploadword" style="display: inline-block">
                     <el-button type="text" size="small" @click="UploadTheSource(scope.row.id,0)">上传</el-button>
                   </el-upload>
                 </template>
@@ -125,25 +62,11 @@
 
               <el-table-column label="实验报告" min-width="200">
                 <template slot-scope="scope">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="scope.row.reportName"
-                    placement="top"
-                  >
-                    <el-button
-                      type="text"
-                      icon="el-icon-download"
-                      @click="download(scope.row.reportPath,scope.row.reportName)"
-                    ></el-button>
+                  <el-tooltip class="item" effect="dark" :content="scope.row.reportName" placement="top">
+                    <el-button type="text" icon="el-icon-download" @click="download(scope.row.reportPath,scope.row.reportName)"></el-button>
                   </el-tooltip>
                   <el-button type="text" @click="deleteTemplate(scope.row,1)" size="small">删除</el-button>
-                  <el-upload
-                    class="upload-demo"
-                    action="/img/add_resource"
-                    :before-upload="beforeUploadword"
-                    style="display: inline-block"
-                  >
+                  <el-upload class="upload-demo" action="/img/add_resource" :before-upload="beforeUploadword" style="display: inline-block">
                     <el-button type="text" size="small" @click="UploadTheSource(scope.row.id,1)">上传</el-button>
                   </el-upload>
                 </template>
@@ -151,11 +74,7 @@
 
               <el-table-column label="操作" min-width="200">
                 <template slot-scope="scope">
-                  <el-button
-                    @click="dialogVisiblecopyMy=true,open3(scope.row.id)"
-                    type="text"
-                    size="small"
-                  >克隆</el-button>
+                  <el-button @click="dialogVisiblecopyMy=true,open3(scope.row.id)" type="text" size="small">克隆</el-button>
                   <el-button type="text" @click="deleteTemplate(scope.row,-1)" size="small">删除</el-button>
                 </template>
               </el-table-column>
@@ -169,26 +88,14 @@
             <span class="buttombox">内置实验模板</span>
           </div>
           <div>
-            <el-table
-              ref="singleTable"
-              :data="tableDataTrue"
-              border
-              highlight-current-row
-              @current-change="handleCurrentChange"
-              class="tablebox"
-            >
+            <el-table ref="singleTable" :data="tableDataTrue" border highlight-current-row @current-change="handleCurrentChange" class="tablebox">
               <el-table-column prop="index" label="序号" min-width="100" class="table1" type="index"></el-table-column>
               <el-table-column prop="name" label="名称" min-width="250"></el-table-column>
               <el-table-column prop="experimentType" label="实验类型" min-width="249"></el-table-column>
 
               <el-table-column label="实验场景文件" min-width="250">
                 <template slot-scope="scope">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="scope.row.sceneName"
-                    placement="top"
-                  >
+                  <el-tooltip class="item" effect="dark" :content="scope.row.sceneName" placement="top">
                     <el-button type="text" icon="el-icon-search" @click="go3D(scope.row.sceneId)"></el-button>
                   </el-tooltip>
                   {{scope.row.sceneName}}
@@ -197,17 +104,8 @@
 
               <el-table-column label="实验指导书" min-width="250">
                 <template slot-scope="scope">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="scope.row.guideName"
-                    placement="top"
-                  >
-                    <el-button
-                      type="text"
-                      icon="el-icon-picture"
-                      @click="handleChange(scope.row.guideId)"
-                    ></el-button>
+                  <el-tooltip class="item" effect="dark" :content="scope.row.guideName" placement="top">
+                    <el-button type="text" icon="el-icon-picture" @click="handleChange(scope.row.guideId)"></el-button>
                   </el-tooltip>
                   {{scope.row.guideName}}
                 </template>
@@ -215,28 +113,12 @@
 
               <el-table-column label="实验报告" min-width="200">
                 <template slot-scope="scope">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="scope.row.reportName"
-                    placement="top"
-                  >
-                    <el-button
-                      type="text"
-                      icon="el-icon-download"
-                      @click="download(scope.row.reportPath,scope.row.reportName)"
-                    ></el-button>
+                  <el-tooltip class="item" effect="dark" :content="scope.row.reportName" placement="top">
+                    <el-button type="text" icon="el-icon-download" @click="download(scope.row.reportPath,scope.row.reportName)"></el-button>
                   </el-tooltip>
                   {{scope.row.reportName}}
                 </template>
               </el-table-column>
-
-              <!-- <el-table-column label="操作" width="200">
-            <template slot-scope="scope">
-              <el-button @click="open2(scope.row.id)" type="text" size="small">克隆</el-button>
-              <el-button type="text" @click="deleteTemplate(scope.row,0)" size="small">删除</el-button>
-            </template>
-              </el-table-column>-->
             </el-table>
           </div>
         </div>
@@ -248,45 +130,6 @@
           <el-input placeholder="请输入内容" v-model="addtest.name">
             <template slot="prepend">实验模板名称*</template>
           </el-input>
-          <!-- <el-row :gutter="20">
-          <el-col :span="7">
-            <div class="grid-content bg-purple">
-              <span style="  line-height: 35px;margin: 0 10px;font-size: 18px;">场景文件:</span>
-            </div>
-          </el-col>
-
-          <el-col :span="5">
-            <div class="grid-content bg-purple">
-              <el-tooltip class="item" effect="dark" content="点击进入场景" placement="top">
-                <el-button icon="el-icon-search"></el-button>
-              </el-tooltip>
-            </div>
-          </el-col>
-          <el-col :span="7">
-            <div class="grid-content bg-purple">
-              <el-select v-model="tasks.id" placeholder="请选择模式">
-                <el-option
-                  v-for="item in pattern"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </div>
-          </el-col>
-          <el-col :span="3">
-            <div class="grid-content bg-purple">
-              <el-upload
-                class="upload-demo"
-                action="/img/add_resource"
-                :before-upload="beforeUploadword"
-                style="width:100%"
-              >
-                <el-button @click="UploadTheSource('add',2)">上传</el-button>
-              </el-upload>
-            </div>
-          </el-col>
-          </el-row>-->
           <!-- 从已有模板选择场景文件 -->
           <el-row :gutter="20">
             <el-col :span="7">
@@ -298,12 +141,7 @@
             <el-col :span="10">
               <div class="grid-content bg-purple">
                 <el-select v-model="addtest.sceneId" placeholder="请选择模板场景文件">
-                  <el-option
-                    v-for="item in tableDataTrue"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.sceneId"
-                  ></el-option>
+                  <el-option v-for="item in tableDataTrue" :key="item.id" :label="item.name" :value="item.sceneId"></el-option>
                 </el-select>
               </div>
             </el-col>
@@ -318,24 +156,14 @@
 
             <el-col :span="5">
               <div class="grid-content bg-purple">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="addtestName.guideName"
-                  placement="top"
-                >
+                <el-tooltip class="item" effect="dark" :content="addtestName.guideName" placement="top">
                   <el-button icon="el-icon-search"></el-button>
                 </el-tooltip>
               </div>
             </el-col>
             <el-col :span="5">
               <div class="grid-content bg-purple">
-                <el-upload
-                  class="upload-demo"
-                  action="/img/add_resource"
-                  :before-upload="beforeUploadword"
-                  style="width:100%"
-                >
+                <el-upload class="upload-demo" action="/img/add_resource" :before-upload="beforeUploadword" style="width:100%">
                   <el-button @click="UploadTheSource('add',0)">上传</el-button>
                 </el-upload>
               </div>
@@ -351,24 +179,14 @@
 
             <el-col :span="5">
               <div class="grid-content bg-purple">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="addtestName.reportame"
-                  placement="top"
-                >
+                <el-tooltip class="item" effect="dark" :content="addtestName.reportame" placement="top">
                   <el-button icon="el-icon-search"></el-button>
                 </el-tooltip>
               </div>
             </el-col>
             <el-col :span="5">
               <div class="grid-content bg-purple">
-                <el-upload
-                  class="upload-demo"
-                  action="/img/add_resource"
-                  :before-upload="beforeUploadword"
-                  style="width:100%"
-                >
+                <el-upload class="upload-demo" action="/img/add_resource" :before-upload="beforeUploadword" style="width:100%">
                   <el-button @click="UploadTheSource('add',1)">上传</el-button>
                 </el-upload>
               </div>
@@ -385,18 +203,8 @@
 
             <el-col :span="13">
               <div class="grid-content bg-purple">
-                <el-upload
-                  action="/img/add_resource"
-                  list-type="picture-card"
-                  :before-upload="beforeUploadimg"
-                  :on-remove="handleRemove"
-                >
-                  <img
-                    :src="dialogImageUrl"
-                    alt
-                    style="width:100%;height:100%"
-                    v-if="dialogVisibleImg"
-                  >
+                <el-upload action="/img/add_resource" list-type="picture-card" :before-upload="beforeUploadimg" :on-remove="handleRemove">
+                  <img :src="dialogImageUrl" alt style="width:100%;height:100%" v-if="dialogVisibleImg">
                   <i class="el-icon-plus"></i>
                 </el-upload>
 
@@ -417,29 +225,12 @@
       <el-dialog title="新建场景文件" :visible.sync="dialogVisiblecopyscene" width="30%">
         <div>
           <el-input placeholder="请输入新增场景名称" v-model="tasks.name" class="input-with-select">
-            <el-select
-              v-model="tasks.type"
-              slot="prepend"
-              placeholder="请选泽场景模式"
-              style="width:180px"
-            >
-              <el-option
-                :label="item.name"
-                :value="item.name"
-                v-for="(item) in pattern"
-                :key="item.id"
-              ></el-option>
+            <el-select v-model="tasks.type" slot="prepend" placeholder="请选泽场景模式" style="width:180px">
+              <el-option :label="item.name" :value="item.name" v-for="(item) in pattern" :key="item.id"></el-option>
             </el-select>
           </el-input>
         </div>
-        <el-dialog
-          width="90%"
-          title="场景文件"
-          top="10vh"
-          :visible.sync="innerVisible"
-          :before-close="det3D"
-          append-to-body
-        >
+        <el-dialog width="90%" title="场景文件" top="10vh" :visible.sync="innerVisible" :before-close="det3D" append-to-body>
           <div style="height:70vh">
             <!-- <Unity3D v-bind:tasks="tasks" ref="unity3D"></Unity3D> -->
           </div>
@@ -450,15 +241,16 @@
         </span>
       </el-dialog>
       <!-- 3D文件弹出层 -->
-      <el-dialog
-        width="90%"
-        title="场景文件"
-        top="10vh"
-        :visible.sync="innerVisibleNew"
-        :before-close="det3D"
-      >
+      <el-dialog width="90%" title="场景文件" top="10vh" :visible.sync="innerVisibleNew" :before-close="det3D">
         <div style="height:70vh">
           <!-- <Unity3D v-bind:tasks="tasks" ref="unity3D"></Unity3D> -->
+        </div>
+      </el-dialog>
+
+      <!-- 指导文件查看 -->
+      <el-dialog width="90%" title="指导文件" top="10vh" :visible.sync="innerVisibleNewpdf">
+        <div style="height:840px">
+          <Examine ref="child"></Examine>
         </div>
       </el-dialog>
 
@@ -467,12 +259,7 @@
         <div>
           <el-input placeholder="请输入新增模板名称" v-model="inputcopyname" class="input-with-select">
             <el-select v-model="select" slot="prepend" placeholder="请选择克隆的模板" style="width:180px">
-              <el-option
-                :label="item.name"
-                :value="item.id"
-                v-for="(item) in tableDataTrue"
-                :key="item.id"
-              ></el-option>
+              <el-option :label="item.name" :value="item.id" v-for="(item) in tableDataTrue" :key="item.id"></el-option>
             </el-select>
           </el-input>
         </div>
@@ -486,14 +273,6 @@
       <el-dialog title="克隆我的实验模板" :visible.sync=" dialogVisiblecopyMy" width="30%">
         <div>
           <el-input placeholder="请输入新增模板名称" v-model="inputcopyname" class="input-with-select">
-            <!-- <el-select v-model="select" slot="prepend" placeholder="请选择克隆的模板" style="width:180px">
-              <el-option
-                :label="item.name"
-                :value="item.id"
-                v-for="(item) in tableDataFalse"
-                :key="item.id"
-              ></el-option>
-            </el-select>-->
           </el-input>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -519,6 +298,7 @@ import {
 } from "../API/api";
 import Unity3D from "./uity3D";
 import { log } from "util";
+import Examine from "../views/Examine";
 export default {
   data() {
     return {
@@ -530,6 +310,7 @@ export default {
       dialogVisiblecopy: false,
       dialogVisiblecopyMy: false,
       dialogVisiblecopyscene: false,
+      innerVisibleNewpdf: false,
       innerVisible: false,
       innerVisibleNew: false,
       dialogImageUrl: "",
@@ -586,25 +367,30 @@ export default {
     };
   },
   components: {
-    // Unity3D
+    // Unity3D,
+    Examine
   },
   methods: {
     // 到详情页面
     handleChange(id) {
-      console.log(id);
+      // console.log(id);
       getResource_by_id({
         id: id
       })
         .then(res => {
-          console.log(res);
-          this.goExamine(res.data.object.name, res.data.object.path);
+          // console.log(res);
+          if (res.data.code == "0") {
+            this.innerVisibleNewpdf = true;
+            this.goExamine(res.data.object.name, res.data.object.path);
+          } else {
+            this.$message.error({
+              message: "该资源不存在"
+            });
+          }
+
         })
         .catch(() => {
-          this.$message.error({
-            showClose: true,
-            message: "该资源不存在",
-            type: "warning"
-          });
+
         });
     },
     // 详情页入口
@@ -616,13 +402,14 @@ export default {
       console.log(examine);
       sessionStorage.setItem("examine", JSON.stringify(examine));
       let user = JSON.parse(sessionStorage.getItem("user"));
+      this.$refs.child.gopdf(name, path);
       // console.log(user, user.role);
-      if (user.role == "teacher") {
-        this.$router.push("/relayteacher/Examine");
-      } else if (user.role == "student") {
-        this.$router.push("/relay/Examine");
-      } else {
-      }
+      // if (user.role == "teacher") {
+      //   this.$router.push("/relayteacher/Examine");
+      // } else if (user.role == "student") {
+      //   this.$router.push("/relay/Examine");
+      // } else {
+      // }
     },
     // 上传图片
     handleRemove(file, fileList) {
@@ -661,13 +448,13 @@ export default {
       this.shuangchuanid = id;
       this.shuangchuantype = type;
     },
-    handleCurrentChange() {},
+    handleCurrentChange() { },
     handleClose(done) {
       this.$confirm("确认关闭？")
         .then(_ => {
           done();
         })
-        .catch(_ => {});
+        .catch(_ => { });
     },
     // 下载文件
     download(src, name) {
@@ -735,7 +522,6 @@ export default {
     // 复制内置实验
 
     ReplicateTheBuiltInExperiment(id) {
-      console.log(this.inputcopyname, this.select);
       this.dialogVisiblecopy = false;
       this.dialogVisiblecopyMy = false;
       let type = true;

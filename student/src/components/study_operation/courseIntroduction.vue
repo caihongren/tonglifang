@@ -46,9 +46,11 @@ import {
   modify_course_description,
   modify_course_objectives
 } from "@/API/api";
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
+      id:'', //课程id
       courseOverview: "", //课程概述内容
       teachingObjectives: "", //授课目标内容
       chapterUnitDate: [{ id: null, name: "", section: 1 }], //章节目录数据
@@ -59,40 +61,54 @@ export default {
       teachingObjectivesInput: "" //修改授课目标编辑框
     };
   },
+  computed: {
+    ...mapState(["courseList"])
+  },
   methods: {
+    ...mapActions(["course"]),
     //获取课程介绍内容
     getCourseDescription() {
       get_course_description({
-        courseId: "7c6684b1-b41c-467a-8706-8b5ebb31d3a0"
+        courseId: this.id
       })
         .then(res => {
           this.courseOverview = res.data.object.description; //将课程介绍内容绑定到页面相应位置
           this.teachingObjectives = res.data.object.objectives; //将授课目标绑定到页面相应位置
         })
         .catch(function(error) {
-          // console.log(error);
+           console.log(error);
         });
     },
     //修改授课目标
     modifyCourseObjectives() {
       modify_course_objectives({
-        courseId: "7c6684b1-b41c-467a-8706-8b5ebb31d3a0"
+        courseId: this.id
       })
         .then(res => {
           this.teachingObjectives = res.data.object.objectives; //将课程介绍内容绑定到页面相应位置
         })
         .catch(function(error) {
-          // console.log(error);
+           console.log(error);
         });
     },
     //获取所有章节
     getChapterAnd_UnitList() {
       get_chapter_and_unit_list()
         .then(res => {
-          let obj = res.data.object;
+          console.log(res)
+          this.addserial(res.data.object)
+          this.course(res.data.object)
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 给章节加前缀
+    addserial( row){
+        let obj = row;
           let databox = [];
           for (let i = 0; i < obj.length; i++) {
-            let item = res.data.object[i];
+            let item = obj[i];
             databox[i] = {};
 
             databox[i].id = item.id;
@@ -110,10 +126,6 @@ export default {
           if (databox.length > 0) {
             this.chapterUnitDate = databox;//将章节内容绑定到页面相应位置
           }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
     },
     //修改课程概述弹出框显示
     courseOverviewUpdateButton() {
@@ -124,7 +136,7 @@ export default {
     courseOverviewUpdate() {
       this.courseOverviewDialogVisible = false;
       modify_course_description({
-        courseId: "7c6684b1-b41c-467a-8706-8b5ebb31d3a0",
+        courseId: this.id,
         description: this.courseOverviewInput
       })
         .then(res => {
@@ -148,7 +160,7 @@ export default {
     teachingObjectivesUpdate() {
       this.teachingObjectivesDialogVisible = false;
       modify_course_objectives({
-        courseId: "7c6684b1-b41c-467a-8706-8b5ebb31d3a0",
+        courseId: this.id,
         objectives: this.teachingObjectivesInput
       })
         .then(res => {
@@ -165,9 +177,17 @@ export default {
     }
   },
   created() {
+    // 获取课程id
+    this.id= JSON.parse(sessionStorage.getItem('course')).id
     this.getCourseDescription(); //获取课程介绍内容
     //  this.modifyCourseObjectives()
-    this.getChapterAnd_UnitList(); //获取所有章节
+    // 从vuex中取缓存的数据
+    if(this.courseList.length>0){
+          this.addserial(this.courseList)
+    }else{
+      this.getChapterAnd_UnitList(); //获取所有章节
+    }
+    
     //判断学生/老师，隐藏/显示菜单操作按钮
     let role = JSON.parse(sessionStorage.getItem("user")).role;
     if (role == "student") {

@@ -1,16 +1,15 @@
 <template>
   <div class="box">
-    <router-link to="/relayteacher/taskManagement">
+    <!-- <router-link to="/relayteacher/taskManagement">
       <el-button type="primary" size="small" icon="el-icon-back" style="margin-top:20px">返回</el-button>
-    </router-link>
+    </router-link>-->
     <el-aside width="100%" border="true">
       <div style="height:50px" class="bottonbox">
         <span class="buttombox">任务编辑器</span>
-        <!-- <el-button type="primary" icon="el-icon-search" class="search">新增任务</el-button> -->
       </div>
     </el-aside>
     <ul class="ul">
-      <li class="li">说明</li>
+      <li class="li">备注</li>
       <li class="li">下发对象</li>
       <li class="li" style="width:28%">任务时间</li>
       <li class="li" style="width:17%">实验模板选择</li>
@@ -18,9 +17,14 @@
       <li class="li" style="width:14%;border-right:1px solid #ccc">操作</li>
     </ul>
     <ul class="ul">
-      <li class="li">按要求完成任务</li>
+      <li class="li" ><el-input v-model="addIssued.remarks" placeholder="请输入内容" style="width:80%"></el-input></li>
       <li class="li">
-        <el-button type="primary" @click="modal1 = true">选择</el-button>
+        <el-button type="primary" size="mini" @click="modal1 = true" v-if="studentname.length>0?false:true">选择</el-button>
+        <p
+          class="student"
+          v-if="studentname.length>0?true:false"
+          @click="modal1 = true"
+        >{{studentname}}</p>
       </li>
       <li class="li" style="width:28%">
         <el-date-picker
@@ -28,7 +32,6 @@
           type="date"
           :picker-options="pickerOptions1"
           format="yyyy 年 MM 月 dd 日"
-         
           placeholder="选择截止日期时间"
         ></el-date-picker>
       </li>
@@ -46,10 +49,10 @@
       </li>
       <li class="li" style="width:14%;border-right:1px solid #ccc">
         <el-button type="primary" size="mini" @click="open2">下发</el-button>
-        <el-button type="primary" size="mini" @click="open4">删除取消</el-button>
+        <!-- <el-button type="primary" size="mini" @click="open4">删除取消</el-button> -->
       </li>
     </ul>
-    <el-dialog title="选择下发对象" :visible.sync="modal1" width="30%">
+    <el-dialog title="选择下发对象" :visible.sync="modal1" width="30%" append-to-body>
       <el-tree
         :data="students"
         show-checkbox
@@ -70,7 +73,12 @@
 
 
 <script>
-import { Nxmission, templateList, getclass, formatDate } from "./../../API/api";
+import {
+  Nxmission,
+  getTemplateList,
+  getclass,
+  formatDate
+} from "./../../API/api";
 import { log } from "util";
 export default {
   data() {
@@ -78,12 +86,14 @@ export default {
       value1: "",
       offset: 0,
       limit: 50,
+      studentname: "",
       addIssued: {
         taskTemplateId: "",
         accountIds: [],
-        annexIds: "",
+        // annexIds: "",
         startTime: "",
-        finishTime: ""
+        finishTime: "",
+        remarks:"",
       },
       tableDataBox: [],
       tcourseId: "",
@@ -116,49 +126,57 @@ export default {
             text: "一周后",
             onClick(picker) {
               const date = new Date();
-              date.setTime(date.getTime() +3600 * 1000 * 24 * 7);
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
               picker.$emit("pick", date);
             }
           }
         ],
-         disabledDate(time) {
-                    // console.log('111');
-                    return time.getTime() < Date.now();
-                }
+        disabledDate(time) {
+          // console.log('111');
+          return time.getTime() < Date.now();
+        }
       },
 
       students: []
     };
   },
   methods: {
-   
     handleCurrentChange() {},
     open2() {
       // console.log(formatDate(this.value1[0]));
       //  下发时间为当前时间
-      let finishTime=this.value1;
+      let finishTime = this.value1;
       // console.log(finishTime,formatDate(finishTime))
-      if(finishTime==""){
+      if (finishTime == "") {
         this.$message.error({
-            message: "请选择下发时间",
-            type: "warning"
-          });
-        return 
+          message: "请选择下发时间",
+          type: "warning"
+        });
+        return;
       }
-      this.addIssued.startTime = formatDate(new Date().setTime(new Date().getTime()));
+      this.addIssued.startTime = formatDate(
+        new Date().setTime(new Date().getTime())
+      );
       this.addIssued.finishTime = formatDate(finishTime);
       // console.log(this.addIssued.startTime,this.addIssued.finishTime)
       // console.log(this.addIssued.accountIds.length);
       if (this.addIssued.accountIds.length > 0) {
         if (this.addIssued.taskTemplateId != "") {
-          Nxmission(this.addIssued).then(res => {
-            // console.log(res);
-            this.$message({
-              message: "下发成功",
-              type: "success"
+          Nxmission(this.addIssued)
+            .then(res => {
+              // console.log(res);
+              this.$message({
+                message: "下发成功",
+                type: "success"
+              });
+              this.$emit.taskissue();
+              // this.$router.push("/relayteacher/taskManagement");
+            })
+            .catch(() => {
+              this.$message.error({
+                message: "下发失败"
+              });
             });
-            this.$router.push("/relayteacher/taskManagement");
-          });
         } else {
           this.$message.error({
             message: "请选择实验模板",
@@ -174,6 +192,7 @@ export default {
     },
     getCheckedNodes() {
       this.modal1 = false;
+      let studentname = "";
       // console.log(this.$refs.tree.getCheckedNodes());
       let list = this.$refs.tree.getCheckedNodes();
       let accountIds = [];
@@ -182,10 +201,13 @@ export default {
         if (list[i].accounts) {
         } else {
           accountIds.push(list[i].id);
+          studentname += list[i].name + ",";
         }
       }
       // console.log(accountIds);
       this.addIssued.accountIds = accountIds;
+      this.studentname = studentname;
+      console.log(studentname);
     },
     open4() {
       this.value1 = [];
@@ -214,13 +236,24 @@ export default {
     }
   },
   mounted() {
-    templateList({
+    let box = [];
+    getTemplateList({
       offset: this.offset,
-      limit: this.limit
+      limit: this.limit,
+      inner: false
     }).then(res => {
       // console.log(res.data.object, "模板列表");
 
       this.tableDataBox = res.data.object;
+      getTemplateList({
+        offset: this.offset,
+        limit: this.limit,
+        inner: true
+      }).then(res => {
+        // console.log(res.data.object, "neizhi模板列表");
+
+        this.tableDataBox = this.tableDataBox.concat(res.data.object);
+      });
     });
   },
   created() {
@@ -294,6 +327,15 @@ export default {
     right: 320px;
   }
 }
+.student {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+cursor:pointer;
+  overflow: hidden; //超出的文本隐藏
+  text-overflow: ellipsis; //溢出用省略号显示
+  white-space: nowrap; //溢出不换行
+}
 .ul {
   width: 95%;
   height: 50px;
@@ -303,7 +345,7 @@ export default {
     width: 20%;
     background-color: #ffffff;
     height: 60px;
-
+box-sizing:border-box;
     border: 1px solid #ccc;
     border-right: 0px solid black;
     text-align: center;
@@ -323,6 +365,5 @@ export default {
   font-size: 20px;
   font-weight: 700;
 }
-
 </style>
 

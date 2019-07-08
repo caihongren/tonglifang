@@ -87,23 +87,25 @@ module.exports = {
             https: false,
             hotOnly: false,
             proxy: { // 配置跨域
-                '/api': {　　　　　　　　　 //要访问的跨域的api的域名
-                    // target: 'http://192.168.2.223:8080',
-                    // target: 'http://192.168.0.104:8080',
-                    target: 'http://192.168.2.200:8080/creatoraccount',
+                '/apl': {　　　　　　　　　 //要访问的跨域的api的域名
+                    //target: 'http://192.168.2.223:8080',
+                    //target: 'http://192.168.2.223:10000/zuul/creator/api/public/account',
+                    // target: 'http://localhost:8080/creatoraccount',
+                    //target: 'http://192.168.0.104:8081',
+                   target: 'http://192.168.2.200:8080/creatoraccount',
                     // target: 'http://sso.icubespace.com/account',
                     ws: true,
-
                     changOrigin: true,
                     pathRewrite: {
-                        '^/api': ''
+                        '^/apl': ''
                     }
                 },
                 '/img': {
-                    // target: 'http://192.168.2.223:8081',
-                    //target: 'http://192.168.0.104:8081', //
-                    target: 'http://192.168.2.200:8080/creatorcourse',
+                    //target: 'http://192.168.0.104:8082',
+                    //target: 'http://192.168.2.223:10000/zuul/creator/api/public/course',
+                    // target: 'http://192.168.2.200:8080/creatorcourse',
                     // target: 'http://sso.icubespace.com/course',
+                    target: 'http://192.168.2.200:8080/creatorcourse',
 
 
                     changeOrigin: true,

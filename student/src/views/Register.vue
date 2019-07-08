@@ -132,8 +132,8 @@ export default {
 <style lang="less" scoped>
 .register {
   position: relative;
-  width: 90%;
-  height: 800px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
   background: url(./../image/150325rxssts2sf2ft72df.jpg);
   background-size: 100% 100%;

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from './views/Home.vue'
-import relay from './components/curriculum/relay.vue'
+import relay from './paging/relay.vue'
 //登录注册页面
 import register from './views/Register.vue'
 import login from './views/login.vue'
@@ -9,12 +9,9 @@ import login from './views/login.vue'
 import NotFound from './views/404.vue'
 import Examine from './views/Examine.vue'
 
-//课程学习
-import courseIntroduction from './components/study_operation/courseIntroduction.vue'
-import curriculumLearning from './components/study_operation/curriculumLearning.vue'
 
 
-//继保课程--------nav
+//课程学生端********************
 import simulation from './components/cur__nav/simulation.vue'
 import study from './components/cur__nav/study.vue'
 import my__note from './components/cur__nav/my__note.vue'
@@ -22,6 +19,9 @@ import my__notedemo from './components/cur__nav/my__notedemo.vue'
 import my__data from './components/cur__nav/my__data.vue'
 import my__Submission from './components/cur__nav/my__Submission.vue'
 import componentLibrary from './components/cur__nav/componentLibrary.vue'
+
+
+
 //仿真实验操作 
 import guidance from './components/simulation__operation/guidance.vue'
 import Presentation from './components/simulation__operation/Presentation.vue'
@@ -30,29 +30,28 @@ import snapshot from './components/simulation__operation/snapshot.vue'
 import exportData from './components/simulation__operation/exportData.vue'
 import unity from './components/simulation__operation/unity.vue'
 
-// 
-//  //暂时的效果
+
 import sExperiment1 from './components/simulation__operation/guidance_path/sExperiment1.vue'
-// import sExperiment2 from './components/simulation__operation/guidance_path/sExperiment2.vue'
-// import sExperiment3 from './components/simulation__operation/guidance_path/sExperiment3.vue'
-// simcontent
-// import simcontent from './components/simulation__operation/guidance_path/simcontent.vue'
+//课程学习
+import courseIntroduction from './components/study_operation/courseIntroduction.vue'
+import curriculumLearning from './components/study_operation/curriculumLearning.vue'
 
 
-// paging
+
+// paging 老师端******************
 import relayteacher from './paging/relayteacher.vue'
-import course1 from './paging/admin.vue'
-import course2 from './paging/course2.vue'
-
 //relay paging
-
-import Survey from './relay_paging/Survey.vue'
-import Resources from './relay_paging/Resources.vue'
-import task from './relay_paging/task.vue'
 import taskManagement from './relay_paging/taskManagement.vue'
-
-
 import experimentalTemplateLibrary from './relay_paging/experimentalTemplateLibrary.vue'
+import myTest from './components/cur__nav/myTest.vue'
+import newExperimentalTemplateLibrary from './relay_paging/newExperimentalTemplateLibrary.vue'
+import simulationDatabase from './relay_paging/simulationDatabase.vue'
+import dimension2 from './relay_paging/Dimension2.vue'
+import dimension3 from './relay_paging/Dimension3.vue'
+
+
+
+
 //relay task Presentation
 import Presentationteacher from './relay_paging/tasks/Presentation.vue'
 import DetailedList from './relay_paging/tasks/DetailedList.vue'
@@ -61,22 +60,10 @@ import Addtask from './relay_paging/tasks/Addtask.vue'
 
 
 
-///relay/Resources/files
-import file from './Resources/file.vue'
-// import topic from './Resources/Files/topic.vue'
-// import video from './Resources/Files/video.vue'
-//relay/resources/element
-// import source from './Resources/element/source.vue'
-// import Switch from './Resources/element/Switch.vue'
-// import machinery from './Resources/element/machinery.vue'
-// import Other from './Resources/element/Other.vue'
-//relay/resources/Experiment
-import Basics from './Resources/Experiment/Basics.vue'
-import comprehensive from './Resources/Experiment/comprehensive.vue'
-import innovate from './Resources/Experiment/innovate.vue'
 
 
-// admin端
+
+// admin端******************
 import admin from './paging/admin.vue'
 import addstudent from './components/admin/addstudent.vue'
 import Myclass from './components/admin/Myclass.vue'
@@ -125,19 +112,19 @@ export default new Router({
             path: '/relay',
             name: 'relay',
             component: relay,
-            beforeEnter:((to, from, next) => {
+            beforeEnter: ((to, from, next) => {
                 if (to.path === '/login') {
-                  next();
-                } else {
-                  let token = localStorage.getItem('token');
-              
-                  if (token === 'null' || token === '') {
-                    next('/login');
-                  } else {
                     next();
-                  }
+                } else {
+                    let token = localStorage.getItem('token');
+
+                    if (token === 'null' || token === '') {
+                        next('/login');
+                    } else {
+                        next();
+                    }
                 }
-              }),
+            }),
             children: [{
                     path: '/relay',
                     redirect: '/relay/simulation'
@@ -194,36 +181,13 @@ export default new Router({
                                 }
                             ]
                         },
-                        // {path:'/guidance/sExperiment2',name:'sExperiment2',component:sExperiment2},
-                        // {path:'/guidance/sExperiment3',name:'sExperiment3',component:sExperiment3}
-                        //   ]
-                        // },
-                        // {
-                        //   path: '/simulation/Presentation',
-                        //   name: 'Presentation',
-                        //   component: Presentation
-                        // },
-                        // {
-                        //   path: '/simulation/Enclosure',
-                        //   name: 'Enclosure',
-                        //   component: Enclosure
-                        // },
-                        // {
-                        //   path: '/simulation/snapshot',
-                        //   name: 'snapshot',
-                        //   component: snapshot
-                        // },
-                        // {
-                        //   path: '/simulation/exportData',
-                        //   name: 'export',
-                        //   component: exportData
-                        // },
-                        // {
-                        //   path: '/simulation/unity',
-                        //   name: 'unity',
-                        //   component: unity
-                        // }
+
                     ]
+                },
+                {
+                    path: '/relay/myTest',
+                    name: '/relay/myTest',
+                    component: myTest
                 },
                 //元件库
                 {
@@ -231,6 +195,7 @@ export default new Router({
                     name: 'componentLibrary',
                     component: componentLibrary
                 },
+
                 //课程学习
                 {
                     path: '/relay/study',
@@ -238,15 +203,16 @@ export default new Router({
                     component: study,
                     redirect: '/relay/study/courseIntroduction',
                     children: [{
-                        path: "/relay/study/courseIntroduction",
-                        name: "courseIntroduction",
-                        component: courseIntroduction
-                    },
-                    {
-                        path: "/relay/study/curriculumLearning",
-                        name: "curriculumLearning",
-                        component: curriculumLearning
-                    }]
+                            path: "/relay/study/courseIntroduction",
+                            name: "courseIntroduction",
+                            component: courseIntroduction
+                        },
+                        {
+                            path: "/relay/study/curriculumLearning",
+                            name: "curriculumLearning",
+                            component: curriculumLearning
+                        }
+                    ]
                 },
                 {
                     path: '/relay/my__note',
@@ -274,7 +240,19 @@ export default new Router({
                     path: '/relay/Examine',
                     name: '/relay/Examine',
                     component: Examine
-                }
+                },
+                // 二维设计图
+                {
+                    path: '/relay/dimension2',
+                    name: '/relaydimension2',
+                    component: dimension2
+                },
+                // 三维设计图
+                {
+                    path: '/relay/dimension3',
+                    name: '/relaydimension3',
+                    component: dimension3
+                },
             ]
         },
 
@@ -285,12 +263,7 @@ export default new Router({
             name: 'relayteacher',
             component: relayteacher,
             children: [
-                //relay继电保护分页内容
-                {
-                    path: '/relayteacher/Survey',
-                    name: 'Survey',
-                    component: Survey
-                },
+
                 // 课程管理
 
                 {
@@ -305,7 +278,7 @@ export default new Router({
                         {
                             path: "/relayteacher/study/curriculumLearning",
                             name: "relayteacher/curriculumLearning",
-                            component: curriculumLearning 
+                            component: curriculumLearning
                         }
                     ]
                 },
@@ -315,11 +288,24 @@ export default new Router({
                     name: 'relayteacher/componentLibrary',
                     component: componentLibrary
                 },
+              
                 //实验模板件库
                 {
                     path: '/relayteacher/experimentalTemplateLibrary',
                     name: 'experimentalTemplateLibrary',
                     component: experimentalTemplateLibrary
+                },
+                //新开实验模板库
+                {
+                    path: '/relayteacher/newExperimentalTemplateLibrary',
+                    name: 'newExperimentalTemplateLibrary',
+                    component: newExperimentalTemplateLibrary
+                },
+                //仿真资源库
+                {
+                    path: '/relayteacher/simulationDatabase',
+                    name: 'simulationDatabase',
+                    component: simulationDatabase
                 },
                 // 详情
                 {
@@ -327,49 +313,21 @@ export default new Router({
                     name: '/relayteacher/Examine',
                     component: Examine
                 },
+                // 二维设计图
                 {
-                    path: '/relayteacher/Resources',
-                    name: 'Resources',
-                    component: Resources,
-                    children: [
-                        // {path:'/relay/resources',redirect:'/Resources/Files/file'},
-                        {
-                            path: '/relayteacher/resources/file/:id',
-                            name: 'file',
-                            component: file
-                        },
-                        // {path: '/Resources/Files/topic',name: 'topic',component: topic},
-                        // {path: '/Resources/Files/video',name: 'video',component: video},
-                        // {path: '/Resources/element/source', name: 'source',component: source},
-                        // {path: '/Resources/element/Switch',name: 'Switch',component: Switch},
-                        // {path: '/Resources/element/machinery',name: 'machinery',component: machinery},
-                        // {path: '/Resources/element/Other',name: 'Other',component: Other},
-                        {
-                            path: '/Resources/Experiment/Basics',
-                            name: 'Basics',
-                            component: Basics
-                        },
-                        {
-                            path: '/Resources/Experiment/comprehensive',
-                            name: 'comprehensive',
-                            component: comprehensive
-                        },
-                        {
-                            path: '/Resources/Experiment/innovate',
-                            name: 'innovate',
-                            component: innovate
-                        },
-
-                    ]
+                    path: '/relayteacher/dimension2',
+                    name: 'dimension2',
+                    component: dimension2
                 },
+                // 三维设计图
                 {
-                    path: '/relayteacher/task',
-                    name: 'task',
-                    component: task,
-                    children: [
-
-                    ]
+                    path: '/relayteacher/dimension3',
+                    name: 'dimension3',
+                    component: dimension3
                 },
+
+
+
                 //跳转到任务管里单
                 {
                     path: '/relayteacher/taskManagement',
@@ -405,7 +363,7 @@ export default new Router({
                     component: Addtask
                 },
 
-                
+
 
             ]
         },
@@ -451,23 +409,6 @@ export default new Router({
             ]
         },
 
-
-
-       
-
-
-        // 跳转到课程1
-        {
-            path: '/course1',
-            name: 'course1',
-            component: course1
-        },
-        //跳转到课程二
-        {
-            path: '/course2',
-            name: 'course2',
-            component: course2
-        }
     ]
 })
 
@@ -492,4 +433,3 @@ export default new Router({
 //     }
 //   }
 // })
-
