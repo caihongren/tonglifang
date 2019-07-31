@@ -15,4 +15,7 @@ export default {
   element(state, list) {
     state.elementList = list
   },
+  setAction(state, action){
+    state.action = action;
+  },
 }

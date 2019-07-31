@@ -21,7 +21,6 @@ export default {
         this.txt=res.data.object.name
       })
       .catch(function(error) {
-        console.log(error);
       });
   }
 };

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="46px" height="46px" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 0.470633 0.470633"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str2 {stroke:#1F1A17;stroke-width:0.0115453}
+    .str1 {stroke:#1F1A17;stroke-width:0.017318}
+    .str0 {stroke:#1F1A17;stroke-width:0.017318}
+    .fil0 {fill:none}
+    .fil1 {fill:#1F1A17}
+   ]]>
+  </style>
+ </defs>
+ <g id="图层_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_302910464">
+   <g>
+    <path id="_304186304" class="fil0 str0" d="M0.235311 0.0861858c0.057894,0 0.104849,0.0469548 0.104849,0.104843 0,0.0578882 -0.0469548,0.104831 -0.104849,0.104831 -0.057894,0 -0.104837,-0.0469433 -0.104837,-0.104831 0,-0.0578882 0.0469433,-0.104843 0.104837,-0.104843z"/>
+   </g>
+   <g>
+    <path class="fil0 str0" d="M0.235311 0.249229c0.057894,0 0.104849,0.0469433 0.104849,0.104831 0,0.057894 -0.0469548,0.104837 -0.104849,0.104837 -0.057894,0 -0.104837,-0.0469433 -0.104837,-0.104837 0,-0.0578882 0.0469433,-0.104831 0.104837,-0.104831z"/>
+   </g>
+   <rect class="fil1" x="0.224869" y="0.000385873" width="0.0208897" height="0.0795807"/>
+   <polyline class="fil0 str1" points="0.18689,0.137655 0.239023,0.188142 0.287311,0.1393 "/>
+   <line class="fil0 str1" x1="0.23792" y1="0.187594" x2="0.23792" y2= "0.247405" />
+  </g>
+  <polygon class="fil0 str2" points="0.239906,0.318362 0.291704,0.404213 0.188108,0.404213 "/>
+  <rect class="fil0" width="0.470633" height="0.470633"/>
+ </g>
+</svg>

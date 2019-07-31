@@ -61,11 +61,9 @@ export default {
     //   let courseUrl = "";
     //   if (JSON.parse(sessionStorage.getItem("course"))) {
     //     courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-    //     // console.log(courseUrl, "课程服");
     //   }
     //   const fileName = this.name;
     //   let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-    //   // console.log(url)
     //   const elink = document.createElement("a");
     //   // elink.download = fileName;
     //   elink.style.display = "none";
@@ -86,7 +84,6 @@ export default {
               path:"http://192.168.2.200:8080/creatorcourse/download_test?url=http://192.168.2.200:8080/creatorcourse/static/report/e9150eb0-7ff8-4b66-8e63-6a665f959d78.docx&name=实验七报告模板 .docx"
               // headers: {'Content-Type': 'application/json;charset=UTF-8'},
             }).then(res => {
-              console.log(res);
               // if (res.status == 200) {
               //   const link = document.createElement("a");
               //   let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
@@ -113,15 +110,12 @@ export default {
     $route: {
       handler: function(val, oldVal) {
         this.id = this.$route.params.id;
-        //  console.log(this.id);
         guidelist({
           taskExperimentId: this.id
         }).then(res => {
-          console.log(res, 1111);
           this.name = res.data.object.name;
           this.pdfId=res.data.object.id;
       let path=res.data.object.path
-      //  console.log(res.data.object.path,path)
        this.pdfPath=path
       if(this.pdfPath.indexOf('pdf')!=-1){
           return this.pdfType=true;
@@ -135,18 +129,12 @@ export default {
     }
   },
   created() {
-    // console.log(this.id);
-
     guidelist({
       taskExperimentId: this.id
     }).then(res => {
-      console.log(res, 1111);
       this.name = res.data.object.name;
       this.pdfId=res.data.object.id;
-    
-      // this.pdfPath=res.data.object.path;
       let path=res.data.object.path
-      //  console.log(res.data.object.path,path)
        this.pdfPath=path
       if(this.pdfPath.indexOf('pdf')!=-1){
           this.pdfType=true;

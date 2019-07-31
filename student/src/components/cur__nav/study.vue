@@ -6,16 +6,21 @@
         <div class="grid-content bg-purple left">
           <div class="Catalog-img"><img src="./../../image/course-top1.png"></div>
           <div class="top">
-            <el-menu default-active="1" class="el-menu-vertical-demo" background-color="rgb(35,38,41)" text-color="#fff" active-text-color="#ffd04b" router >
+            <el-menu default-active="1" class="el-menu-vertical-demo" background-color="white" text-color="black" active-text-color="#ffd04b" router>
               <el-menu-item :index="courseIntroductionPath">
-                <!-- <i class="el-icon-menu"></i> -->
-                <span slot="title" class="introduce"><i class="icon iconfont" style="font-size:20px">&#xe501;</i> 课程介绍</span>
+                <span slot="title" class="introduce">
+                  <i class="icon iconfont" style="font-size:20px">&#xe501;</i> 课程介绍</span>
               </el-menu-item>
               <el-menu-item :index="curriculumLearningPath">
-                <div class="two" >
-                  <!-- <i class="el-icon-menu"></i> -->
-                  <span slot="title" class="introduce">  <i class="icon iconfont" style="font-size:20px">&#xe622;</i> 课程学习</span>
+                <div class="two">
+                  <span slot="title" class="introduce">
+                    <i class="icon iconfont" style="font-size:20px">&#xe622;</i> 课程学习</span>
                 </div>
+              </el-menu-item>
+              <el-menu-item :index="averageScore" v-show='isshow'>
+                <span slot="title" class="introduce">
+                  <i class="icon iconfont" style="font-size:20px">&#xe734;</i>平均成绩</span>
+
               </el-menu-item>
             </el-menu>
           </div>
@@ -30,58 +35,59 @@
   </div>
 </template>
 <script>
-import {get_course_description} from "@/API/api";
+import { get_course_description } from "@/API/api";
 export default {
   data() {
     return {
-      //curriculumLearning: true,
-      icon:"",
+      isshow: 'true',
+      icon: "",
       courseIntroductionPath: "",//课程介绍路由路径
-      curriculumLearningPath: ""//课程学习路由路径
+      curriculumLearningPath: "",//课程学习路由路径
+      averageScore: "",//平均成绩路由路径
+      isstudent:true,
     }
   },
   methods: {
     //判断老师还是学生
-    courseIntroductionToInit(){
-      let  user= JSON.parse( sessionStorage.getItem("user"))
-      if(user.role == "teacher"){
-       this.curriculumLearning = false;
-       this.courseIntroductionPath = "/relayteacher/study/courseIntroduction";//课程介绍老师路由地址
-       this.curriculumLearningPath ="/relayteacher/study/curriculumLearning";//课程学习老师路由地址
-      }else if(user.role == "student"){
+    courseIntroductionToInit() {
+      let user = JSON.parse(sessionStorage.getItem("user"))
+      if (user.role == "teacher") {
+        this.curriculumLearning = false;
+        this.courseIntroductionPath = "/relayteacher/study/courseIntroduction";//课程介绍老师路由地址
+        this.curriculumLearningPath = "/relayteacher/study/curriculumLearning";//课程学习老师路由地址
+        this.averageScore = "/relayteacher/study/averageScore";//课程学习老师路由地址
+      } else if (user.role == "student") {
+        this.isshow = false;
         this.curriculumLearning = true;
+        this.isstudent=false
         this.courseIntroductionPath = "/relay/study/courseIntroduction";//课程介绍学生路由地址
-        this.curriculumLearningPath ="/relay/study/curriculumLearning"; //课程学习老师路由地址
-      }else{
-         this.$router.push("/login");
+        this.curriculumLearningPath = "/relay/study/curriculumLearning"; //课程学习老师路由地址
+      } else {
+        this.$router.push("/login");
       }
-     
+
 
     }
-    
+
   },
   created() {
-     //获取课程介绍内容
+    //获取课程介绍内容
     get_course_description({
       courseId: "7c6684b1-b41c-467a-8706-8b5ebb31d3a0",
     })
       .then(res => {
         this.icon = res.data.object.icon;//将课程介绍内容绑定到页面相应位置
       })
-      .catch(function(error) {
-        console.log(error);
+      .catch(function (error) {
       });
     this.courseIntroductionToInit();
   },
 };
 </script>
 <style  lang="less" scoped >
-.el-menu{
-background-color: rgb(35,38,41);
-}
-.el-menu-item{
+.el-menu-item {
   color: #fff;
-  font-size:16px;
+  font-size: 16px;
 }
 .box {
   margin-top: -1px;
@@ -91,26 +97,24 @@ background-color: rgb(35,38,41);
     box-sizing: border-box;
     .left {
       position: relative;
-      background-color: rgb(35,38,41);
+      background-color: white;
       height: 98%;
       .Catalog-img {
         width: 100%;
-        // height: 150px;
         img {
           width: 100%;
-          // height: 150px;
         }
       }
       .top {
-        text-align:center;
+        text-align: center;
         height: 100%;
         display: flex;
         flex-direction: column;
-        .el-menu{
-          border: 1px solid rgb(35, 38, 41)
+        border-right: 1px solid #dddddd;
+        .el-menu {
+          border: 1px solid white;
         }
         span {
-
           font-style: "微软雅黑";
           font-size: 16px;
         }
@@ -119,7 +123,6 @@ background-color: rgb(35,38,41);
           height: 10%;
           .introduce {
             padding-left: 35%;
-
           }
         }
         .two {
@@ -130,7 +133,6 @@ background-color: rgb(35,38,41);
           }
         }
       }
-      
     }
     .right {
       position: relative;
@@ -141,9 +143,9 @@ background-color: rgb(35,38,41);
 </style>
 
 <style>
-  .two .el-menu{
-          border: 1px solid rgb(35, 38, 41)
-        }
+.two .el-menu {
+  border: 1px solid white;
+}
 </style>
 
 

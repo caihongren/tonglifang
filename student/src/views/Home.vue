@@ -5,7 +5,6 @@
       <ul>
         <li v-for="(item,index) in curlist" :key="item.index" @click="goClass(index)">
           课程{{index+1}}------{{item.course}}
-          <!-- <router-link to="/relay/curriculumLearning/courseIntroduction" >课程{{index+1}}------{{item.course}}</router-link> -->
         </li>
       </ul>
     </div>
@@ -15,7 +14,7 @@
 <script>
 import { curlist } from "@/API/api.js";
 import { log } from "util";
-
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -25,31 +24,30 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["element", "task", "course"]),
     goClass(index) {
       let user = JSON.parse(sessionStorage.getItem("user"));
-
       let course = this.curlist[index];
-      console.log(course)
       sessionStorage.setItem("course", JSON.stringify(course));
-       if (user.role == "teacher") {
-          this.$router.push("/relayteacher/study/courseIntroduction");
-        } else if (user.role == "student") {
-          this.$router.push("/relay/study");
-        } else {
-          this.$router.push("/login");
-        }
-      
+      if (user.role == "teacher") {
+        this.$router.push("/relayteacher/study/courseIntroduction");
+      } else if (user.role == "student") {
+        this.$router.push("/relay/study");
+      } else {
+        this.$router.push("/login");
+      }
     }
   },
-
   created() {
     curlist().then(res => {
       this.curlist = res.data.object;
     });
+    this.element([]);
+    this.task([]);
+    this.course([]);
   }
 };
 </script>
-
 <style lang="less" scoped>
 .home {
   .conter {

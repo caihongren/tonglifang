@@ -10,10 +10,11 @@
       :default-active="activeIndex2"
       class="el-menu-demo"
       mode="horizontal"
+      style="background-color: #fff; position: absolute;top: -48px;left: 500px;"
       @select="handleSelect"
-      background-color="#232629"
-      text-color="#fff"
-      active-text-color="#ffd04b"
+      background-color="#fff"
+      text-color="black"
+      active-text-color="#409EFF"
     >
       <router-link to="/relay/study">
         <el-menu-item index="1">课程学习</el-menu-item>
@@ -21,34 +22,21 @@
       <router-link to="/relay/componentLibrary">
         <el-menu-item index="2">元件库</el-menu-item>
       </router-link>
-      <!-- <router-link to="/relay/simulation">
-        <el-menu-item index="3">仿真实验</el-menu-item>
-      </router-link> -->
+
       <router-link to="/relay/myTest">
-        <el-menu-item index="9">实验任务</el-menu-item>
+        <el-menu-item index="3">实验任务</el-menu-item>
       </router-link>
 
-      <router-link to="/relay/my__note">
-        <el-menu-item index="4">我的笔记</el-menu-item>
-      </router-link>
-      <router-link to="/relay/my__data">
-        <el-menu-item index="5">我的资料</el-menu-item>
-      </router-link>
-      <router-link to="/relay/my__Submission">
-        <el-menu-item index="6">我的提交</el-menu-item>
-      </router-link>
-      
       <router-link to="/relay/Dimension2" v-if="iswatchStorage2D">
         <el-menu-item index="10">二维设计空间</el-menu-item>
       </router-link>
       <router-link to="/relay/Dimension3" v-if="iswatchStorage3D">
-        <el-menu-item index="11">三维设计空间</el-menu-item>
+        <el-menu-item index="11">
+          <el-tag closable :disable-transitions="true" class="det" @close="det('3D')">三维设计空间</el-tag>
+        </el-menu-item>
       </router-link>
-
-      <!-- <router-link to="/relay/my__notedemo">
-        <el-menu-item index="7">我的富文本笔记</el-menu-item>
-      </router-link>-->
     </el-menu>
+    <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div>
     <keep-alive :include="['myTest']">
       <router-view
         @gounity="gounity"
@@ -105,16 +93,13 @@ export default {
   watch: {},
   methods: {
     handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
       // 刷新存储导航页面
       this.activeIndex2 = key;
       sessionStorage.setItem("page", key);
     },
     // 回首页归零
     guizone() {
-      // console.log("归零");
       this.activeIndex2 = "1";
-      // console.log("存储页面", "1");
       sessionStorage.setItem("page", "1");
     },
     gounity(row) {
@@ -148,15 +133,20 @@ export default {
         "{'opcode':4,'LocationX': 575,'LocationY':165,'LocationX_Right': 135,'LocationY_Buttom':80,'SizeX': 1210,'SizeY':700}";
       // "{'opcode':4,'LocationX': 755,'LocationY':135,'LocationX_Right': 15,'LocationY_Buttom':10,'SizeX': 1620,'SizeY':760}";
       // "{'opcode':4,'LocationX': 950,'LocationY':150,'LocationX_Right': 10,'LocationY_Buttom':100,}";
-      wfapp.start(cmd);
+
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     },
     // 三维设计空间显示
     interspace() {
       let cmd =
         // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
         "{'opcode':4,'LocationX': 55,'LocationY':215,'LocationX_Right': 50,'LocationY_Buttom':10,'SizeX': 1820,'SizeY':900}";
-      console.log(cmd);
-      wfapp.start(cmd);
+
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     },
     // 关闭3D/
     derunity() {
@@ -277,7 +267,7 @@ export default {
     },
     websocketsend(agen) {
       //数据发送
-      console.log(agen);
+      console.log("数据发送", agen);
       this.websock.send(JSON.stringify(agen));
     },
     websocketclose(e) {
@@ -286,15 +276,18 @@ export default {
     on_click_hide_unity_window() {
       var cmd = "{'opcode':3}";
 
-      wfapp.start(cmd);
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     },
 
     on_click_show_unity_window() {
       var cmd =
         // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
         "{'opcode':4,'LocationX': 125,'LocationY':150,'LocationX_Right': 125,'LocationY_Buttom':100,'SizeX': 1620,'SizeY':760}";
-
-      wfapp.start(cmd);
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     },
     // 2d3D信息
     type2D3D() {
@@ -304,7 +297,6 @@ export default {
       const watchStorage3D = JSON.parse(
         sessionStorage.getItem("watchStorage3D")
       );
-      console.log(watchStorage2D, watchStorage3D, "2d3d");
       if (watchStorage2D != null) {
         this.iswatchStorage2D = true;
       } else {
@@ -315,6 +307,28 @@ export default {
       } else {
         this.iswatchStorage3D = false;
       }
+    },
+    det(type) {
+      if (type == "3D") {
+        this.resetSetItem("watchStorage3D", null);
+        if ("/relay/Dimension3" == this.$route.path) {
+          let SourcePage = JSON.parse(sessionStorage.getItem("SourcePage"));
+          this.handleSelect(SourcePage.index);
+          this.derunity();
+          this.$router.replace(SourcePage.path);
+        } else {
+          let page = sessionStorage.getItem("page");
+          sessionStorage.setItem(
+            "SourcePage",
+            JSON.stringify({
+              path: this.$route.path,
+              index: page
+            })
+          );
+        }
+      } else if (type == "2D") {
+      }
+      // this.iswatchStorage3D = false;
     }
   },
   created() {
@@ -330,6 +344,7 @@ export default {
     });
   },
   destroyed() {
+    this.guizone();
     this.websock.close(); // 离开路由之后断开websocket连接
   }
 };
@@ -347,7 +362,22 @@ export default {
   }
   .el-menu-item {
     font-size: 16px;
+    height: 48px;
+    line-height: 48px;
+    border-bottom: 2px solid red;
   }
+}
+.det {
+  background-color: transparent;
+  border: 0px solid red;
+  font-size: 14px;
+
+  color: inherit;
+}
+.el-menu-demo {
+  height: 48px;
+  // margin-top: -1px;
+  // margin-bottom: 10px;
 }
 </style>
 

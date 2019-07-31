@@ -83,13 +83,10 @@ export default {
       alert(this.editorContent);
     },
     handleOpen(key, keyPath) {
-        console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
       },
       rightShow(){
-        console.log('右键')
       }
   },
   mounted() {

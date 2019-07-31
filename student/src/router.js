@@ -29,9 +29,10 @@ import Enclosure from './components/simulation__operation/Enclosure.vue'
 import snapshot from './components/simulation__operation/snapshot.vue'
 import exportData from './components/simulation__operation/exportData.vue'
 import unity from './components/simulation__operation/unity.vue'
-
-
 import sExperiment1 from './components/simulation__operation/guidance_path/sExperiment1.vue'
+
+
+
 //课程学习
 import courseIntroduction from './components/study_operation/courseIntroduction.vue'
 import curriculumLearning from './components/study_operation/curriculumLearning.vue'
@@ -47,7 +48,9 @@ import myTest from './components/cur__nav/myTest.vue'
 import newExperimentalTemplateLibrary from './relay_paging/newExperimentalTemplateLibrary.vue'
 import simulationDatabase from './relay_paging/simulationDatabase.vue'
 import dimension2 from './relay_paging/Dimension2.vue'
+import dimension2demo from './relay_paging/draw/index.vue'
 import dimension3 from './relay_paging/Dimension3.vue'
+import averageScore from './relay_paging/averageScore.vue'
 
 
 
@@ -279,6 +282,11 @@ export default new Router({
                             path: "/relayteacher/study/curriculumLearning",
                             name: "relayteacher/curriculumLearning",
                             component: curriculumLearning
+                        },
+                        {
+                            path: "/relayteacher/study/averageScore",
+                            name: "relayteacher/averageScore",
+                            component: averageScore
                         }
                     ]
                 },
@@ -288,7 +296,7 @@ export default new Router({
                     name: 'relayteacher/componentLibrary',
                     component: componentLibrary
                 },
-              
+
                 //实验模板件库
                 {
                     path: '/relayteacher/experimentalTemplateLibrary',
@@ -318,6 +326,12 @@ export default new Router({
                     path: '/relayteacher/dimension2',
                     name: 'dimension2',
                     component: dimension2
+                },
+                 // 二维设计图
+                 {
+                    path: '/relayteacher/dimension2demo',
+                    name: 'dimension2demo',
+                    component: dimension2demo
                 },
                 // 三维设计图
                 {

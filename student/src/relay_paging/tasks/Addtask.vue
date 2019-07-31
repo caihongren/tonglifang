@@ -9,38 +9,30 @@
         <el-button type="primary" icon="el-icon-search" class="search">新增实验模板</el-button>
       </div>
       <div>
-          <!-- 表格 -->
-            <el-table
-        ref="singleTable"
-        :data="tableData"
-        border
-        highlight-current-row
-        @current-change="handleCurrentChange"
-        class="tablebox"
-      >
-        <el-table-column prop="index" label="序号" width="100" class="table1" type="index"></el-table-column>
-        <el-table-column prop="name" label="名称" width="250"></el-table-column>
-        <el-table-column prop="experimentType" label="实验类型" width="249"></el-table-column>
-        <el-table-column prop="guideName" label="实验指导书" width="249"></el-table-column>
-        <el-table-column prop="reportName" label="实验报告" width="249"></el-table-column>
-        
-        <el-table-column prop="kong" label="附件" width="150">
-          <Button type="primary" @click="dialogVisible = true">详情展开</Button>
-          <Modal v-model="modal3" title="选择附件" @on-ok="addok" @on-cancel="addcancel">
-            <Tree :data="data2" show-checkbox multiple></Tree>
-          </Modal>
-        </el-table-column>
-        <el-table-column prop="sceneName" label="实验资源" width="249"></el-table-column>
-        <el-table-column  label="操作" >
-          <template slot-scope="scope">
-        <el-button @click="open2(scope.row.id)" type="text" size="small">编辑</el-button>
-        <el-button type="text" @click="open4" size="small">删除</el-button>
-      </template>
-        </el-table-column>
-      </el-table>
+        <!-- 表格 -->
+        <el-table ref="singleTable" :data="tableData" border highlight-current-row @current-change="handleCurrentChange" class="tablebox">
+          <el-table-column prop="index" label="序号" width="100" class="table1" type="index"></el-table-column>
+          <el-table-column prop="name" label="名称" width="250"></el-table-column>
+          <el-table-column prop="experimentType" label="实验类型" width="249"></el-table-column>
+          <el-table-column prop="guideName" label="实验指导书" width="249"></el-table-column>
+          <el-table-column prop="reportName" label="实验报告" width="249"></el-table-column>
+
+          <el-table-column prop="kong" label="附件" width="150">
+            <Button type="primary" @click="dialogVisible = true">详情展开</Button>
+            <Modal v-model="modal3" title="选择附件" @on-ok="addok" @on-cancel="addcancel">
+              <Tree :data="data2" show-checkbox multiple></Tree>
+            </Modal>
+          </el-table-column>
+          <el-table-column prop="sceneName" label="实验资源" width="249"></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button @click="open2(scope.row.id)" type="text" size="small">编辑</el-button>
+              <el-button type="text" @click="open4" size="small">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
       </div>
-      
 
       <!-- 弹出层 -->
     </el-aside>
@@ -169,13 +161,13 @@ export default {
     };
   },
   methods: {
-    handleCurrentChange() {},
+    handleCurrentChange() { },
     handleClose(done) {
       this.$confirm("确认关闭？")
         .then(_ => {
           done();
         })
-        .catch(_ => {});
+        .catch(_ => { });
     },
     open2(id) {
       this.$message({
@@ -212,9 +204,9 @@ export default {
       offset: this.offset,
       limit: this.limit
     }).then(res => {
-      (this.tableData = res.data.object),
-        (this.taskLength = res.data.length),
-        console.log(res);
+      this.tableData = res.data.object;
+      this.taskLength = res.data.length;
+
     });
   }
 };
@@ -238,8 +230,8 @@ export default {
     width: 1800px;
   }
 }
-.box{
-  margin:0 10px
+.box {
+  margin: 0 10px;
 }
 .bottonbox {
   position: relative;

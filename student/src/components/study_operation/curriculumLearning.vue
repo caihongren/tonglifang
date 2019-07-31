@@ -52,8 +52,7 @@
         <!-- 目录顶部操作按钮 -->
         <div class="menu1">
           <!-- 章节目录 -->
-          <div class="Catalog-t" @click="openCloseAllMenu()">
-            <i class="icon iconfont" style="font-size:22px;">&#xe601;</i>目录</div>
+          <div class="Catalog-t" @click="openCloseAllMenu()">目录</div>
           <el-button type="primary" size="small" @click="get_all_materials(), chapterReset()" class="wholeStudent" v-show="!teacherStudentShow">全部</el-button>
           <div class="chapter">
             <el-tree :data="data" node-key="id" :default-expanded-keys="expandedKeys" :expand-on-click-node="false" :props="defaultProps" ref="menuTree">
@@ -109,6 +108,7 @@
               下载
               <i class="el-icon-download"></i>
             </el-button>
+
             <div class="uploadDiv" v-show="teacherStudentShow">
               <el-upload class="upload-demo" action="/img/upload_material" :before-upload="beforeUpload">
                 <el-button size="small" type="primary" class="upload">
@@ -191,9 +191,10 @@ import {
   upload_material, //资料上传
   modify_material_name, //修改文件名
   fileDownload, //资源下载
-  modify_material_chapter_and_unit //移动文件
+  modify_material_chapter_and_unit, //移动文件
+  download,//下载
 } from "@/API/api";
-//let id = 1000;
+import FileSaver from "file-saver";
 export default {
   data() {
     return {
@@ -356,7 +357,7 @@ export default {
         offset: this.nowCurrent,
         limit: this.nowPageSize
       }).then(res => {
-        if (res.data.code == 0) {
+        if (res.data.code == 0) {console.log(res.data.object)
           this.fileArray = res.data.object;
           this.fileTotal = res.data.length;
         } else {
@@ -366,11 +367,7 @@ export default {
 
     //点击全部 展开所有章节
     openCloseAllMenu() {
-      for (
-        var i = 0;
-        i < this.$refs.menuTree.store._getAllNodes().length;
-        i++
-      ) {
+      for (var i = 0; i < this.$refs.menuTree.store._getAllNodes().length; i++) {
         this.$refs.menuTree.store._getAllNodes()[i].expanded = this.isExpanded;
       }
       this.isExpanded = !this.isExpanded;
@@ -448,7 +445,6 @@ export default {
         }).then(res => {
           if (res.data.code == 0) {
             this.$message("修改章成功！");
-
             this.updateMenuLabelInput = "";
           } else {
             this.$message("修改章失败！");
@@ -463,7 +459,6 @@ export default {
         }).then(res => {
           if (res.data.code == 0) {
             this.$message("修改节成功！");
-
             this.updateMenuLabelInput = "";
           } else {
             this.$message("修改节失败！");
@@ -606,26 +601,15 @@ export default {
         this.clearFileOperation();
       }
     },
-
     // 下载文件
     Dowload(src, name) {
-      let data = src;
-      if (!data) {
-        return;
-      }
-      let courseUrl = "";
-      if (JSON.parse(sessionStorage.getItem("course"))) {
-        courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-      }
-      const fileName = name;
-      let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      const elink = document.createElement("a");
-      elink.style.display = "none";
-      elink.href = url;
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
+      download({
+        name: name,
+        url: src,
+      }).then(res => {
+        const blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
+        FileSaver.saveAs(blob, name);
+      })
     },
     //移动文件按钮
     moveFileButton() {
@@ -695,16 +679,12 @@ export default {
       } else {
       }
     },
-
     //修改文件名按钮
     fileUpdateBlock() {
       if (this.fileOperationArray.length != 0) {
         this.fileUpdateVisible = true;
         for (var i = 0; i < this.fileArray.length; i++) {
-          if (
-            this.fileOperationArray[this.fileOperationArray.length - 1] ==
-            this.fileArray[i].id
-          ) {
+          if (this.fileOperationArray[this.fileOperationArray.length - 1] == this.fileArray[i].id) {
             this.fileUpdateForm.name = this.fileArray[i].name;
           }
         }
@@ -920,6 +900,7 @@ export default {
 .introduceBox {
   height: 100%;
   width: 100%;
+  overflow: auto;
   .row-bg {
     height: 100%;
     .leftCol {
@@ -963,7 +944,7 @@ export default {
 
         .chapter {
           .menuContext {
-            width: 205px;
+            width: 202px;
             overflow: hidden;
           }
           .modifyForm {
@@ -993,6 +974,7 @@ export default {
     }
     .right {
       height: 100%;
+      width: 98%;
       .operationButtons {
         padding: 0px 30px;
         .rename {
@@ -1013,8 +995,9 @@ export default {
         }
       }
       .fileContext {
-        width: 100%;
-        height: 80%;
+        width: 102%;
+        height: 76%;
+        overflow: auto;
         .fileCard {
           float: left;
           width: 115px;
@@ -1034,7 +1017,7 @@ export default {
           }
           img {
             width: 50px;
-            height: 50px;
+            height: 70px;
             display: block;
             padding-bottom: 20px;
           }
@@ -1043,13 +1026,14 @@ export default {
       .paging {
         text-align: center;
         margin-right: 30%;
+        margin: 50px;
       }
     }
     .filePreview {
       width: 100%;
       height: 100%;
       display: none;
-      margin-left: 10px;
+      margin-left: 0px;
       .iframe {
         height: 93%;
         width: 98%;

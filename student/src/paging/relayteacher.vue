@@ -6,63 +6,42 @@
         <el-breadcrumb-item>{{course}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo ralateacher"
-      mode="horizontal"
-      style="background-color: rgb(35, 38, 41);"
-      @select="handleSelect"
-      background-color="#232629"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-    >
+    <el-menu :default-active="activeIndex" class="el-menu-demo ralateacher" mode="horizontal" style="background-color: #fff; position: absolute;top: -50px;left: 500px;" @select="handleSelect" background-color="#fff" text-color="black" active-text-color="#409EFF">
       <router-link to="/relayteacher/study/courseIntroduction">
         <el-menu-item index="1" class="Surveybox">课程管理</el-menu-item>
       </router-link>
       <router-link to="/relayteacher/componentLibrary">
-        <el-menu-item index="4">元件库</el-menu-item>
+        <el-menu-item index="2">元件库</el-menu-item>
       </router-link>
-      <!-- <router-link to="/relayteacher/newcomponentLibrary">
-        <el-menu-item index="9">新元件库</el-menu-item>
-      </router-link>-->
-      <!-- <router-link to="/relayteacher/experimentalTemplateLibrary">
-        <el-menu-item index="5">实验模板库</el-menu-item>
-      </router-link>-->
-      <!-- 新开实验模板库 -->
-      <router-link to="/relayteacher/newExperimentalTemplateLibrary">
-        <el-menu-item index="3">实验模板库</el-menu-item>
-      </router-link>
-
-      <router-link to="/relayteacher/taskManagement">
-        <el-menu-item index="2">实验任务管理</el-menu-item>
-      </router-link>
-
       <router-link to="/relayteacher/simulationDatabase">
-        <!-- 仿真资源库 -->
-        <el-menu-item index="6">仿真资源库</el-menu-item>
+        <el-menu-item index="3">仿真资源库</el-menu-item>
       </router-link>
-
+      <router-link to="/relayteacher/newExperimentalTemplateLibrary">
+        <el-menu-item index="4">实验模板库</el-menu-item>
+      </router-link>
+      <router-link to="/relayteacher/taskManagement">
+        <el-menu-item index="5">实验任务管理</el-menu-item>
+      </router-link>
       <router-link to="/relayteacher/Dimension2" v-if="iswatchStorage2D">
         <el-menu-item index="10">二维设计空间</el-menu-item>
       </router-link>
+      <!-- <router-link to="/relayteacher/Dimension3" v-if="iswatchStorage3D">
+        <el-menu-item index="11">
+三维设计空间
+        </el-menu-item>
+      </router-link>-->
       <router-link to="/relayteacher/Dimension3" v-if="iswatchStorage3D">
-        <el-menu-item index="11">三维设计空间</el-menu-item>
+        <el-menu-item index="11">
+          <el-tag closable :disable-transitions="true" class="det" @close="deet('3D')">三维设计空间</el-tag>
+        </el-menu-item>
       </router-link>
-        <router-link to="/task/Presentationteacher">
-      
-        <el-menu-item index="11">老师批阅</el-menu-item>
+      <router-link to="/relayteacher/Dimension2demo">
+        <el-menu-item index="12">二维设计空间demo</el-menu-item>
       </router-link>
     </el-menu>
-  
-
-    <keep-alive :include="['newExperimentalTemplateLibrary']">
-      <router-view
-        @gounity="gounity"
-        @derunity="derunity"
-        @yuangounity="yuangounity"
-        @threadPoxi="threadPoxi"
-        @handleSelect="handleSelect"
-      ></router-view>
+    <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div>
+    <keep-alive :include="['newExperimentalTemplateLibrary','taskManagement',]">
+      <router-view @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity" @threadPoxi="threadPoxi" @handleSelect="handleSelect" @deet='deet'></router-view>
     </keep-alive>
   </div>
 </template>
@@ -104,10 +83,14 @@ export default {
       },
       newagentData: {},
       iswatchStorage2D: "", //判断2D或者3d界面
-      iswatchStorage3D: "" //判断2D或者3d界面
+      iswatchStorage3D: "", //判断2D或者3d界面
+      path3D: "/relayteacher/Dimension3"
     };
   },
   methods: {
+    // deet() {
+    //   this.iswatchStorage3D = false;
+    // },
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);
       this.activeIndex = key;
@@ -177,7 +160,7 @@ export default {
       // 若是 正在开启状态，则等待300毫秒
       else if (this.websock.readyState === this.websock.CONNECTING) {
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 300);
       }
@@ -185,7 +168,7 @@ export default {
       else {
         this.initWebSocket();
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 500);
       }
@@ -215,7 +198,7 @@ export default {
       that.lockReconnect = true;
       //没连接上会一直重连，设置延迟避免请求过多
       that.timeoutnum && clearTimeout(that.timeoutnum);
-      that.timeoutnum = setTimeout(function() {
+      that.timeoutnum = setTimeout(function () {
         //新连接
         that.initWebSocket();
         that.lockReconnect = false;
@@ -235,7 +218,7 @@ export default {
       var self = this;
       self.timeoutObj && clearTimeout(self.timeoutObj);
       self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
-      self.timeoutObj = setTimeout(function() {
+      self.timeoutObj = setTimeout(function () {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.websock.readyState == 1) {
           //如果连接正常
@@ -248,7 +231,7 @@ export default {
           console.log("重连");
           self.reconnect();
         }
-        self.serverTimeoutObj = setTimeout(function() {
+        self.serverTimeoutObj = setTimeout(function () {
           //超时关闭
           self.websock.close();
         }, self.timeout);
@@ -289,8 +272,10 @@ export default {
     },
     on_click_hide_unity_window() {
       var cmd = "{'opcode':3}";
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
 
-      wfapp.start(cmd);
     },
 
     on_click_show_unity_window() {
@@ -298,7 +283,10 @@ export default {
         // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
         "{'opcode':4,'LocationX': 125,'LocationY':150,'LocationX_Right': 125,'LocationY_Buttom':100,'SizeX': 1620,'SizeY':760}";
 
-      wfapp.start(cmd);
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
+
     },
     // 2d3D信息
     type2D3D() {
@@ -308,7 +296,6 @@ export default {
       const watchStorage3D = JSON.parse(
         sessionStorage.getItem("watchStorage3D")
       );
-      // console.log(watchStorage2D, watchStorage3D, "2d3d");
       if (watchStorage2D != null) {
         this.iswatchStorage2D = true;
       } else {
@@ -319,11 +306,34 @@ export default {
       } else {
         this.iswatchStorage3D = false;
       }
-    }
+    },
+    deet(type) {
+      console.log(type)
+      if (type == "3D") {
+        this.resetSetItem("watchStorage3D", null);
+        if ("/relayteacher/Dimension3" == this.$route.path) {
+          let SourcePage = JSON.parse(sessionStorage.getItem("SourcePage"));
+          this.handleSelect(SourcePage.index);
+          this.derunity();
+          console.log(SourcePage.path, 'path')
+          this.$router.replace(SourcePage.path);
+        } else {
+          let page = sessionStorage.getItem("pageTeacher");
+          sessionStorage.setItem(
+            "SourcePage",
+            JSON.stringify({
+              path: this.$route.path,
+              index: page
+            })
+          );
+        }
+      } else if (type == "2D") {
+      }
+      this.iswatchStorage3D = false;
+    },
   },
   created() {
     let course = JSON.parse(sessionStorage.getItem("course"));
-    // console.log(course);
     this.course = course.course;
     this.initWebSocket();
     if (sessionStorage.getItem("pageTeacher")) {
@@ -341,6 +351,7 @@ export default {
   },
   destroyed() {
     console.log("离开断开websocket连接");
+    this.guizone();
     this.websock.close(); // 离开路由之后断开websocket连接
   }
 };
@@ -353,30 +364,30 @@ a {
   display: inline-block;
 }
 .el-menu-demo {
-  height: 50px;
-  margin-top: -1px;
+  height: 48px;
+  // margin-top: -1px;
   // margin-bottom: 10px;
 }
 .el-menu-item {
   height: 48px;
   min-width: 100px;
   margin: auto;
-
-  // margin-left: 35px;
-}
-.Surveybox {
-  // margin-left: 200px;
 }
 .relaybanner {
   position: relative;
-  height: 90%;
+  height: 92%;
 }
 .Breadcrumb {
   position: absolute;
   top: -25px;
   left: 250px;
 }
+.det {
+  background-color: transparent;
+  border: 0px solid red;
+  font-size: 14px;
+
+  color: inherit;
+}
 </style>
 
-<style>
-</style>

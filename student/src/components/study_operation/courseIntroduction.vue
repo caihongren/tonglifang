@@ -2,8 +2,9 @@
   <el-row type="flex" class="row-bg">
     <el-col :span="24">
       <div class="outline">
-        <h3><i class="el-icon-menu"></i> 课程概述 
-        <el-button  class="Summary"   size= "small"  type="primary" @click="courseOverviewUpdateButton()" v-show="teacherStudentShow">修改</el-button>
+        <h3>
+          <i class="el-icon-menu"></i> 课程概述
+          <el-button class="Summary" size="small" type="primary" @click="courseOverviewUpdateButton()" v-show="teacherStudentShow">修改</el-button>
         </h3>
         <p class="courseOverview">{{ courseOverview }}</p>
         <el-dialog title="修改课程概述" :visible.sync="courseOverviewDialogVisible">
@@ -13,7 +14,8 @@
             <el-button type="primary" @click="courseOverviewUpdate()">确 定</el-button>
           </div>
         </el-dialog>
-        <h3><i class="el-icon-s-data"></i> 课程大纲 </h3>
+        <h3>
+          <i class="el-icon-s-data"></i> 课程大纲 </h3>
         <div class="outline-c" v-for="item in chapterUnitDate" :key="item.id">
           <span style="font-size:16px">{{ item.section }}{{"."}}{{ item.name }}</span>
           <div v-for="unitItem in item.units" :key="unitItem.id">
@@ -21,19 +23,19 @@
           </div>
         </div>
         <div class="target">
-          <h3><i class="el-icon-reading"></i> 授课目标 
-          <el-button  class="Summary"   size= "small"  type="primary" @click="teachingObjectivesUpdateButton()" v-show="teacherStudentShow">修改</el-button>
+          <h3>
+            <i class="el-icon-reading"></i> 授课目标
+            <el-button class="Summary" size="small" type="primary" @click="teachingObjectivesUpdateButton()" v-show="teacherStudentShow">修改</el-button>
           </h3>
           <p class="target-c">{{teachingObjectives}} </p>
           <el-dialog title="修改授课目标" :visible.sync="teachingObjectivesDialogVisible">
-          <el-input type="textarea" :rows="8" v-model="teachingObjectivesInput" autocomplete="off"></el-input>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="teachingObjectivesDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="teachingObjectivesUpdate()">确 定</el-button>
-          </div>
-        </el-dialog>
+            <el-input type="textarea" :rows="8" v-model="teachingObjectivesInput" autocomplete="off"></el-input>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="teachingObjectivesDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="teachingObjectivesUpdate()">确 定</el-button>
+            </div>
+          </el-dialog>
         </div>
-
 
       </div>
     </el-col>
@@ -50,7 +52,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      id:'', //课程id
+      id: '', //课程id
       courseOverview: "", //课程概述内容
       teachingObjectives: "", //授课目标内容
       chapterUnitDate: [{ id: null, name: "", section: 1 }], //章节目录数据
@@ -75,8 +77,7 @@ export default {
           this.courseOverview = res.data.object.description; //将课程介绍内容绑定到页面相应位置
           this.teachingObjectives = res.data.object.objectives; //将授课目标绑定到页面相应位置
         })
-        .catch(function(error) {
-           console.log(error);
+        .catch(function (error) {
         });
     },
     //修改授课目标
@@ -85,47 +86,45 @@ export default {
         courseId: this.id
       })
         .then(res => {
+          // console.log(res)
           this.teachingObjectives = res.data.object.objectives; //将课程介绍内容绑定到页面相应位置
         })
-        .catch(function(error) {
-           console.log(error);
+        .catch(function (error) {
         });
     },
     //获取所有章节
     getChapterAnd_UnitList() {
       get_chapter_and_unit_list()
         .then(res => {
-          console.log(res)
           this.addserial(res.data.object)
           this.course(res.data.object)
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(function (error) {
         });
     },
     // 给章节加前缀
-    addserial( row){
-        let obj = row;
-          let databox = [];
-          for (let i = 0; i < obj.length; i++) {
-            let item = obj[i];
-            databox[i] = {};
+    addserial(row) {
+      let obj = row;
+      let databox = [];
+      for (let i = 0; i < obj.length; i++) {
+        let item = obj[i];
+        databox[i] = {};
 
-            databox[i].id = item.id;
-            databox[i].name = item.name;
-            databox[i].section = i + 1;
-            let units = [];
-            for (let j = 0; j < item.units.length; j++) {
-              units[j] = {};
-              units[j].id = item.units[j].id;
-              units[j].name = item.units[j].name;
-              units[j].section = i + 1 + "." + (j + 1);
-            }
-            databox[i].units = units;
-          }
-          if (databox.length > 0) {
-            this.chapterUnitDate = databox;//将章节内容绑定到页面相应位置
-          }
+        databox[i].id = item.id;
+        databox[i].name = item.name;
+        databox[i].section = i + 1;
+        let units = [];
+        for (let j = 0; j < item.units.length; j++) {
+          units[j] = {};
+          units[j].id = item.units[j].id;
+          units[j].name = item.units[j].name;
+          units[j].section = i + 1 + "." + (j + 1);
+        }
+        databox[i].units = units;
+      }
+      if (databox.length > 0) {
+        this.chapterUnitDate = databox;//将章节内容绑定到页面相应位置
+      }
     },
     //修改课程概述弹出框显示
     courseOverviewUpdateButton() {
@@ -147,8 +146,7 @@ export default {
             this.$message("修改失败！");
           }
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(function (error) {
         });
     },
     //修改授课目标弹出框显示
@@ -166,28 +164,27 @@ export default {
         .then(res => {
           if (res.data.code == 0) {
             this.$message("修改成功！");
-            this.modifyCourseObjectives(); //获取课程介绍内容
+            this.getCourseDescription(); //获取课程介绍内容
           } else {
             this.$message("修改失败！");
           }
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(function (error) {
         });
     }
   },
   created() {
     // 获取课程id
-    this.id= JSON.parse(sessionStorage.getItem('course')).id
+    this.id = JSON.parse(sessionStorage.getItem('course')).id
     this.getCourseDescription(); //获取课程介绍内容
     //  this.modifyCourseObjectives()
     // 从vuex中取缓存的数据
-    if(this.courseList.length>0){
-          this.addserial(this.courseList)
-    }else{
+    if (this.courseList.length > 0) {
+      this.addserial(this.courseList)
+    } else {
       this.getChapterAnd_UnitList(); //获取所有章节
     }
-    
+
     //判断学生/老师，隐藏/显示菜单操作按钮
     let role = JSON.parse(sessionStorage.getItem("user")).role;
     if (role == "student") {
@@ -207,6 +204,7 @@ export default {
   padding-bottom: 100px;
   position: relative;
   h3 {
+    font-size: 18px;
     line-height: 30px;
     padding: 0 30px;
     .Summary {

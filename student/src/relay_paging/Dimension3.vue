@@ -1,10 +1,10 @@
 <template>
   <div class="box">
     <!-- 菜单-->
-    <el-row>
+    <!-- <el-row>
       <el-col :span="7" :offset="1">
         <div class="grid-content bg-purple">
-          <h2>仿真资源库/{{name}}(类型:{{type}})</h2>
+          <h2>{{name}}(类型:{{type}})</h2>
         </div>
       </el-col>
 
@@ -13,7 +13,7 @@
           <el-button type="primary" @click="detpage()">关闭</el-button>
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
     <!-- 显示框 -->
     <div class="show"></div>
   </div>
@@ -32,7 +32,7 @@ export default {
       },
       agentData: {
         name: "mode",
-        mode: "task_experiment_exercise_instance_editor",
+        mode: "",
         token: "",
         id: "",
         type: "",
@@ -51,7 +51,6 @@ export default {
       // 进行来源判断
 
       let SourcePage = JSON.parse(sessionStorage.getItem("SourcePage"));
-      // console.log(SourcePage.index)
       this.$emit("handleSelect", SourcePage.index);
 
       this.$emit("derunity");
@@ -60,30 +59,48 @@ export default {
     }
   },
   mounted() {
-    this.$emit("threadPoxi", this.agentData);
+    //判断学生老师  字段
+    let role = JSON.parse(sessionStorage.getItem("user")).role;
+    if (role == "teacher") {
+      this.agentData.mode = "task_experiment_exercise_template_editor";
+    } else {
+      this.agentData.mode = "task_experiment_exercise_instance_editor";
+    }
+    const tasks = JSON.parse(sessionStorage.getItem("watchStorage3D"));
+
+    if (tasks != null) {
+      this.$emit("threadPoxi", this.agentData);
+    }
+
     let cmd =
       // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
-      "{'opcode':4,'LocationX': 55,'LocationY':215,'LocationX_Right': 50,'LocationY_Buttom':10,'SizeX': 1820,'SizeY':900}";
- 
-    wfapp.start(cmd);
+      "{'opcode':4,'LocationX': 21,'LocationY':72,'LocationX_Right': 20,'LocationY_Buttom':30,'SizeX': 1820,'SizeY':900}";
+    if (typeof wfapp !== "undefined") {
+      wfapp.start(cmd);
+    }
     // this.$emit('interspace')
   },
   created() {
     const tasks = JSON.parse(sessionStorage.getItem("watchStorage3D"));
-    console.log(tasks);
+
+    if (tasks == null) {
+      this.detpage();
+      return;
+    }
+    this.$emit("handleSelect", 11);
     //获取本地缓存中的令牌mytoken
     let token = localStorage.getItem("token");
-    this.name=tasks.name;
-    this.type=tasks.type;
+    this.name = tasks.name;
+    this.type = tasks.type;
     this.agentData.token = token;
     this.agentData.id = tasks.id;
+    // this.agentData.mode=tasks.mode;
     this.agentData.Expname = tasks.name;
-    this.agentData.type = tasks.type;
-    if (tasks.look == true) {
-      this.agentData.look = tasks.look;
-    }
+    this.agentData.taskExperimentId = tasks.taskExperimentId;
 
-    console.log(this.agentData);
+    this.agentData.type = tasks.type;
+
+    this.agentData.look = tasks.look;
   },
   destroyed() {
     this.$emit("derunity"); // 离开路由之后关闭显示
@@ -92,15 +109,16 @@ export default {
 </script>
 <style lang="less" scoped>
 .box {
-  width: 96%;
-  margin: -1px 2%;
-  height: 95%;
+  width: 99%;
+  margin: 0 0.5%;
+  height: 100%;
   border: 1px solid #ccc;
   padding: 5px;
+  border-radius: 5px;
 
   .show {
     width: 100%;
-    height: 90%;
+    height: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;
   }

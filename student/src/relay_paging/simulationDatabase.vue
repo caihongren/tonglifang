@@ -3,34 +3,18 @@
     <div class="simulationResourcesOverall">
       <div class="simulationResourcesOverall-top">
         <h2 class="simulationResourcesOverall-left">我的仿真资源</h2>
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          @click="newlyBuildButton()"
-          class="simulationResourcesOverall-right"
-        >新建</el-button>
-        <el-table
-          :data="tableDataFalse"
-          border
-          stripe
-          :default-sort="{prop:'createdAt', order: 'descending'}"
-          :header-cell-style="{background:'#ccc'}"
-          class="Simulation operation"
-        >
+        <el-button type="primary" icon="el-icon-plus" @click="newlyBuildButton()" class="simulationResourcesOverall-right">新建</el-button>
+        <el-table :data="tableDataFalse" border stripe :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#ccc'}" class="Simulation operation">
           <el-table-column prop="index" label="序号" min-width="140" class="table1" type="index"></el-table-column>
-          <el-table-column prop="name" label="名称" min-width="250" sortable></el-table-column>
-          <el-table-column prop="createdAt" label="保存时间" min-width="350" sortable>
+          <el-table-column prop="name" label="名称" min-width="120" sortable></el-table-column>
+          <el-table-column prop="createdAt" label="保存时间" min-width="120" sortable>
             <template slot-scope="scope">{{scope.row.createdAt|dateformat}}</template>
           </el-table-column>
-          <el-table-column prop="typeName" label="类型" min-width="400"></el-table-column>
-          <el-table-column label="操作" min-width="350">
+          <el-table-column prop="typeName" label="类型" min-width="100"></el-table-column>
+          <el-table-column label="操作" min-width="150">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="compile(scope.row)">编辑</el-button>
-              <el-button
-                @click="dialogVisiblecopyMy=true,select=scope.row.id,inputcopyname=''"
-                type="text"
-                size="small"
-              >克隆</el-button>
+              <el-button @click="dialogVisiblecopyMy=true,select=scope.row.id,inputcopyname=''" type="text" size="small">克隆</el-button>
               <el-button type="text" @click="deleteTaskFormwork(scope.row.id)" size="small">删除</el-button>
             </template>
           </el-table-column>
@@ -41,39 +25,20 @@
       </div>
       <div class="simulationResourcesOverall-bottom">
         <h2 class="simulationResourcesOverall-leftbottom">内置仿真资源</h2>
-        <el-table
-          :data="tableDataTrue"
-          stripe
-          border
-          :default-sort="{prop:'createdAt', order: 'descending'}"
-          :header-cell-style="{background:'#ccc'}"
-          class="Simulation operation"
-        >
-          <el-table-column prop="index" label="序号" min-width="140" class="table1" type="index"></el-table-column>
-          <el-table-column prop="name" label="名称" min-width="250"></el-table-column>
-          <el-table-column prop="typeName" label="类型" min-width="400"></el-table-column>
-          <el-table-column label="操作" min-width="250">
+        <el-table :data="tableDataTrue" stripe border :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#ccc'}" class="Simulation operation">
+          <el-table-column prop="index" label="序号" min-width="40" class="table1" type="index"></el-table-column>
+          <el-table-column prop="name" label="名称" min-width="120"></el-table-column>
+          <el-table-column prop="typeName" label="类型" min-width="100"></el-table-column>
+          <el-table-column label="操作" min-width="150">
             <template slot-scope="scope">
               <el-button @click="look(scope.row)" type="text" size="small">查看</el-button>
-              <el-button
-                @click="dialogVisiblecopy=true,select=scope.row.id,inputcopyname=''"
-                type="text"
-                size="small"
-              >克隆</el-button>
+              <el-button @click="dialogVisiblecopy=true,select=scope.row.id,inputcopyname=''" type="text" size="small">克隆</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div style="margin:50px;">
-        <el-pagination
-          @size-change="handleSizeChangeinner"
-          @current-change="handleCurrentChangeinner"
-          :current-page="currentPage"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="10"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="lengthinner"
-        ></el-pagination>
+        <el-pagination @size-change="handleSizeChangeinner" @current-change="handleCurrentChangeinner" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="lengthinner"></el-pagination>
       </div>
     </div>
     <!-- 新建弹出框 -->
@@ -81,27 +46,10 @@
       <div>
         <el-input placeholder="新建名称" v-model="addform.name" class="input-with-select">
           <el-select v-model="addform.type" slot="prepend" placeholder="请选择类型" style="width:150px">
-            <el-option
-              :label="item.name"
-              :value="item.name"
-              v-for="(item) in simulationResourcesType"
-              :key="item.id"
-            ></el-option>
-            <!-- <el-option label="二维设计图" value="二维设计图"></el-option>
-            <el-option label="二维接线图" value="二维接线图"></el-option>
-            <el-option label="二维布局图" value="二维布局图"></el-option>
-            <el-option label="三维工厂场景" value="三维工厂场景"></el-option>
-            <el-option label="三维教学场景" value="三维教学场景"></el-option>
-            <el-option label="三维工程场景" value="三维工程场景"></el-option>-->
+            <el-option :label="item.name" :value="item.name" v-for="(item) in simulationResourcesType" :key="item.id"></el-option>
           </el-select>
-          <el-select
-            v-model="addform.expTypeId"
-            v-show="addform.type[0]=='三'?true:false"
-            slot="prepend"
-            placeholder="请选泽实验类型"
-            style="width:150px;margin-left:10px"
-          >
-            <el-option :label="item.name" :value="item.id" v-for="(item) in pattern" :key="item.id"></el-option>
+          <el-select v-model="addform.expTypeId" v-show="addform.type[0]=='三'?true:false" slot="prepend" placeholder="请选泽实验类型" style="width:150px;margin-left:10px">
+            <el-option :label="item.name" :value="item.id" v-for="item in pattern" :key="item.id"></el-option>
           </el-select>
         </el-input>
       </div>
@@ -141,17 +89,17 @@ import {
   cloneSimulation, //克隆仿真资源
   deletSimulation, //删除仿真资源
   modifySimulation, //修改仿真资源
-  experiment_type_list
+  experiment_type_list //添加实验类型
 } from "../API/api";
 export default {
   data() {
     return {
       offset: 0,
       limit: 10,
-      length: 10,
+      length: 0,
       offsetinner: 0,
       limitinner: 20,
-      lengthinner: 10,
+      lengthinner: 0,
       currentPage: 1,
       currentPage4: 1,
       select: "", //克隆时选中的id
@@ -183,43 +131,26 @@ export default {
         type: "",
         look: false
       },
-      pattern: [
-        {
-          name: "基础实验",
-          id: "1"
-        },
-        {
-          name: "创新实验",
-          id: "2"
-        },
-        {
-          name: "综合实验",
-          id: "3"
-        }
-      ],
+      pattern: [],
       formLabelWidth: "120px"
     };
   },
   methods: {
     // 我的仿真资源分页
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
       this.limit = val;
       this.mySimulationResources();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       this.offset = (val - 1) * this.limit;
       this.mySimulationResources();
     },
     // 内置仿真资源分页
     handleSizeChangeinner(val) {
-      // console.log(`每页 ${val} 条`);
       this.limitinner = val;
       this.innerSimulationResources();
     },
     handleCurrentChangeinner(val) {
-      // console.log(`当前页: ${val}`);
       this.offsetinner = (val - 1) * this.limit;
       this.innerSimulationResources();
     },
@@ -227,15 +158,15 @@ export default {
     newlyBuildButton() {
       this.testTemplateLibrary = true; //模态框显示
       this.getSceneTypeList(); //获取仿真资源类型列表
-      this.experiment_type_list();
+      this.experiment_type_list(); //添加实验类型
     },
     //获取仿真资源类型列表
     getSceneTypeList() {
       getScene().then(res => {
-        // console.log(res)
         this.simulationResourcesType = res.data.object;
       });
     },
+    //添加实验类型
     experiment_type_list() {
       experiment_type_list().then(res => {
         this.pattern = res.data.object;
@@ -248,12 +179,9 @@ export default {
         limit: this.limit,
         inner: false
       }).then(res => {
-        console.log(res);
         this.tableDataFalse = [];
         let tableDataFalse = [];
         this.length = res.data.length;
-        // console.log(res.data.object);
-
         for (let i = 0; i < res.data.object.length; i++) {
           tableDataFalse.push(res.data.object[i]);
         }
@@ -270,7 +198,6 @@ export default {
         this.tableDataTrue = [];
         let tableDataTrue = [];
         this.lengthinner = res.data.length;
-        // console.log(res.data.object);
         for (let i = 0; i < res.data.object.length; i++) {
           tableDataTrue.push(res.data.object[i]);
         }
@@ -280,18 +207,32 @@ export default {
 
     //删除仿真资源
     deleteTaskFormwork(id) {
+
       this.$confirm("此操作将永久删除该任务, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
+          if(sessionStorage.getItem("watchStorage3D")!=null){
+            if(JSON.parse(sessionStorage.getItem("watchStorage3D")).id==id){
+           
+              this.$emit("deet","3D")
+            }
+          }
+           if(sessionStorage.getItem("watchStorage2D")!=null){
+            if(JSON.parse(sessionStorage.getItem("watchStorage2D")).id==id){
+           
+              this.$emit("deet","2D")
+            }
+          }
           deletSimulation({
             id: id
           }).then(res => {
             this.$message({
               message: "删除成功",
-              type: "success"
+              type: "success",
+              duration:2000,
             });
             this.mySimulationResources(); // 加载我的内置仿真模板列表
           });
@@ -299,9 +240,11 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
+             duration:2000,
           });
         });
+
     },
     //克隆我的仿真资源
     ReplicateTheBuiltInExperimentMy(id) {
@@ -326,8 +269,6 @@ export default {
           id: this.select,
           name: this.inputcopyname
         }).then(res => {
-          // console.log("4444444444444444444444444", res);
-
           if (res.data.code == 0) {
             this.$message({
               message: "克隆成功",
@@ -363,8 +304,6 @@ export default {
           id: this.select,
           name: this.inputcopyname
         }).then(res => {
-          // console.log("4444444444444444444444444", res);
-
           if (res.data.code == 0) {
             this.$message({
               message: "克隆成功",
@@ -387,7 +326,7 @@ export default {
         return;
       }
       for (let i = 0; i < this.simulationResourcesType.length; i++) {
-        if ((this.simulationResourcesType[i].name = this.addform.type)) {
+        if ((this.simulationResourcesType[i].name == this.addform.type)) {
           this.addform.typeId = this.simulationResourcesType[i].id;
           break;
         }
@@ -405,21 +344,28 @@ export default {
           return;
         }
       }
-      addSimulation(from).then(res => {
-        if (res.data.code == "0") {
+      addSimulation(from).then(res => {console.log(res.data.code);
+        if (res.data.code == "-2") {
+          this.$message({
+            type: "info",
+            message: "新建名称重复"
+          });
+        } else if (res.data.code == "0") {
           this.$message({
             message: "新增成功",
             type: "success"
           });
+          this.addform.name == "";
+          this.addform.type == "";
           this.mySimulationResources();
+
         }
       });
       this.testTemplateLibrary = false;
     },
     // 编辑
     compile(row) {
-      console.log(row);
-      if (row.expTypeId == null) {
+      if (row.expTypeId == null || row.expTypeId == "") {
         this.dimensionality.id = row.id;
         this.dimensionality.name = row.name;
         this.dimensionality.type = row.typeName;
@@ -435,7 +381,6 @@ export default {
     },
     // 查看
     look(row) {
-      console.log(row);
       if (row.expTypeId == null) {
         this.dimensionality.id = row.id;
         this.dimensionality.name = row.name;
@@ -451,7 +396,6 @@ export default {
       }
     },
     go2D(row) {
-      console.log(row);
       const tasks = JSON.parse(sessionStorage.getItem("watchStorage2D"));
       if (tasks != null) {
         this.$confirm("请先关闭或保存二维设计空间?", "提示", {
@@ -492,7 +436,6 @@ export default {
       }
     },
     go3D(row) {
-      console.log(row);
       const tasks = JSON.parse(sessionStorage.getItem("watchStorage3D"));
       if (tasks != null) {
         this.$confirm("请先关闭或保存三维设计空间?", "提示", {

@@ -15,9 +15,11 @@ const doUrl = url => {
 
     const rules = [{
             //  target: 'http://192.168.2.223:8080', //
-            target: 'http://localhost:8080/creatoraccount',
+            // target: 'http://localhost:8080/creatoraccount',
             // target: 'http://192.168.2.200:8080/creatoraccount', //
             // target: 'http://sso.icubespace.com/account',
+            target: 'http://cloud.asp0755.com/creator/api/public/account',
+
             pathRewrite: '^/apl',
 
         },
@@ -65,12 +67,12 @@ export const demo = () => {
 
 //登录n
 export const login = (params) => {
-  // return axios.post("http://sso.icubespace.com/account/signin",params)
-    //return axios.post("/apl/login", params)  //高训
-   return axios.post("/apl/signin", params)
+        // return axios.post("http://sso.icubespace.com/account/signin",params)
+        return axios.post("/apl/login", params) //高训
+            // return axios.post("/apl/signin", params)
 
-}
-// 获取课程
+    }
+    // 获取课程
 export const curlist = () => {
         return axios.get(`/apl/get_course_list`)
     }
@@ -186,6 +188,20 @@ export const get_component_group = () => {
     return axios.post(`/img/get_component_group`)
 }
 
+//老师批阅列表
+export const task_review_list = (params) => {
+    return axios.post(`/img/task_review_list`, params)
+}
+
+//老师查看学生任务详情
+export const task_review_details = (params) => {
+        return axios.post(`/img/task_review_details`, params)
+    }
+    //老师批阅，打分，写评语
+export const task_review_score = (params) => {
+    return axios.post(`/img/task_review_score`, params)
+}
+
 //根据元件组获取元件
 export const get_component_by_group = (params) => {
         return axios.post(`/img/get_component_by_group`, params)
@@ -243,10 +259,18 @@ export const getTemplate = (params) => {
 }
 
 
+//获取实验任务列表
 
-// 获取任务列表
+export const bySubmitter = (params) => {
+        return axios.post(`/img/get_task_experiment_by_submitter`, params)
+    }
+    // 获取任务列表
 export const simulist = (params) => {
         return axios.post(`/img/get_task_experiment_by_submitter`, params)
+    }
+    // 获取学生实验任务列表
+export const experimentDetails = (params) => {
+        return axios.post(`/img/get_task_experiment_details`, params)
     }
     // 获取制定任务的实验指导
 export const guidelist = (params) => {
@@ -283,12 +307,22 @@ export const resource = (params) => {
     return axios.post(`/img/add_resource`, params)
 }
 
+// 添加资源
+export const taskUpload = (params) => {
+    return axios.post(`/img/task_upload`, params)
+}
+
 
 // 上传报告
 
 export const report = (params) => {
     return axios.post(`/img/add_task_experiment_report`, params)
 }
+
+export const saveTaskExperiment = (params) => {
+    return axios.post(`/img/save_task_experiment`, params)
+}
+
 
 
 // 获取快照
@@ -297,7 +331,7 @@ export const project = (params) => {
     }
     // 资源下载
 export const download = (params) => {
-        return axios.post(`/img/download`, params)
+        return axios.post(`/img/download`, params, { responseType: 'blob' })
     }
     // 根据资源id获取属性
 export const getResource_by_id = (params) => {
@@ -367,37 +401,47 @@ export const deletedaTask = (params) => {
 export const getScene = () => {
         return axios.post('/img/get_scene_type_list')
 
-}
+    }
+    //添加实验类型
 export const experiment_type_list = () => {
-  return axios.post('/img/experiment_type_list')
-
-}
-// 获取仿真资源列表
-export const getSimulation = (params) => {
-
-        return axios.post('/img/get_simulation_resource_list', params)
+        return axios.post('/img/experiment_type_list')
 
     }
+    // 获取仿真资源列表
+export const getSimulation = (params) => {
+
+    return axios.post('/img/get_simulation_resource_list', params)
+
+}
 
 //新增仿真资源
 export const addSimulation = (params) => {
-  return axios.post('/img/add_simulation_resource', params)
+        return axios.post('/img/add_simulation_resource', params)
 
     }
     //克隆仿真资源
 export const cloneSimulation = (params) => {
-  return axios.post('/img/clone_simulation_resource', params)
+        return axios.post('/img/clone_simulation_resource', params)
 
     }
     //删除仿真资源
 export const deletSimulation = (params) => {
-  return axios.post('/img/delete_simulation_resource', params)
+        return axios.post('/img/delete_simulation_resource', params)
 
     }
     //修改仿真资源
 export const modifySimulation = (params) => {
-  return axios.post('/img/modify_simulation_resource', params)
+    return axios.post('/img/modify_simulation_resource', params)
 
+}
+
+//获取仿真资源类型列表2维/3维
+export const sceneTypes = (params) => {
+    return axios.post('/img/get_scene_types', params)
+}
+
+export const addSimulationAnnex = (params) => {
+    return axios.post('/img/add_simulation_annex', params)
 }
 
 // admin端管理元*************************
@@ -487,7 +531,7 @@ export const modify_course_information = (params) => {
 }
 
 export const getCourseList = (params) => {
-        return axios.post('/apl/get_course_list', params)
+        return axios.post('/apl/get_course_list1', params)
 
     }
     // 课程列表

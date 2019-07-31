@@ -18,8 +18,9 @@ export default {
   methods: {
     on_click_hide_unity_window() {
       var cmd = "{'opcode':3}";
-
-      wfapp.start(cmd);
+ if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     }
   },
   created() {},

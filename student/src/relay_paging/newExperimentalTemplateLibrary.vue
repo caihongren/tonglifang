@@ -1,6 +1,6 @@
 <template>
   <div class="populationgroup">
-    <div class="population transition-box" :style="{height:isshowheight?'100%':'0px'}" v-show="isshowheight">
+    <div class="population" :style="{height:isshowheight?'100%':'0px'}" v-show="isshowheight">
       <div class="population-top">
         <div class="testFormwork">
           <h2 class="testFormwork-left">我的实验模板</h2>
@@ -8,14 +8,14 @@
           <el-button type="primary" icon="el-icon-document-copy" class="testFormwork-right" @click="dialogVisiblecopy = true">从内置模板克隆</el-button>
         </div>
         <div class="testFormwork-button">
-          <el-table ref="singleTable" :data="tableDataFalse" stripe border :header-cell-style="{background:'#ccc'}" highlight-current-row class="tablebox">
-            <el-table-column prop="index" label="序号" min-width="100" type="index"></el-table-column>
+          <el-table ref="singleTable" :data="tableDataFalse" stripe border highlight-current-row :header-cell-style="{background:'#ccc'}" class="tablebox">
+            <el-table-column prop="index" label="序号" min-width="140" class="table1" type="index"></el-table-column>
             <el-table-column prop="name" label="名称" min-width="150"></el-table-column>
-            <el-table-column prop="updatedAt" label="保存时间" min-width="350">
+            <el-table-column prop="updatedAt" label="保存时间" min-width="120">
               <template slot-scope="scope">{{scope.row.updatedAt|dateformat}}</template>
             </el-table-column>
-            <el-table-column prop="description" label="要求" min-width="249"></el-table-column>
-            <el-table-column label="操作" min-width="200">
+            <el-table-column prop="description" label="要求" min-width="149"></el-table-column>
+            <el-table-column label="操作" min-width="100">
               <template slot-scope="scope">
                 <el-button @click="dialogVisiblecopyMy=true,select=scope.row.id" type="text" size="small">克隆</el-button>
                 <el-button type="text" @click="compileClick(scope.row) , isshowheight=false" size="small">编辑</el-button>
@@ -54,7 +54,7 @@
       <div>
         <el-input placeholder="请输入新增模板名称" v-model="inputcopyname" class="input-with-select">
           <el-select v-model="select" slot="prepend" placeholder="请选择克隆的模板" style="width:180px">
-            <el-option :label="item.name" :value="item.id" v-for="(item) in tableDataTrue" :key="item.id"></el-option>
+            <el-option :label="item.name" :value="item.id" v-for="item in tableDataTrue" :key="item.id"></el-option>
           </el-select>
         </el-input>
       </div>
@@ -73,7 +73,7 @@
         <el-button type="primary" @click="ReplicateTheBuiltInExperiment()">确 定</el-button>
       </span>
     </el-dialog>
-    <div style="width:100%;" class="transition-box" :style="{height:!isshowheight?'100%':'0px'}">
+    <div style="width:100%;" :style="{height:!isshowheight?'100%':'0px'}">
       <div class="breadcrumb">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
@@ -89,7 +89,7 @@
         </el-breadcrumb>
       </div>
 
-      <newExperimentalTemplate v-if="isadd" v-bind:isshow="isshow" v-bind:row="row" @detpage="detpage"></newExperimentalTemplate>
+      <newExperimentalTemplate v-if="!isshowheight" v-bind:isshow="isshow" v-bind:row="row" @detpage="detpage"></newExperimentalTemplate>
     </div>
   </div>
 </template>
@@ -105,21 +105,26 @@ export default {
   name: "newExperimentalTemplateLibrary",
   data() {
     return {
+      name: "",
       currentPage: 1,
       currentPage4: 1,
       offset: 0,
-      limit: 50,
+      limit: 10,
       offsetinner: 0,
-      limitinner: 50,
-      length: 20,
-      lengthinner: 20,
+      limitinner: 10,
+      length: 0,
+      lengthinner: 0,
       row: {},
       isshow: {
         type: false,
         addtype: false,
         vall: false,
-        deletebutton: false
+        look: false,
+        deletebutton: false,
+
+
       },
+      // addOrEditFlag: "",//点击的编辑还是新增按钮跳转到子组件
       isadd: false,
       isshowheight: true, //子组件的页面打开
       inputcopyname: "", //克隆时输入的新名称
@@ -158,16 +163,20 @@ export default {
     },
     //点击新建模态框显示
     newTemplate() {
+
       const isshow = {};
       isshow.type = true;
       isshow.addtype = true;
       isshow.deletebutton = true;
       isshow.vall = false;//文本域可以编辑
+      isshow.look = false;
       this.isshow = isshow;
       this.isadd = true;
       this.row = {};
       this.isshowheight = false;
       this.name = '新建模板'
+      // this.newName = ''//新建模板名称清空
+      // this.textarea = ''
     },
     // 加载实验模板列表
     mySimulationResources() {
@@ -178,7 +187,7 @@ export default {
       }).then(res => {
         this.tableDataFalse = [];
         this.length = res.data.length;
-        for (let i = 0; i < res.data.length; i++) {
+        for (let i = 0; i < res.data.object.length; i++) {
           this.tableDataFalse.push(res.data.object[i]);
         }
       });
@@ -192,7 +201,7 @@ export default {
       }).then(res => {
         this.tableDataTrue = [];
         this.lengthinner = res.data.length;
-        for (let i = 0; i < res.data.length; i++) {
+        for (let i = 0; i < res.data.object.length; i++) {
           this.tableDataTrue.push(res.data.object[i]);
         }
       });
@@ -259,10 +268,11 @@ export default {
       this.name = row.name;
       this.row = row;
       this.isshow.deletebutton = true;
-      this.isshow.type = false;
+      this.isshow.type = true;
       this.isadd = true;
       this.isshow.addtype = true;
-      this.isshow.vall = false; //文本域可以编辑
+      this.isshow.vall = false;
+      this.isshow.look = false; //文本域可以编辑
     },
     //内置实验模板查看按钮
     seeTemplate(row) {
@@ -272,25 +282,26 @@ export default {
       this.isshow.type = false;
       this.isadd = true;
       this.isshow.addtype = false;
+      this.isshow.look = false;
       this.isshow.vall = true; //文本域只读
     },
     // 关闭详情页面
     detpage() {
       this.isshowheight = !this.isshowheight;
       this.innerVisible = !this.innerVisible;
-       this.mySimulationResources();
+      this.mySimulationResources(); // 加载我的实验模板列表
     }
   },
   created() {
     // 加载实验模板列表
-    this.innerSimulationResources(); // 加载内置仿真模板列表
-    this.mySimulationResources(); // 加载我的内置仿真模板列表
+    this.innerSimulationResources(); // 加载内置实验模板列表
+    this.mySimulationResources(); // 加载我的实验模板列表
   }
 };
 </script>
 <style lang="less" scoped>
 .populationgroup {
-  height: 95%;
+  height: 100%;
   width: 80%;
   border: 1px solid #dddddd;
   margin: 0 10%;
@@ -300,7 +311,7 @@ export default {
     height: 86vh;
     width: 102%;
     overflow: auto;
-    transition: 0.5s;
+    transition: 0s;
     .population-top {
       position: relative;
       margin-bottom: 100px;
@@ -329,12 +340,6 @@ export default {
     margin: 0 35px;
   }
 }
-.transition-box {
-  // height: 100px;
-
-  // transition-duration: 0;
-}
-
 .breadcrumb {
   width: 94%;
   height: 50px;

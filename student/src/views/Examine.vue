@@ -80,7 +80,6 @@ export default {
     },
     
     type(puah,name) {
-      console.log('pdf')
       this. gopdf()
     },
     getback() {
@@ -95,7 +94,6 @@ export default {
       examine.path = path;
       sessionStorage.setItem("examine", JSON.stringify(examine));
       let user = JSON.parse(sessionStorage.getItem("user"));
-      // console.log(user, user.role);
       if (user.role == "teacher") {
         this.$router.push("/relayteacher/Examine");
       } else if (user.role == "student") {
@@ -105,7 +103,6 @@ export default {
     },
     // pdf来源
     gopdf() {
-      console.log("进入pdf详情");
       let examine = JSON.parse(sessionStorage.getItem("examine"));
       this.name = examine.name;
       this.sourcePath = examine.sourcePath;
@@ -131,7 +128,6 @@ export default {
   watch: {
     changeFlageEdit: function(newValue) {
        this.gopdf();
-      console.log("pdfbianfa");
     }
   },
   mounted() {
@@ -140,11 +136,6 @@ export default {
   created() {
     this.gopdf();
     this.changeFlageEdit = this.isChangeFlageEdit;
-    // if (this.pdfPath.indexOf("pdf") != -1) {
-    //   this.pdfType = true;
-    // } else {
-    //   this.pdfType = false;
-    // }
   }
 };
 </script>
@@ -152,7 +143,7 @@ export default {
 <style lang="less" scoped>
 .box {
   width: 95%;
-  height: 760px;
+  height: 97%;
   border: 1px solid black;
   margin: 0 2%;
 }

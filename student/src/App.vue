@@ -2,27 +2,28 @@
   <div id="app">
     <el-row type="flex">
       <el-col :span="5">
-        <img src="./image/tonglifanglogo.png" style="margin-left: 5%;" slt>
+        <img src="./image/tonglifanglogo.png" style="margin-left: 5%;" slt />
       </el-col>
       <el-col :span="11"></el-col>
-      <el-col :span="2"></el-col>
-      <el-col :span="4">
-        <div class="grid-content"></div>
+      <el-col :span="5"></el-col>
+      <el-col :span="1">
+        <div class="grid-content" style=" margin: 15px 0;" v-show="logintype">
+          <i @click="refresh()" class="el-icon-refresh"></i>
+        </div>
       </el-col>
       <el-col :span="2">
-        <!-- <div class="grid-content">
-          <el-button type="danger" size="mini" class="loginout">退出登陆</el-button>
-        </div>-->
         <el-dropdown trigger="click" v-show="logintype">
           <el-button type="primary">
             {{userlist.name}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <button   @click="login"><el-dropdown-item>退出登录</el-dropdown-item></button>
+            <button @click="login">
+              <el-dropdown-item>退出登录</el-dropdown-item>
+            </button>
             <!-- <el-dropdown-item>
               <div @click="login">退出登录</div>
-            </el-dropdown-item> -->
+            </el-dropdown-item>-->
             <!-- 个人中心 -->
             <!-- <el-dropdown-item><div @click="login"> 个人中心 </div></el-dropdown-item> -->
 
@@ -31,7 +32,7 @@
         </el-dropdown>
       </el-col>
     </el-row>
-    <router-view/>
+    <router-view />
     <!-- <a id="autoRun" href="CreatorShell://" style="visibility: hidden;"  ref="autoRun" @runUnity="showU3d" /> -->
   </div>
 </template>
@@ -51,6 +52,9 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    refresh() {
+      this.$router.go(0);
+    },
     login() {
       // 退出清除缓存信息
       localStorage.removeItem("token");
@@ -62,13 +66,13 @@ export default {
       sessionStorage.setItem("user", JSON.stringify(userupdata));
 
       this.user();
+     
       this.$router.push("/login");
     }
   },
   watch: {
     $route: {
-      handler: function(val, oldVal) {
-        // console.log(val,"路由变化",val.path);
+      handler: function (val, oldVal) {
         if (val.path == "/register" || val.path == "/login") {
           this.logintype = false;
         } else {
@@ -83,7 +87,6 @@ export default {
     ...mapState(["userlist"])
   },
   created() {
-    // console.log(this.$route)
     if (this.$route.path == "/register" || this.$route.path == "/login") {
       this.logintype = false;
     } else {
@@ -104,12 +107,17 @@ export default {
     //         this.$refs.autoRun.click();
     //     }
   },
-  mounted() {}
+  mounted() { }
 };
 </script>
 
 
 <style >
+.el-icon-refresh {
+  font-size: 25px;
+  padding-left: 15px;
+  color: #919090;
+}
 html,
 body {
   width: 100%;
@@ -118,7 +126,6 @@ body {
   padding: 0px !important;
   margin: 0px;
   overflow: hidden;
-  
 }
 a {
   display: inline-block;
@@ -127,6 +134,11 @@ a {
 }
 li {
   list-style: none;
+}
+h2,
+h3 {
+  font-weight: 800 !important;
+  margin: 15px 0 !important;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -151,6 +163,9 @@ button {
   vertical-align: top;
   line-height: 60px;
 }
+.el-upload__input {
+  display: none !important;
+}
 .el-dropdown + .el-dropdown {
   margin-left: 15px;
 }
@@ -158,30 +173,26 @@ button {
   font-size: 12px;
 }
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar
-{
-    width: 8px;
-    height: 8px;
-    background-color: #F5F5F5;
-}
- 
-/*定义滚动条轨道 内阴影+圆角*/
-::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    border-radius: 5px;
-    background-color: #F5F5F5;
-}
- 
-/*定义滑块 内阴影+圆角*/
-::-webkit-scrollbar-thumb
-{
-    border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #ccc;
-}
-.el-upload-list--text{
-  display: none;
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #f5f5f5;
 }
 
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #ccc;
+}
+.el-upload-list--text {
+  display: none;
+}
 </style>

@@ -8,11 +8,7 @@
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button type="danger" @click="deletecls(scope.row.id)" :loading="false">删除</el-button>
-          <el-button
-            type="primary"
-            @click="downloadProject(scope.row.id, $event)"
-            :loading="false"
-          >导出</el-button>
+          <el-button type="primary" @click="downloadProject(scope.row.id, $event)" :loading="false">导出</el-button>
           <el-button type="info" @click="eacher(scope.row.sim_path)">详情数据</el-button>
           <el-button type="primary" @click="goexperiment(scope.row.id)">打开快照</el-button>
         </template>
@@ -21,15 +17,7 @@
 
     <!-- 分页 -->
     <div style="margin:50px;">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="10"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="length"
-      ></el-pagination>
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="length"></el-pagination>
     </div>
 
     <!-- 弹出框 -->
@@ -93,40 +81,32 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
       this.limit = val;
       this.getListNew();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       this.offset = val * this.limit;
       this.getListNew();
     },
     // 打开详情
     eacher(path) {
-      console.log("dianji ");
       let data = {};
-// "http://192.168.2.223:8081/static/sim/a3c22184-b8de-4819-9f07-ec20a16866de.CreatorSim"
+      // "http://192.168.2.223:8081/static/sim/a3c22184-b8de-4819-9f07-ec20a16866de.CreatorSim"
       this.$http
         .get(
           path
         )
         .then(res => {
-          console.log(res.body);
           data = res.body.SimData;
           this.duration = res.body.duration;
           this.stepLength = res.body.stepLength;
           let one = (this.duration / this.stepLength).toFixed(4);
           let two = [];
-          // console.log(one);
           for (let i = 0; i < this.stepLength; i++) {
             two[i] = one * i;
           }
-          // console.log(two);
           this.stepLengthlist = two;
-          // this.stepLengthlist.push(this.duration)
           for (var item in data) {
-            console.log(item, data[item], "qq");
             this.series.push({
               name: data[item].Name,
               type: "line",
@@ -134,12 +114,6 @@ export default {
             });
             this.legend.push(data[item].Name);
           }
-
-          // console.log(this.series);
-          // console.log(this.stepLengthlist);
-
-          // this.sdawd = this.series[0];
-          // console.log(this.sdawd);
           this.visible2 = true;
           // 基于准备好的dom，初始化echarts实例
           let myChart = this.$echarts.init(document.getElementById("myChart2"));
@@ -161,7 +135,6 @@ export default {
             dataZoom: [
               {
                 dataZoomIndex: 1,
-
                 start: 0,
                 end: 10
               },
@@ -172,13 +145,13 @@ export default {
             series: this.series
           });
         })
-           .catch(() => {
+        .catch(() => {
           this.$message.error({
-                showClose:true,
-                message:'快照暂时无数据',
-                type: 'warning',
-                duration:1000,
-              })
+            showClose: true,
+            message: '快照暂时无数据',
+            type: 'warning',
+            duration: 1000,
+          })
         });
 
     },
@@ -187,7 +160,7 @@ export default {
       this.$emit("gounity", id);
     },
     // 定义函数
-    showclass(offset, limit, tableData, total) {},
+    showclass(offset, limit, tableData, total) { },
     // 分页功能
     currentPage_change(offset) {
       this.offset = offset;
@@ -195,7 +168,6 @@ export default {
     },
     // 删除快照
     deletecls(id) {
-      console.log(id)
       this.$confirm("你确定要删除", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -203,20 +175,14 @@ export default {
       })
         .then(() => {
           snadel({
-            id:id
+            id: id
           }).then(res => {
-            if (res.data.code=="0") {
+            if (res.data.code == "0") {
               this.$message({
                 type: "success",
                 message: "删除成功!"
               });
               this.getListNew()
-              // this.showclass(
-              //   this.offset,
-              //   this.limit,
-              //   this.tableData,
-              //   this.total
-              // );
             } else {
               this.$message({
                 type: "error",
@@ -236,11 +202,9 @@ export default {
     // 导出快照
     downloadProject(id) {
       let el = event.currentTarget;
-      // console.log('导出快照',el.loading)
       project({
         id: id
       }).then(res => {
-        console.log(res, "导出快照", id);
         this.download(res.data.object.scenePath, res.data.object.updatedAt);
       });
     },
@@ -250,7 +214,6 @@ export default {
     },
     // 下载文件
     download(data, name) {
-      // console.log(data,name)
       let src = data;
       // window.location.href = this.downloadSrc;
       // window.open(this.downloadSrc, '_blank'); // 新开窗口下载
@@ -276,12 +239,9 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(res => {
-        console.log(res.data, "实验快照");
         this.length = res.data.length;
         if (res.data.object.length > 0) {
-          // this.id = res.data.object[0].id;
           this.tableData = res.data.object;
-          // this.length=res.data.length;
         }
       });
     }

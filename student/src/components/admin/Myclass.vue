@@ -231,19 +231,15 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
       this.limit = val;
       this.getClassListNew();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       this.offset = (val-1) * this.limit;
       this.getClassListNew();
     },
     // 修改编辑学生
     handleChange(value, direction, movedKeys) {
-      console.log(value, direction, movedKeys);
-      console.log(this.form);
       if (direction == "left") {
         // 减少人员
         for (let i = 0; i < movedKeys.length; i++) {
@@ -275,14 +271,11 @@ export default {
       return allArr;
     },
     interface(id) {
-      console.log(id);
     },
     handleClick(row) {
-      console.log(row);
     },
     // 新增加班级
     addclass() {
-      console.log(this.formadd.students);
       if (this.formadd.students.length < 1) {
         this.$message.error({
           message: "班级学生为空",
@@ -295,10 +288,8 @@ export default {
         this.dialogFormVisibleadd = false;
         //  this.formadd.students.splice(0, 1);
 
-        console.log(this.formadd);
         addClass(this.formadd)
           .then(res => {
-            console.log(res);
             if (res.data.code == "0") {
               this.getStudentListNew();
               this.getClassListNew();
@@ -332,7 +323,6 @@ export default {
       let student = this.value3;
       // this.formadd.students=student.splice(0,1)
       this.formadd.students = student;
-      console.log(this.formadd.students);
       this.innerVisibleadd = false;
     },
     // 编辑学生
@@ -346,10 +336,8 @@ export default {
     cancel() {},
     // 编辑
     compileClick(row) {
-      console.log(row);
       this.data = [];
       //  this.data=this.studentNew
-      //   console.log(this.studentNew)
 
       this.value2 = [];
       let forms = {
@@ -360,24 +348,26 @@ export default {
         addStudents: [],
         deleteStudents: []
       };
-      // console.log(this.form);
       this.form = forms;
       if (row.students.length > 0) {
+        console.log(row.students)
         for (let i = 0; i < row.students.length; i++) {
           this.data.push(row.students[i]);
           this.value2.push(row.students[i].id);
         }
       }
+   
       get_students_no_class({
         offset: this.offset,
         limit: 1000
       }).then(res => {
+       
         let students = this.data;
         for (let i = 0; i < res.data.object.length; i++) {
           students.push(res.data.object[i]);
         }
         this.data = students;
-        this.getStudentListNew();
+     
       });
 
       this.dialogFormVisible = true;
@@ -385,15 +375,12 @@ export default {
     // 编辑修改确定
 
     modifyClassNew() {
-      console.log(this.form);
 
       if (this.form.major != "" && this.form.name != "") {
         this.dialogFormVisible = false;
         //  this.formadd.students.splice(0, 1);
 
-        console.log(this.form);
         modifyClass(this.form).then(res => {
-          console.log(res);
 
           this.getClassListNew();
           this.getStudentListNew();
@@ -413,7 +400,6 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log(row);
           deleteClass({
             id: row.id
           }).then(res => {
@@ -438,7 +424,7 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(res => {
-        console.log(res);
+        console.log(res)
         this.tableData = res.data.object;
         this.length = res.data.length;
       });
@@ -448,7 +434,7 @@ export default {
         offset: this.offset,
         limit: 1000
       }).then(res => {
-        console.log(res, "学生列表");
+       
         this.dataadd = res.data.object;
         this.data = res.data.object;
         this.studentNew = res.data.object;

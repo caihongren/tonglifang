@@ -22,9 +22,9 @@
                   <transition name="el-zoom-in-left">
                     <div v-show="show2" class="transition-box">
                       <el-button type="primary" @click="gounity('')">实验模板</el-button>
-                      
-                      <el-button type="primary"  @click="goguidance()">进入实验快照</el-button>
-                     
+
+                      <el-button type="primary" @click="goguidance()">进入实验快照</el-button>
+
                     </div>
                   </transition>
                 </div>
@@ -80,7 +80,7 @@
               <router-link :to="'/sExperiment1/guidance/'+id">
                 <div :style="{color:twoChick==4?'red':''}" class="el-icon-view"></div>
                 <span :style="{color:twoChick==4?'red':''}">实验指导</span>
-                
+
               </router-link>
             </li>
           </ul>
@@ -104,12 +104,12 @@
 import { log } from "util";
 import { guidelist, snalist, formatDate } from "../../../API/api";
 export default {
-   props: ['innertype'],
+  props: ['innertype'],
   data() {
     return {
       id: this.$route.params.id,
       // imgswiper:true,
-      
+
       Arrowshow: true,
       name: "",
       offset: 0,
@@ -118,16 +118,16 @@ export default {
       herdernone: true,
       twoChick: 4,
       red: { color: "red" },
-      grend:{ color: "pink" },
+      grend: { color: "pink" },
       websock: null,
       show2: false,
-     
+
       agentData: {
         name: "mode",
         mode: "task_experiment_exercise_instance_editor",
         token: "",
         id: "",
-        type:this.innertype.type,
+        type: this.innertype.type,
         taskExperimentId: ""
       }
     };
@@ -139,11 +139,11 @@ export default {
     Arrow() {
       (this.Arrowshow = !this.Arrowshow), (this.herdernone = !this.herdernone);
     },
-  // 进入快照
-  goguidance(){
-    this.twoChick=1;
-    this.$router.push('/sExperiment1/snapshot/'+this.id)
-  },
+    // 进入快照
+    goguidance() {
+      this.twoChick = 1;
+      this.$router.push('/sExperiment1/snapshot/' + this.id)
+    },
     gounity(id) {
       //获取本地缓存中的令牌mytoken
       let token = localStorage.getItem("token");
@@ -152,7 +152,7 @@ export default {
       this.agentData.id = id;
 
       this.agentData.taskExperimentId = this.id;
-      
+
       this.threadPoxi();
       this.on_click_show_unity_window();
       this.$router.push("/sExperiment1/unity/" + this.id);
@@ -160,16 +160,18 @@ export default {
     threadPoxi(id) {
       // 实际调用的方法
       //参数
-         this.$emit("threadPoxi",this.agentData)
-     
-      
-     
+      this.$emit("threadPoxi", this.agentData)
+
+
+
     },
-    
+
     on_click_hide_unity_window() {
       var cmd = "{'opcode':3}";
 
-      wfapp.start(cmd);
+    if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     },
 
     on_click_show_unity_window() {
@@ -177,12 +179,14 @@ export default {
         // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
         "{'opcode':4,'LocationX': 290,'LocationY':200, 'SizeX': 1620,'SizeY':815}";
 
-      wfapp.start(cmd);
+     if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     },
     // 判断是否内置实验
   },
   watch: {
-    "$route.params.id": function(newval, oldval) {
+    "$route.params.id": function (newval, oldval) {
       this.id = newval;
       this.twoChick = 4;
       snalist({
@@ -190,7 +194,6 @@ export default {
         limit: this.limit,
         taskExperimentId: this.id
       }).then(res => {
- console.log(res)
         if (res.data.object.length > 0) {
           this.tableData = res.data.object;
         } else {
@@ -201,15 +204,14 @@ export default {
   },
   created() {
     // this.initWebSocket();
-    
+
   },
   mounted() {
-          snalist({
+    snalist({
       offset: this.offset,
       limit: this.limit,
       taskExperimentId: this.id
     }).then(res => {
-      console.log(res)
       if (res.data.object.length > 0) {
         this.tableData = res.data.object;
       } else {
@@ -218,7 +220,7 @@ export default {
     });
   },
   destroyed() {
-   
+
   }
 };
 </script>

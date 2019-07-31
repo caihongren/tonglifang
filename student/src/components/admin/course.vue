@@ -17,12 +17,12 @@
       </div>
       <template>
         <el-table :data="tableData" border style="width: 90%;margin:5px 3%">
-          <el-table-column fixed prop="name" label="课程名称" min-width="200"></el-table-column>
-          <el-table-column prop="accounts" label="授课教师" min-width="150" :formatter="listspan"></el-table-column>
-          <el-table-column label="班级" min-width="300" prop="classes" :formatter="listclassspan"></el-table-column>
-          <el-table-column prop="semester" label="开设学期" min-width="300"></el-table-column>
+          <el-table-column fixed prop="name" label="课程名称" min-width="100"></el-table-column>
+          <el-table-column prop="accounts" label="授课教师" min-width="76" :formatter="listspan"></el-table-column>
+          <el-table-column label="班级" min-width="150" prop="classes" :formatter="listclassspan"></el-table-column>
+          <el-table-column prop="semester" label="开设学期" min-width="150"></el-table-column>
 
-          <el-table-column label="操作" min-width="200">
+          <el-table-column label="操作" min-width="100">
             <template slot-scope="scope">
               <el-button @click="classunp(scope.row)" type="primary" size="small">编辑</el-button>
               <el-button type="primary" @click="det(scope.row)" size="small">删除</el-button>
@@ -193,20 +193,16 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
       this.limit = val;
       getCourseListNew();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       this.offset = (val-1) * this.limit;
       getCourseListNew();
     },
     interface(id) {
-      console.log(id);
     },
     handleClick(row) {
-      console.log(row);
     },
     // 编辑
     compileClick(row) {},
@@ -218,7 +214,6 @@ export default {
       if (list[0] == null || list == "") {
         return;
       }
-      // console.log(list,"span")
       if (list.length > 0) {
         let newlist = list[0].name;
         for (let i = 1; i < list.length; i++) {
@@ -230,7 +225,6 @@ export default {
         return list[0].name;
       }
 
-      // console.log(newlist)
       // }
 
       // return 'a'
@@ -251,15 +245,11 @@ export default {
       } else {
         return list[0];
       }
-
-      // console.log(newlist)
       // }
     },
     addCourse() {
-      console.log(this.formadd);
       addCourse(this.formadd)
         .then(res => {
-          console.log(res);
           if (res.data.code == "0") {
             this.getCourseListNew();
             this.dialogFormVisibleadd = false;
@@ -286,7 +276,6 @@ export default {
 
     // 进入编辑
     classunp(row) {
-      console.log(row);
       let froms = {
         id: row.id,
         course: row.name,
@@ -300,9 +289,6 @@ export default {
       for (let i = 0; i < row.accounts.length; i++) {
         froms.teachers.push(row.accounts[i].id);
       }
-
-      // console.log(this.from);
-      console.log(this.form);
       this.form = froms;
 
       this.dialogFormVisible = true;
@@ -319,9 +305,7 @@ export default {
 
         //  this.formadd.students.splice(0, 1);
 
-        console.log(this.form);
         modify_course_information(this.form).then(res => {
-          console.log(res);
 
           this.getCourseListNew();
           this.getTeacherListNew();
@@ -341,11 +325,9 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log(row.id);
           delete_course({
             id: row.id
           }).then(res => {
-            console.log(res);
             this.getCourseListNew();
             this.$message({
               type: "success",
@@ -366,20 +348,17 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(res => {
-        console.log(res, "checheng");
         this.tableData = res.data.object;
         this.length = res.data.length;
         // this.tableData.teacher=this.listspan(res.data.object.accounts);
-        // console.log()
       });
     },
     // 加载老师列表
     getTeacherListNew() {
       getTeacherList({
         offset: this.offset,
-        limit: this.limit
+        limit: 10000
       }).then(res => {
-        console.log(res, "老师列表");
         this.teachers = res.data.object;
       });
     },
@@ -387,9 +366,8 @@ export default {
     getClassListNew() {
       getClassList({
         offset: this.offset,
-        limit: this.limit
+        limit: 10000
       }).then(res => {
-        console.log(res, "班级列表");
         this.getClass = res.data.object;
       });
     }

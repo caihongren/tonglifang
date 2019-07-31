@@ -3,23 +3,16 @@
     <section class="form_container">
       <div class="manage_tip">
         <span class="title">仿 真 实 验 操 作 系 统 登 录</span>
-        <el-form
-          :model="loginUser"
-          :rules="rules1"
-          ref="loginForm"
-          label-width="80px"
-          class="loginUser"
-          hide-required-asterisk = "false"
-        >
-          <el-form-item label="用户名：" prop="phone" >
-                <el-input v-model="loginUser.phone" @keyup.enter.native="submitForm('loginForm')" placeholder="Username"  prefix-icon="el-icon-user-solid" class="Username"></el-input>
+        <el-form :model="loginUser" :rules="rules1" ref="loginForm" label-width="80px" class="loginUser" hide-required-asterisk="false">
+          <el-form-item label="用户名：" prop="phone">
+            <el-input v-model="loginUser.phone" @keyup.enter.native="submitForm('loginForm')" placeholder="Username" prefix-icon="el-icon-user-solid" class="Username"></el-input>
           </el-form-item>
           <el-form-item label="密码：" prop="password">
             <el-input type="password" v-model="loginUser.password" @keyup.enter.native="submitForm('loginForm')" placeholder="Password" prefix-icon="el-icon-s-goods" class="Password"></el-input>
           </el-form-item>
           <el-form-item class="login_btngroup">
-            <el-button @click="submitForm('loginForm')"  class="login_btn">登录</el-button>
-            
+            <el-button @click="submitForm('loginForm')" class="login_btn">登录</el-button>
+
           </el-form-item>
         </el-form>
       </div>
@@ -41,7 +34,7 @@ export default {
         phone: "",
         password: "",
         role: "student"
-      }, 
+      },
       rules1: {
         phone: [
           { required: true, message: "用户名不能为空", trigger: "blur" },
@@ -58,12 +51,11 @@ export default {
     ...mapActions(["user"]),
 
     submitForm(formName) {
-      // console.log(this.$refs[formName]);
       this.$refs[formName].validate(valid => {
         if (valid) {
+          sessionStorage.clear()
           login(this.loginUser)
             .then(res => {
-              // console.log(res,"登录信息");
               if (res.data.code == 0) {
                 var token = res.data.object.token;
                 var user = res.data.object.account;
@@ -76,7 +68,6 @@ export default {
                 } else {
                   this.$router.push("/home");
                 }
-                // this.$router.push("/home");
               } else {
                 this.$message.error({
                   showClose: true,
@@ -106,24 +97,26 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(val, oldVal) {
-        console.log(val);
+      handler: function (val, oldVal) {
       },
       // 深度观察监听
       deep: true
     }
+  },
+  created(){
+   
   }
 };
 </script>
 
 <style lang="less" scoped>
-.Username{
+.Username {
   opacity: 0.8;
 }
-.Password{
+.Password {
   opacity: 0.8;
 }
-.manage_tip.Username{
+.manage_tip.Username {
   background-color: rgba(14, 166, 236, 0.212);
   border-radius: 20px;
 }
@@ -142,14 +135,13 @@ export default {
     left: 40%;
     padding: 25px;
     text-align: center;
-  
+
     .manage_tip {
       .title {
         font-family: "Microsoft YaHei";
         font-weight: bold;
         font-size: 26px;
         color: #fff;
-         
       }
       .loginUser {
         margin-top: 20px;
@@ -157,24 +149,23 @@ export default {
         padding: 20px 40px 20px 20px;
         border-radius: 5px;
         box-shadow: 0px 0px 20px #000000;
-        .el-form-item{
+        .el-form-item {
           margin: 20px 20px 20px -8px;
         }
       }
-      .login_btngroup{
-        :hover{
+      .login_btngroup {
+        :hover {
           background-color: rgba(0, 174, 255, 0.747);
           border-radius: 20px;
         }
-          .login_btn {
-        width: 100%;
-        border-radius: 20px;
-        color: #fff;
-       background-color:rgba(7, 4, 14, 0.185);
-       
+        .login_btn {
+          width: 100%;
+          border-radius: 20px;
+          color: #fff;
+          background-color: rgba(7, 4, 14, 0.185);
+        }
       }
-      }
-      
+
       a {
         width: 40%;
         .reg_btn {
@@ -187,5 +178,4 @@ export default {
 }
 </style>
 <style >
- 
 </style>

@@ -1,50 +1,48 @@
 <template>
   <div class="Presentation">
     <div class="taskname">
-      <el-row :gutter="20">
+      <el-row :gutter="20" type="flex" class="row-bg">
+        <el-col :span="1"></el-col>
+        <el-col :span="6">
+          <div>
+            <el-breadcrumb separator="/">
+              <el-breadcrumb-item>
+                <a @click="$router.push('/relayteacher/taskManagement')">
+                  <h3>实验任务管理</h3>
+                </a>
+              </el-breadcrumb-item>
+              <el-breadcrumb-item>
+                <a>
+                  <h3>{{name}}</h3>
+                </a>
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
+        </el-col>
+
         <el-col :span="4">
-          <div class="grid-content bg-purple">任务开始时间：</div>
+          <div>任务开始时间：{{ startTime|dateformat }}</div>
         </el-col>
         <el-col :span="4">
-          <div class="grid-content bg-purple">任务截止时间：</div>
+          <div>任务截止时间：{{ finishTime|dateformat }}</div>
         </el-col>
         <el-col :span="4">
-          <div class="grid-content bg-purple">总人数：</div>
+          <div>总人数：{{ total }}</div>
         </el-col>
         <el-col :span="4">
-          <div class="grid-content bg-purple">已提交人数：</div>
+          <div>已提交人数：{{ complete }}</div>
         </el-col>
       </el-row>
     </div>
     <el-container style="height:100%">
       <el-aside class="asidebox" width="200px">
         <el-col :span="24">
-          <el-menu
-            :default-active="String(sumber)"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-          >
-            <el-menu-item-group
-              :title="itembox.name"
-              v-for="(itembox,index) in student"
-              :key="index"
-            >
-              <el-menu-item
-                style="height: 40px;line-height: 40px;"
-                @click="sumber=item.index,open(item)"
-                v-bind:index=" String(item.index)"
-                v-for="(item) in itembox.list"
-                :key="item.index"
-              >{{item.name}}</el-menu-item>
+          <el-menu :default-active="String(sumber)" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+            <el-menu-item-group :title="itembox.className" v-for="(itembox,index) in student" :key="index">
+              <el-menu-item class="ddddd" style="height: 40px;line-height: 40px;" @click="sumber=item.index,studentClick(item)" v-bind:index=" String(item.index)" v-for="(item) in itembox.students" :disabled="item.statu=='new'?true:false" :key="item.index">
+                <el-badge class="item" :is-dot="item.statu=='submit'?true:false">{{item.studentName}}</el-badge>
+              </el-menu-item>
             </el-menu-item-group>
-            <!-- <el-menu-item
-              style="height: 40px;line-height: 40px;"
-              @click="sumber=index,open(item)"
-              v-bind:index=" String(index)"
-              v-for="(item,index) in 100"
-              :key="index"
-            >选项{{index}}</el-menu-item>-->
           </el-menu>
         </el-col>
       </el-aside>
@@ -52,26 +50,31 @@
       <el-container>
         <el-main style="padding:3px 20px">
           <div class="mainbox">
-            <div class="browse">{{name}}</div>
+            <div class="browse">{{pdfName}}</div>
             <div class="pdf">
               <div class="content">
-                <iframe :src="pdfPath" class="iframe" style="width:100%;height:95%"></iframe>
+                <iframe
+                  :src="pdfPath"
+                  class="iframe"
+                  style="width:100%;height:95%"
+                  v-if="pdfPath==''?false:true"
+                ></iframe>
+                <div v-show="pdfPath==''?true:false">没有数据。。。。</div>
               </div>
             </div>
             <div class="left" @click="switchover(-1)">左</div>
             <div class="right" @click="switchover(1)">右</div>
           </div>
         </el-main>
-        <el-aside width="300px">
+        <el-aside width="410px">
           <div style="margin: 20px;">仿真实验题</div>
           <div style="margin: 20px;">
             <el-table :data="row.tasks" style="width: 100%" border>
-              <el-table-column prop="name" label="名称" min-width="150"></el-table-column>
-
+              <el-table-column prop="name" label="名称" min-width="250"></el-table-column>
               <el-table-column label="操作" min-width="100">
                 <template slot-scope="scope">
-                  <el-button @click="look(scope.row)" type="text" size="small">查看</el-button>
-                  <el-button type="text" size="small" @click="download()">下载</el-button>
+                  <el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>
+                  <el-button type="text" size="small" @click="download(scope.row.path,scope.row.name)">下载</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -84,8 +87,8 @@
 
               <el-table-column label="操作" min-width="100">
                 <template slot-scope="scope">
-                  <el-button @click="preview()" type="text" size="small">查看</el-button>
-                  <el-button type="text" size="small" @click="download()">下载</el-button>
+                  <el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>
+                  <el-button type="text" size="small" @click="download(scope.row.path,scope.row.name)">下载</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -99,140 +102,74 @@
             <el-input v-model="addfrom.grade" placeholder="请输入评分" style="width:50%"></el-input>
           </div>
           <div style="margin:20px;padding-bottom: 100px;">
-            <el-button
-              type="primary"
-              size="mini"
-              style="width:100%;height:50px"
-              @click="readOver"
-            >批阅</el-button>
+            <el-button type="primary" size="mini" style="width:100%;height:50px" @click="readOver()">批阅</el-button>
           </div>
         </el-aside>
       </el-container>
     </el-container>
 
-
-      <!-- 文件预览失败警告框 -->
-            <el-dialog title :visible.sync="previewVisible">
-              <video id="player" width="100%" height="100%" controls>
-                您的浏览器不支持HTML5
-                <source :src="previewPath">
-                <!-- 提供默认的播放视频  -->
-              </video>
-            </el-dialog>
+    <!-- 文件预览失败警告框 -->
+    <el-dialog title :visible.sync="innerVisiblevideo">
+      <video id="player" width="100%" height="100%" controls autoplay="autoplay">
+        您的浏览器不支持HTML5
+        <source :src="previewPath" />
+        <!-- 提供默认的播放视频  -->
+      </video>
+    </el-dialog>
+    <el-dialog width="90%" title="指导文件" top="8vh" append-to-body :visible.sync="innerVisibleNewpdf">
+      <div style="height:75vh">
+        <Examine ref="child" v-if="innerVisibleNewpdf"></Examine>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import FileSaver from "file-saver";
+import Examine from "../../views/Examine";
+import {
+  download,//下载
+  task_review_list,//老师批阅列表
+  task_review_details,//老师查看学生任务详情
+  task_review_score//老师批阅，打分，写评语
+} from "../../API/api";
 export default {
+  name: "Presentationteacher",
   data() {
     return {
-      name: " 彩虹一夏的实验报告",
-      textarea: "",
-      Fractions: "90",
-      previewVisible:false,
-      Presentation: {
-        start: "05/05/13:10",
-        over: "05/05/15:10",
-        Submission: "点击提交"
-      },
-      sumber: 2,
-      student: [
-        {
-          name: "1班",
-          id: "",
-          list: [
-            {
-              name: "1",
-              id: "",
-              index: 1
-            },
-            {
-              name: "2",
-              id: "",
-              index: 2
-            },
-            {
-              name: "3",
-              id: "",
-              index: 3
-            },
-            {
-              name: "4",
-              id: "",
-              index: 4
-            }
-          ]
-        },
-        {
-          name: "2班",
-          id: "",
-          list: [
-            {
-              name: "小明",
-              id: "",
-              index: 5
-            },
-            {
-              name: "小红",
-              id: "",
-              index: 6
-            },
-            {
-              name: "小城",
-              id: "",
-              index: 7
-            },
-            {
-              name: "大黄",
-              id: "",
-              index: 8
-            }
-          ]
-        }
-      ],
-      pdfPath:'http://192.168.2.223:10501/static/material/f092c344-fe1f-41d8-8e8f-75bfef7c2840电机拖动与控制.pdf',
+      innerVisiblevideo: false,
+      innerVisibleNewpdf: false,
+      startTime: "", //任务开始时间
+      finishTime: "", //任务结束时间
+      total: "", //总人数
+      complete: "", //已提交人数
+
+      taskExperimentId: "", //当前任务id
+      studentId: "", //当前学生id
+
+      pdfName: "", //中间pdf预览名字
+      pdfPath: "", //中间pdf预览路径
+      guideName: "",
+      guidePath: "",
       row: {
-        name: "实验报告",
-        pdfPath:
-          "http://192.168.2.223:10501/static/material/f092c344-fe1f-41d8-8e8f-75bfef7c2840电机拖动与控制.pdf",
-        tasks: [
-          {
-            name: "三维实际",
-            path: "dawdada",
-            id: "dadada",
-            type: ""
-          },
-          {
-            name: "二维demo",
-            path: "dawdada",
-            id: "dadada",
-            type: ""
-          }
-        ],
-        accessory: [
-          {
-            name: "实验报告",
-            path: "dawdada",
-            id: "dadada",
-            type: ""
-          },
-          {
-            name: "实验指导书",
-            path: "dawdada",
-            id: "dadada",
-            type: ""
-          },
-          {
-            name: "视屏文件",
-            path: "dawdada",
-            id: "dadada",
-            type: ""
-          }
-        ]
+        //右侧仿真实验题和附件
+        tasks: [],
+        accessory: []
       },
+      res: "",
+      name: "",
+      sumber: 1,
+      studentLength: 0, //学生最大 数量
+      studentlist: new Map(),
+      firststudent: [],
+      theLasTonestudent: [],
+      // presentstudemt:[],  //当前student
+      student: [],
+      previewPath: "",
+
       addfrom: {
-        grade: "",
-        remark: ""
+        grade: "",//评分
+        remark: ""//评语
       },
 
       // 2D3D信息
@@ -252,7 +189,30 @@ export default {
       }
     };
   },
+  components: {
+    Examine
+  },
   methods: {
+    // pdf到详情页面
+    handleChange(name, path) {
+      this.innerVisibleNewpdf = true;
+      if (name != "" && path != "") {
+        this.goExamine(name, path);
+      } else {
+        this.$message.error({
+          message: "资源名称或路径不能为空"
+        });
+      }
+    },
+    // 详情页入口
+    goExamine(name, path) {
+      let examine = {};
+      examine.sourcePath = this.$route.path;
+      examine.name = name;
+      examine.path = path;
+      sessionStorage.setItem("examine", JSON.stringify(examine));
+      let user = JSON.parse(sessionStorage.getItem("user"));
+    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -261,135 +221,132 @@ export default {
     },
     // 切换学生的pdf
     switchover(sum) {
-      if (this.sumber == 1 && sum < 0) {
+      console.log(sum, '111')
+      if (this.sumber <= 1 && sum < 0) {
         this.sumber = 1;
+      } else if (this.sumber >= this.studentLength && sum > 0) {
+        this.sumber = this.studentLength;
       } else {
         this.sumber += sum;
       }
-    },
-    // 打开学生的pdf
-    open(row) {
-      console.log(row);
-    },
-    // 批阅
-    readOver() {
-      if (!Number.isInteger(this.addfrom.grade)) {
-        this.addfrom.grade = "";
-        this.$message.error("请输入正确的数字评分");
-      }
-    },
-       //文件预览
-    preview(path) {
-      if(!path){
-          this.$message.error({
-          message: "无效路径"
-        });
-        return;
-      }
-      let source = path.substring(path.lastIndexOf(".") + 1, path.length);
-      if (
-        source == "AVI" ||
-        source == "avi" ||
-        source == "MOV" ||
-        source == "QT" ||
-        source == "ASF" ||
-        source == "RM" ||
-        source == "NAVI" ||
-        source == "DivX" ||
-        source == "MPEG" ||
-        source == "MPG" ||
-        source == "DAT" ||
-        source == "mp4" ||
-        source == "wmv"
-      ) {
-        // this.previewVisible = true;
-        var cmd =
-          // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
-          "{'opcode':7,'path':'" + path + "'}";
-        wfapp.start(cmd);
+      if (this.studentlist.has(this.sumber)) {
+        let studentId = this.studentlist.get(this.sumber).studentId;
 
-        this.previewPath = path;
-      } else if (
-        source == "ppt" ||
-        source == "pptx" ||
-        source == "PPT" ||
-        source == "PPTX"
-      ) {
-        this.$message("暂不支持PPT文档在线预览,请下载!");
-      } else if (
-        source == "DOCX" ||
-        source == "docx" ||
-        source == "DOC" ||
-        source == "doc"
-      ) {
-        this.$message("暂不支持word文档在线预览,请下载!");
-      } else if (source == "rar" || source == "zip" || source == "7z") {
-        this.$message("暂不支持压缩文件在线解压，请下载!");
-      } else if (source == "PDF" || source == "pdf") {
-        this.pdfPath = path;
-       
-      } else if (
-        source == "gif" ||
-        source == "jpg" ||
-        source == "jpeg" ||
-        source == "png" ||
-        source == "tif"
-      ) {
-        this.pdfPath = path;
-       
+        this.task_review_details(studentId);
+        return;
+        // switchover(this.sumber+sum)
       } else {
-        this.$confirm("文件暂不支持，请下载", "提示", {
+        // console.log(this.sumber, "this.sumber", this.studentlist);
+        if (this.sumber == 1) {
+          // console.log(this.firststudent);
+          this.task_review_details(this.firststudent.studentId);
+          this.sumber = this.firststudent.index;
+        } else if (this.sumber == this.studentLength) {
+          this.theLasTonestudent;
+          this.task_review_details(this.theLasTonestudent.studentId);
+
+          this.sumber = this.theLasTonestudent.index;
+        } else {
+          this.switchover(sum);
+        }
+      }
+    },
+    // 修改批阅状态
+    amendstudent(studentid){
+      console.log(studentid,this.student)
+        let student= this.student;
+        for(let i=0;i<student.length;i++){
+            for(let j=0;j<student[i].students.length;j++){
+                if(student[i].students[j].studentId==studentid){
+                    console.log(student[i].students[j])
+                    student[i].students[j].statu="approved";
+                    break;
+                    return;
+                }
+            }
+        }
+        this.student=student;
+    },
+
+    //文件预览
+    preview(row, path) {
+      if (row.path == "") {
+        this.$confirm("文件路径不支持", "提示", {
           confirmButtonText: "确定",
           type: "info"
-        }).then(() => { });
+        });
+      } else {
+        if (row.simType == "2d") {
+          this.dimensionality.id = row.id;
+          this.dimensionality.name = row.name;
+          this.dimensionality.type = row.typeName;
+          this.dimensionality.look = false;
+          this.go2D(this.dimensionality);
+        } else if (row.simType == "3d") {
+          this.tasks.id = row.id;
+          this.tasks.name = row.name;
+          this.tasks.type = row.typeName;
+          this.tasks.look = true;
+          this.go3D(this.tasks);
+        } else if (row.typeName == "pdf" || row.typeName == "PDF") {
+          this.pdfPath = row.path;
+          this.pdfName = row.name;
+        } else if (
+          row.typeName == "gif" ||
+          row.typeName == "jpg" ||
+          row.typeName == "jpeg" ||
+          row.typeName == "png" ||
+          row.typeName == "tif"
+        ) {
+          this.innerVisibleNewpdf = true;
+          this.handleChange(row.name, row.path);
+        } else if (
+          row.typeName == "AVI" ||
+          row.typeName == "avi" ||
+          row.typeName == "MOV" ||
+          row.typeName == "QT" ||
+          row.typeName == "ASF" ||
+          row.typeName == "RM" ||
+          row.typeName == "NAVI" ||
+          row.typeName == "DivX" ||
+          row.typeName == "MPEG" ||
+          row.typeName == "MPG" ||
+          row.typeName == "DAT" ||
+          row.typeName == "mp4" ||
+          row.typeName == "wmv"
+        ) {
+          // var cmd = "{'opcode':7,'path':'" + path + "'}";
+          // wfapp.start(cmd);
+
+          this.previewPath = row.path;
+          this.innerVisiblevideo = true;
+        } else {
+          this.$confirm("文件暂不支持，请下载", "提示", {
+            confirmButtonText: "确定",
+            type: "info"
+          });
+        }
       }
     },
     // 下载文件
     download(src, name) {
+      console.log(src, name, '111');
+
       if (!src) {
         this.$message.error("文件路径不正确,无法下载");
-      }
-      let data = src;
-
-      if (!data) {
         return;
       }
-      let courseUrl = "";
-      if (JSON.parse(sessionStorage.getItem("course"))) {
-        courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-      }
-      const fileName = name;
-      let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      const elink = document.createElement("a");
-      // elink.download = fileName;
-      elink.style.display = "none";
-      elink.href = url;
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
+      download({
+        name: name,
+        url: src
+      }).then(res => {
+        const blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
+        FileSaver.saveAs(blob, name);
+      });
     },
     //点击按钮进入untiy
-    intounity() {},
-    // 查看
-    look(row) {
-      console.log(row);
-      if (row.expTypeId == null) {
-        this.dimensionality.id = row.id;
-        this.dimensionality.name = row.name;
-        this.dimensionality.type = row.typeName;
-        this.dimensionality.look = false;
-        this.go2D(this.dimensionality);
-      } else {
-        this.tasks.id = row.id;
-        this.tasks.name = row.name;
-        this.tasks.type = row.typeName;
-        this.tasks.look = true;
-        this.go3D(this.tasks);
-      }
-    },
+    intounity() { },
     go2D(row) {
-      console.log(row);
       const tasks = JSON.parse(sessionStorage.getItem("watchStorage2D"));
       if (tasks != null) {
         this.$confirm("请先关闭或保存二维设计空间?", "提示", {
@@ -422,6 +379,7 @@ export default {
           "SourcePage",
           JSON.stringify({
             path: this.$route.path,
+            row: this.res,
             index: page
           })
         );
@@ -430,7 +388,6 @@ export default {
       }
     },
     go3D(row) {
-      console.log(row);
       const tasks = JSON.parse(sessionStorage.getItem("watchStorage3D"));
       if (tasks != null) {
         this.$confirm("请先关闭或保存三维设计空间?", "提示", {
@@ -443,7 +400,7 @@ export default {
           })
           .catch(() => {
             this.$message({
-              type: "info",
+              // type: "info",
               message: "已取消删除"
             });
           });
@@ -462,16 +419,160 @@ export default {
           "SourcePage",
           JSON.stringify({
             path: this.$route.path,
+            row: this.res,
+            student: this.sumber,
             index: page
           })
         );
+        sessionStorage.setItem("studentid", this.sumber);
         this.$emit("handleSelect", 11);
         this.$router.push("/relayteacher/Dimension3");
       }
     },
+    //获取老师批阅列表
+    taskReviewList(taskExperimentId, courseId) {
+      task_review_list({
+        taskExperimentId: taskExperimentId,
+        courseId: courseId
+      }).then(res => {
+        console.log(res, "学生");
+        this.student = [];
+        let data = res.data.object;
+        let firststudent = true;
+        let index = 0;
+        for (var i = 0; i < data.length; i++) {
+          let student = [];
+          for (var j = 0; j < data[i].students.length; j++) {
+            index++;
+            data[i].students[j].index = index;
+            if (data[i].students[j].statu != "new") {
+              this.studentlist.set(index, data[i].students[j]);
+              if (firststudent) {
+                this.firststudent = data[i].students[j];
+                firststudent = false;
+              }
+
+              this.theLasTonestudent = data[i].students[j];
+            }
+          }
+        }
+        this.studentLength = index;
+        this.student = data;
+
+        if (sessionStorage.getItem("studentid")) {
+
+          let student = this.studentlist.get(
+            sessionStorage.getItem("studentid") * 1
+          );
+          console.log("student", this.taskExperimentId, student);
+          this.task_review_details(student.studentId);
+          this.sumber = student.index;
+          setTimeout(res => {
+            sessionStorage.removeItem("studentid");
+          }, 1000);
+          return;
+        } else {
+          console.log("1111", this.firststudent);
+          this.task_review_details(this.firststudent.studentId);
+          this.sumber = this.firststudent.index;
+        }
+        console.log(this.studentlist, "data");
+      });
+    },
+    //老师查看学生任务详情
+    task_review_details(studentid) {
+      task_review_details({
+        taskExperimentId: this.taskExperimentId,
+        studentId: studentid
+      }).then(res => {
+        console.log(res, "res");
+        if (res.data.code == "0") {
+          this.row.tasks = res.data.object.simAnnexs;
+
+          this.row.accessory = res.data.object.otherAnnexs;
+          this.studentId = studentid
+          this.pdfPath = res.data.object.reportPath;
+          this.pdfName = res.data.object.reportName;
+          this.guideName = res.data.object.guideName;
+          this.guidePath = res.data.object.guidePath;
+
+          this.addfrom.grade = res.data.object.score;
+          this.addfrom.remark = res.data.object.comment;
+        } else {
+        }
+      });
+    },
+
+    studentClick(item) {
+      // console.log(item)
+
+      this.task_review_details(item.studentId);
+    },
+    //老师批阅，打分，写评语
+    readOver() {
+      if (this.taskExperimentId == '' || this.studentId == "") {
+        this.$message.error("批阅错误");
+        return;
+
+      }
+      if (this.addfrom.grade < 0 && this.addfrom.grade > 100) {
+        this.addfrom.grade = "";
+        this.$message.error("请输入正确的数字评分0-100");
+        return;
+      } else {
+        
+      task_review_score({
+        taskExperimentId: this.taskExperimentId,
+        studentId: this.studentId,
+        score: this.addfrom.grade,
+        comment: this.addfrom.remark
+      }).then(res => {
+        console.log(res)
+        if (res.data.code =="0") {
+          this.$message({
+            type: "info",
+            duration: 1000,
+            message: "批阅成功"
+          });
+          this.amendstudent(this.studentId)
+        }else{
+          this.$message.error('批阅失败')
+        }
+      });
+      }
+    },
+    initData(res) {
+      let row = "";
+      if (res) {
+        row = res;
+        this.res = row;
+      } else {
+        row = this.$route.query;
+        this.res = row;
+        console.log(row, "qqq");
+      }
+      this.taskExperimentId = row.id;
+      this.name = row.name;
+      this.startTime = row.startTime;
+      this.finishTime = row.finishTime;
+      this.total = row.total;
+      this.complete = row.complete;
+      let courseId = JSON.parse(sessionStorage.getItem("course")).id;
+      this.taskReviewList(this.taskExperimentId, courseId);
+    }
   },
-  created(){
-    console.log(this.$route.query.id,'实验id')
+
+
+
+  created() {
+    console.log(this.$route.query, '333')
+    let res = JSON.parse(sessionStorage.getItem("SourcePage"));
+    if (this.$route.query.id) {
+      this.initData();
+    } else if (res.row != null) {
+      console.log(res.row);
+      this.initData(res.row);
+    }
   }
 };
 </script>
@@ -483,8 +584,8 @@ export default {
 }
 .taskname {
   width: 100%;
-  height: 40px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 50px;
   // text-align: center;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -560,6 +661,12 @@ export default {
     background-color: #ccc;
     cursor: pointer;
   }
+  .right:hover {
+    background-color: #74a778;
+  }
+  .left:hover {
+    background-color: #74a778;
+  }
   .right {
     position: absolute;
     right: 10px;
@@ -573,6 +680,15 @@ export default {
     background-color: #ccc;
     cursor: pointer;
   }
+}
+</style>
+
+<style>
+.Presentation .el-breadcrumb__separator {
+  color: black;
+}
+.Presentation .item .is-fixed {
+  top: 11px;
 }
 </style>
 

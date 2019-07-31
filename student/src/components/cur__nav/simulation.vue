@@ -12,12 +12,7 @@
                 <div class="grid-content bg-purple">
                   <template>
                     <el-select v-model="taskOne" placeholder="全部">
-                      <el-option
-                        v-for="item in tasks"
-                        :key="item.index"
-                        :label="item"
-                        :value="item"
-                      ></el-option>
+                      <el-option v-for="item in tasks" :key="item.index" :label="item" :value="item"></el-option>
                     </el-select>
                   </template>
                 </div>
@@ -29,27 +24,13 @@
             <div v-show="showOne" class="TestList">
               <ul>
                 <li v-for="(item,index) in itemArr" :key="item.id">
-                  <i
-                    v-if="!item.inner"
-                    v-show="item.mode==taskOne||taskOne=='全部'"
-                    @click="istests(index,item.inner,item.type)"
-                    style="position: relative;display: block;"
-                  >
+                  <i v-if="!item.inner" v-show="item.mode==taskOne||taskOne=='全部'" @click="istests(index,item.inner,item.type)" style="position: relative;display: block;">
                     <router-link :to="'/sExperiment1/guidance/'+item.id">
-                    <!-- src="./../../image/nisfunbduhf.png" -->
-                      <img
-                        class="img"
-                        
-                        :src="judge(item.path)"
-                        :style="{border:(istest==index?redcolor:color)}"
-                      >
+                      <!-- src="./../../image/nisfunbduhf.png" -->
+                      <img class="img" :src="judge(item.path)" :style="{border:(istest==index?redcolor:color)}">
                       <i class="status" style="background-color:red;" v-if="item.status=='new'"></i>
                       <!-- <i class="status" style="background-color:red">{{item.status=="new"}}</i> -->
-                      <i
-                        class="status"
-                        style="background-color:#3be450"
-                        v-if="item.status=='submit'"
-                      ></i>
+                      <i class="status" style="background-color:#3be450" v-if="item.status=='submit'"></i>
                       <span>{{item.name}}</span>
                     </router-link>
                   </i>
@@ -67,12 +48,7 @@
                 <div class="grid-content bg-purple">
                   <template>
                     <el-select v-model="taskTwo" placeholder="全部">
-                      <el-option
-                        v-for="item in tasks"
-                        :key="item.index"
-                        :label="item"
-                        :value="item"
-                      ></el-option>
+                      <el-option v-for="item in tasks" :key="item.index" :label="item" :value="item"></el-option>
                     </el-select>
                   </template>
                 </div>
@@ -84,18 +60,10 @@
             <div v-show="showTwo" class="TestList">
               <ul style="padding-bottom: 100px;">
                 <li v-for="(item,index) in itemArr" :key="item.id">
-                  <i
-                    v-if="item.inner"
-                    v-show="item.mode==taskTwo||taskTwo=='全部'"
-                    @click="istests(index,item.inner,item.type)"
-                  >
+                  <i v-if="item.inner" v-show="item.mode==taskTwo||taskTwo=='全部'" @click="istests(index,item.inner,item.type)">
                     <!-- <template slot-scope="scope"> -->
                     <router-link :to="'/sExperiment1/guidance/'+item.id">
-                      <img
-                        class="img"
-                        :src="judge(item.path)"
-                        :style="{border:(istest==index?redcolor:color)}"
-                      >
+                      <img class="img" :src="judge(item.path)" :style="{border:(istest==index?redcolor:color)}">
                       <span>{{item.name}}</span>
                     </router-link>
                     <!-- </template>  -->
@@ -140,11 +108,8 @@ export default {
     };
   },
   methods: {
-     ...mapActions([
-      'task'
-    ]),
+    ...mapActions(['task']),
     istests(index, inner, type) {
-      
       this.istest = index;
       this.innertype.inner = inner;
       this.innertype.type = type;
@@ -153,34 +118,31 @@ export default {
       this.$emit("threadPoxi", type);
     },
     // 任务图片
-    judge(path){
-          if(path==null||path==""){
-              return require("./../../image/nisfunbduhf.png");
-          }else{
-              return path;
-          } 
-
-      
+    judge(path) {
+      if (path == null || path == "") {
+        return require("./../../image/nisfunbduhf.png");
+      } else {
+        return path;
+      }
     },
-    simulist(){
-         simulist({
-      offset: this.offset,
-      limit: this.limit
-    }).then(res => {
-      console.log(res,'任务列表')
-      this.itemArr = res.data.object;
-      this.task(res.data.object)
-    });
+    simulist() {
+      simulist({
+        offset: this.offset,
+        limit: this.limit
+      }).then(res => {
+        this.itemArr = res.data.object;
+        this.task(res.data.object)
+      });
     }
   },
-   computed: {
+  computed: {
     ...mapState(["taskList"])
   },
   created() {
-    if(this.taskList.length>0){
-      this.itemArr=this.taskList
-    }else{
-        this.simulist();
+    if (this.taskList.length > 0) {
+      this.itemArr = this.taskList
+    } else {
+      this.simulist();
     }
   },
   mounted() {
@@ -188,9 +150,7 @@ export default {
     setTimeout(() => {
       if (this.itemArr.length > 0) {
         for (let i = 0; i < this.itemArr.length; i++) {
-          // console.log("加载完成", this.itemArr[i].inner);
           let item = this.itemArr[i];
-          //  console.log(item.id)
           if (item.inner == false) {
             this.istests(i);
             this.$router.push("/sExperiment1/guidance/" + item.id);

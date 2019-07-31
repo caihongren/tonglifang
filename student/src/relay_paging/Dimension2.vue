@@ -47,7 +47,7 @@ export default {
       },
       agentData: {
         name: "mode",
-        mode: "task_experiment_exercise_instance_editor",
+        mode: "",
         token: "",
         id: "",
         type: "",
@@ -65,14 +65,24 @@ export default {
       // 进行来源判断
 
       let SourcePage = JSON.parse(sessionStorage.getItem("SourcePage"));
-      console.log(SourcePage.index)
       this.$emit("handleSelect", SourcePage.index);
       this.$router.replace(SourcePage.path);
     }
   },
+  mounted() {
+     //判断学生老师  字段
+    let role = JSON.parse(sessionStorage.getItem("user")).role;
+    if (role == "teacher") {
+      this.agentData.mode = 'task_experiment_exercise_template_editor'
+    }
+    else {
+      this.agentData.mode = 'task_experiment_exercise_instance_editor'
+    }
+  },
+
   created() {
+     this.$emit("handleSelect", 10);
   const tasks = JSON.parse(sessionStorage.getItem("watchStorage2D"));
-    console.log(tasks);
     //获取本地缓存中的令牌mytoken
     let token = localStorage.getItem("token");
     this.name=tasks.name;
@@ -85,7 +95,9 @@ export default {
       this.agentData.look = tasks.look;
     }
 
-    console.log(this.agentData);
+
+
+
 
   }
 };

@@ -2,239 +2,162 @@
   <div class="box addTest">
     <div class="interior">
       <!-- 表格 -->
-      <el-form label-position="left" label-width="100px" :model="form" style="width:90%">
+      <el-form label-position="left" label-width="100px" :model="form" style="width:90%" id="right">
+        <!-- 要求 -->
         <el-form-item label="要求">
-          <el-input type="textarea" :rows="2" v-model="form.region" :disabled="true"></el-input>
+          <el-input type="textarea" :rows="2" v-model="form.textarea" :disabled="true"></el-input>
         </el-form-item>
+        <!-- 实验指导书 -->
         <el-form-item label="实验指导书">
-          <span class="span">{{guidename}}</span>
-          <span></span>
-          <el-button icon="el-icon-plus" size="small" @click="handleChange(guideid)">打开</el-button>
+          <span class="span">{{form.guide.name}}</span>
+          <el-button icon="el-icon-plus" size="small" @click="handleChange(form.guide.name, form.guide.path)">打开</el-button>
         </el-form-item>
+        <!-- 参考附件 -->
         <el-form-item label="参考附件">
-          <template>
-            <el-table
-              :data="tableData"
-              border
-              style="width: 100%;margin:5px 0;text-align:center"
-              stripe
-              :header-cell-style="{background:'#ccc',height:'50px'}"
-            >
-              <el-table-column prop="name" label="附件名称" min-width="120"></el-table-column>
-              <el-table-column prop="name" label="类型" min-width="200"></el-table-column>
-
-              <el-table-column label="操作" min-width="150">
-                <template slot-scope="scope">
-                  <el-button @click="lookover(scope.row)" size="small" icon="el-icon-search">查看</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </template>
+          <el-table :data="form.reference" border style="width: 100%;margin:5px 0;text-align:center" stripe :header-cell-style="{background:'#ccc',height:'50px'}">
+            <el-table-column prop="name" label="附件名称" min-width="150"></el-table-column>
+            <el-table-column prop="typeName" label="类型" min-width="100"></el-table-column>
+            <el-table-column label="操作" min-width="150">
+              <template slot-scope="scope">
+                <el-button @click="otherAnnexs(scope.row)" size="small" icon="el-icon-search">查看</el-button>
+                <el-button size="small" icon="el-icon-date" @click="download(scope.row.name,scope.row.path)">下载</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-form-item>
-        <div style="width:110%;border:1px solid #ccc;margin:5px 0"></div>
+        <!-- 实验报告 -->
         <el-form-item label="实验报告">
-          <span class="span">{{form.reportname}}</span>
-          <span></span>
-          <el-button size="small" v-if="islook">在线编辑</el-button>
-          <el-button
-            size="small"
-            icon="el-icon-download"
-            @click="download(form.reportpath,form.reportname)"
-          >导出</el-button>
-          <el-button size="small" icon="el-icon-date" @click="download(reportpath,reportname)">下载模板</el-button>
+          <el-row>
+            <el-col :span="6">
+              <div class="laboratoryBook" :title="form.report.name">{{form.report.name}}
+                <i @click="deletework()" class="el-icon-circle-close" v-show="islook"></i>
+              </div>
+            </el-col>
+            <el-col :span="10">
+              <div class="grid-content bg-purple">
+                <el-button icon="el-icon-plus" size="small" @click="handleChange(form.report.name, form.report.path)" v-if="open">打开</el-button>
+                <el-button size="small" @click="download(form.report.name,form.report.path)" class="el-icon-top">导出</el-button>
+                <el-button size="small" @click="download(form.reportTemName,form.reportTemPath)" class="el-icon-bottom" v-show="islook">下载模板</el-button>
+                
+
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <div class="grid-content bg-purple">
+                <el-upload class="upload-demo" action="/img/taskUpload" :before-upload="beforeUploadword" style :limit="5">
+                  <el-button size="small" icon="el-icon-upload" v-if="islook">上传文件</el-button>
+                </el-upload>
+              </div>
+            </el-col>
+          </el-row>
         </el-form-item>
+        <!-- 仿真实验题 -->
         <el-form-item label="仿真实验题">
           <template>
-            <el-table
-              :data="snapshoot"
-              border
-              style="width: 100%;margin:5px 0"
-              stripe
-              :header-cell-style="{background:'#ccc'}"
-            >
-              <el-table-column prop="name" label="附件名称" min-width="120"></el-table-column>
-              <el-table-column prop="name" label="类型" min-width="150"></el-table-column>
-              <el-table-column prop="name" label="原题" min-width="150">
+            <el-table :data="form.snapshoot" border style="width: 100%;margin:5px 0" stripe :header-cell-style="{background:'#ccc'}">
+              <el-table-column prop="name" label="附件名称" min-width="100"></el-table-column>
+              <el-table-column prop="typeName" label="类型" min-width="60"></el-table-column>
+              <el-table-column prop="name" label="原题" min-width="100">
                 <template slot-scope="scope">
-                  <el-button
-                    @click="compileClick(scope.row)"
-                    size="small"
-                    type="text"
-                  >{{scope.row.name}}</el-button>
+                  <el-button @click="compileClick(scope.row)" size="small" type="text">{{scope.row.name}}</el-button>
                 </template>
               </el-table-column>
-
-              <el-table-column label="快照" min-width="550">
-                <template slot-scope="scope">
-                  <span
-                    v-bind:key="item.id"
-                    v-for="(item) in scope.row.list"
-                    style="padding-right: 30px;"
-                  >
-                    <el-radio
-                      v-model="snapshoot[scope.$index].radio"
-                      :label="item.name"
-                    >{{item.name}}</el-radio>
-
-                    <!-- <el-button @click="compileClick(scope.row)" size="small" type="text">{{item.name}}</el-button> -->
-
-                    <el-button type="text" @click="compileClick(scope.row)">
-                      <span class="icon iconfont">&#xe643;</span>
-                    </el-button>
-                    <el-button type="text" @click="eacher(item.sim_path)">
-                      <span class="icon iconfont">&#xeb99;</span>
-                    </el-button>
-                    <el-button
-                      icon="el-icon-delete"
-                      v-if="islook"
-                      type="text"
-                      @click="det(scope.row.id)"
-                    ></el-button>
-                  </span>
-                  <!-- <span >
-                       <el-button @click="compileClick(scope.row)" size="small">查看</el-button>
-                  <el-button @click="det(scope.row.id)" size="small">删除</el-button>
-                  </span>-->
+              <el-table-column prop="projectName" label="快照" min-width="110">
+                <template slot-scope="scope" v-if="scope.row.projectId != null && scope.row.projectId != ''">
+                  {{scope.row.projectName|dateformat}}
+                  <el-button type="text" size="small" @click="snapshotLook(scope.row)">
+                    <span class="icon iconfont">&#xe643;</span>
+                  </el-button>
+                  <el-button type="text" @click="eacher(scope.row.simPath)">
+                    <span class="icon iconfont">&#xeb99;</span>
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
           </template>
         </el-form-item>
+        <!-- 其他附件 -->
         <el-form-item label="其他附件">
           <template>
             <el-row v-if="islook">
-              <el-col :span="5">
+              <el-col :span="9">
                 <div class="grid-content bg-purple"></div>
-                <el-button
-                  @click="testTemplateLibrary=!testTemplateLibrary"
-                  size="small"
-                  icon="el-icon-plus"
-                >新建二维仿真</el-button>
-                <el-button
-                  @click="dialogVisiblecopyscene=!dialogVisiblecopyscene"
-                  size="small"
-                  icon="el-icon-plus"
-                >新建三维仿真</el-button>
+                <el-button @click="templateLibrary()" size="small" icon="el-icon-plus">新建二维仿真</el-button>
+                <el-button @click="visiblecopyscene()" size="small" icon="el-icon-plus">新建三维仿真</el-button>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="5">
                 <div class="grid-content bg-purple">
-                  <el-upload
-                    class="upload-demo"
-                    action="/img/add_resource"
-                    :before-upload="beforeUpload"
-                    style
-                    :limit="5"
-                  >
-                    <el-button @click="compileClick()" size="small" icon="el-icon-upload">上传文件</el-button>
+                  <el-upload class="upload-demo" action="/img/taskUpload" :before-upload="beforeUpload" style :limit="5">
+                    <el-button size="small" icon="el-icon-upload">上传文件</el-button>
                   </el-upload>
                 </div>
               </el-col>
             </el-row>
-
-            <el-table
-              :data="form.annexs"
-              border
-              style="width: 100%;margin:5px 0"
-              stripe
-              :header-cell-style="{background:'#ccc'}"
-            >
-              <el-table-column prop="name" label="附件名称" min-width="150"></el-table-column>
-              <el-table-column prop="name" label="类型" min-width="120"></el-table-column>
-
+            <el-table :data="form.otherAnnexs" border stripe :header-cell-style="{background:'#ccc'}" style="width: 100%;margin:5px 0">
+              <el-table-column prop="name" label="附件名称" min-width="170" sortable></el-table-column>
+              <el-table-column prop="typeName" label="类型" min-width="120"></el-table-column>
               <el-table-column label="操作" min-width="150">
                 <template slot-scope="scope">
-                  <el-button @click="lookover(scope.row)" size="small" icon="el-icon-search">查看</el-button>
-                  <el-button
-                    @click="det(scope.row.id)"
-                    v-if="islook"
-                    size="small"
-                    icon="el-icon-delete"
-                  >删除</el-button>
+                  <el-button type="text" size="small" @click="otherAnnexs(scope.row)">查看</el-button>
+                  <el-button type="text" @click="det(scope.row.id)" size="small" v-show="islook">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
           </template>
         </el-form-item>
         <el-form-item label="老师批阅" v-if="isapproved">
-          <div>分数：{{teacherScore}}</div>
+          <div>分数：{{form.teacherScore}}</div>
           <div>
-            <el-input type="textarea" :rows="2" v-model="teacherComment" :disabled="true"></el-input>
+            <el-input type="textarea" :rows="2" v-model="form.teacherComment" :disabled="true"></el-input>
           </div>
         </el-form-item>
       </el-form>
       <div class="operation">
-        <el-button @click="compileClick()" v-if="islook" type="success">保存</el-button>
-        <el-button @click="submit()" v-if="islook" type="danger">提交</el-button>
+        <el-button @click="SubmitAnExperimentReport('save')" v-if="islook" type="success" :loading="loading">保存</el-button>
+        <el-button @click="SubmitAnExperimentReport('submit')" v-if="islook" type="danger" :loading="loading">提交</el-button>
         <el-button @click="$emit('detpage')" v-if="!islook">确定</el-button>
       </div>
 
       <!-- 弹窗 -->
       <!-- 新建2D弹出框 -->
-      <el-dialog :visible.sync="testTemplateLibrary" class="newBulletWindowFrame" width="30%">
+      <el-dialog title="新建二维" :visible.sync="testTemplateLibrary" class="newBulletWindowFrame" width="45%">
         <div>
-          <el-input placeholder="请输入新增二维名称" v-model="dimensionality.name" class="input-with-select">
-            <el-select
-              v-model="dimensionality.type"
-              slot="prepend"
-              placeholder="请选泽二维模式"
-              style="width:180px"
-            >
-              <el-option label="二维设计图" value="shanghai"></el-option>
-              <el-option label="二维接线图" value="beijing"></el-option>
-              <el-option label="二维布局图" value="shen"></el-option>
+          <el-input placeholder="请输入新增二维名称" v-model="taskExperiment.name" class="input-with-select">
+            <el-select v-model="erweiSelect" slot="prepend" placeholder="请选泽二维模式" style="width:180px">
+              <el-option :label="item.name" :value="item" v-for="(item) in simulationResourcesType" :key="item.id"></el-option>
             </el-select>
           </el-input>
         </div>
-
         <div slot="footer" class="dialog-footer">
           <el-button @click="testTemplateLibrary = false">取 消</el-button>
-          <el-button type="primary" @click="go2D(dimensionality)">确 定</el-button>
+          <el-button type="primary" @click="addOtherAnnexes()">确 定</el-button>
         </div>
       </el-dialog>
       <!-- 新建3d场景文件 -->
-      <el-dialog title="新建场景文件" :visible.sync="dialogVisiblecopyscene" width="30%">
+      <el-dialog title="新建三维" :visible.sync="dialogVisiblecopyscene" width="45%">
         <div>
-          <el-input placeholder="请输入新增场景名称" v-model="tasks.name" class="input-with-select">
-            <el-select
-              v-model="tasks.type"
-              slot="prepend"
-              placeholder="请选泽场景模式"
-              style="width:180px"
-            >
-              <el-option
-                :label="item.name"
-                :value="item.name"
-                v-for="(item) in pattern"
-                :key="item.id"
-              ></el-option>
+          <el-input placeholder="请输入新增场景名称" v-model="taskExperiment.name" class="input-with-select">
+            <el-select v-model="sanweiSelect1" slot="prepend" placeholder="请选泽三维模式" style="width:150px;margin-right:10px">
+              <el-option :label="item.name" :value="item" v-for="item in pattern" :key="item.id"></el-option>
+            </el-select>
+            <el-select v-model="sanweiSelect2" slot="prepend" placeholder="请选泽场景模式" style="width:150px">
+              <el-option :label="item.name" :value="item" v-for="item in patterncon" :key="item.id"></el-option>
             </el-select>
           </el-input>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisiblecopyscene = false">取 消</el-button>
-          <el-button type="primary" @click="go3D(tasks)">确 定</el-button>
+          <el-button type="primary" @click="addOtherSanwei()">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 指导文件查看 -->
-      <el-dialog
-        width="90%"
-        title="指导文件"
-        top="8vh"
-        append-to-body
-        :visible.sync="innerVisibleNewpdf"
-      >
+      <el-dialog width="90%" title="指导文件" top="8vh" append-to-body :visible.sync="innerVisibleNewpdf">
         <div style="height:75vh">
-          <Examine ref="child"></Examine>
+          <Examine ref="child" v-if="innerVisibleNewpdf"></Examine>
         </div>
       </el-dialog>
       <!-- 视屏文件查看 -->
-      <el-dialog
-        width="90%"
-        title="播放视屏"
-        top="8vh"
-        append-to-body
-        :visible.sync="innerVisiblevideo"
-      >
+      <el-dialog width="90%" title="播放视屏" top="8vh" append-to-body :visible.sync="innerVisiblevideo">
         <div style="height:75vh">
           <video id="player" width="100%" height="100%" controls>
             您的浏览器不支持HTML5
@@ -244,15 +167,9 @@
         </div>
       </el-dialog>
       <!-- 快照折线图查看 -->
-      <el-dialog
-        width="50%"
-        title="实验快照折线图"
-        top="8vh"
-        append-to-body
-        :visible.sync="innerVisiblePolyline"
-      >
+      <el-dialog width="50%" title="实验快照折线图" top="8vh" append-to-body :visible.sync="innerVisiblePolyline">
         <div style="height:55vh">
-          <div id="myChart2" :style="{width: '800px', height: '600px'}"></div>
+          <div id="myChart2" :style="{width: '90%', height: '80%'}" class="myChart2" v-if="innerVisiblePolyline"></div>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="innerVisiblePolyline=false">确 定</el-button>
@@ -261,105 +178,96 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapState, mapActions } from "vuex";
 import Examine from "../../views/Examine";
+import FileSaver from "file-saver";
 import {
-  guidelist,
-  demo,
-  reportlist,
-  snalist,
-  resource,
-  report,
-  tostring,
-  tonumber,
-  getResource_by_id
+  snalist, //  加载快照列表
+  taskUpload,    // 上传文件
+  saveTaskExperiment,//保存或提交
+  experimentDetails,   // 获取学生实验任务列表
+  experiment_type_list, //添加实验类型
+  sceneTypes,//获取仿真资源类型列表2维/3维
+  addSimulationAnnex,//新增二维三维
+  download,//下载
 } from "../../API/api";
 export default {
   data() {
     return {
-      id: "",
-      offset: 0,
-      limit: 100,
-      currentPage4: 1,
-      length: 40,
-      innerVisible: false,
-      innerVisibleNewpdf: false,
-      innerVisiblevideo: false,
-      testTemplateLibrary: false,
-      innerVisiblePolyline: false,
-      dialogVisiblecopyscene: false,
-      islook: true,
-      isapproved: false,
-      previewPath: "",
+      //整个页面form内容
       form: {
-        name: "minziu",
-        region: "dawdad",
-        reportid: "",
-        reportname: "",
-        reportpath: "",
-        annexs: []
+        id: "",//id
+        textarea: "",//要求
+        guide: {//实验指导书
+          id: "",
+          name: "",
+          path: ""
+        },
+        reference: [],//参考附件表单
+        report: {//实验报告
+          id: "",
+          name: "",
+          path: "",
+          file: ""
+        },
+
+        snapshoot: [],//仿真实验题表单
+        otherAnnexs: [],//其他附件表单
+        teacherScore: "",
+        teacherComment: "",
+        reportTemName:"",//实验报告模板名称
+        reportTemPath:""//实验报告模板路径
       },
-      snapshoot: [
-        {
-          name: "快照实验demo",
-          radio: "1",
-          list: [
-            {
-              name: "demo1",
-              path: "dadad",
-              id: "dawd1ada"
-            },
-            {
-              name: "demo2",
-              path: "dadad",
-              id: "dawd1addawdawdadaa"
-            }
-          ]
-        }
-      ],
-      dimensionality: {
-        dimensionality: "2D",
+      innerVisibleNewpdf: false,//实验指导书指导文件查看
+      //二维仿真模态框
+      simulationResourcesType: [],//新建二维下拉框内容
+      testTemplateLibrary: false,//二维模态框是否显示
+      erweiSelect: "",//二维下拉框选中的值
+      //三维仿真模态框
+      dialogVisiblecopyscene: false,//三维模态框是否显示
+      pattern: [],//新建三维第一个下拉框内容
+      patterncon: [],//新建三维第二个下拉框内容
+      sanweiSelect1: "",//三维模式下第一个拉框选中的值
+      sanweiSelect2: "",//三维模式第二个下拉框选中的值
+      innerVisiblePolyline: false,//折线图模态框是否显示
+      loading: false, //保存提交中
+      dimensionality: {//go2d对象
+        simType: "",
         name: "",
-        type: ""
+        typeName: "",
+        type: "",
+        id: "",
+        look: false
       },
-      tasks: {
+      tasks: {//go3d对象
+        taskExperimentId: '',
         id: "",
         name: "",
         path: "",
         type: "",
-        look:false,
+        look: false,
+        expTypeId: ''
       },
-      pattern: [
-        {
-          name: "基础实验",
-          id: "1"
-        },
-        {
-          name: "创新实验",
-          id: "2"
-        },
-        {
-          name: "综合实验",
-          id: "3"
-        }
-      ],
-      guideid: "",
-      guidepath: "",
-      guidename: "",
-      reportid: "",
-      reportname: "",
-      reportpath: "",
-      teacherScore: "未评分",
-      teacherComment: "暂无评论。。。",
-      tableData: [],
+      innerVisiblevideo: false,
+      previewPath: "",
+      jpgPreviewPath: false,
+      islook: true,
+      open:false,
+      isapproved: false,
 
-      series: [], //折线图部分
+      //折线图部分
+      series: [],
       duration: "",
       stepLength: "",
       stepLengthlist: [],
-      legend: []
+      legend: [],
+      taskExperiment: {
+        taskExperimentId: "",
+        name: "",
+        type: "",
+        expType: ""
+      }
     };
   },
   components: {
@@ -368,103 +276,158 @@ export default {
   },
   props: {
     row: Object,
-    showheight:String
+    showheight: String
   },
   methods: {
     ...mapActions(["task"]),
-
-    // pdf到详情页面
-    handleChange(id) {
-      // console.log(id);
-      this.innerVisibleNewpdf = true;
-      getResource_by_id({
-        id: id
-      })
-        .then(res => {
-          // console.log(res);
-          if (res.data.code == "0") {
-            this.innerVisibleNewpdf = true;
-            this.goExamine(res.data.object.name, res.data.object.path);
-          } else {
-            this.$message.error({
-              message: "该资源不存在"
-            });
-          }
-        })
-        .catch(() => {});
-    },
-    // 查看
-    lookover(row) {
-      // 对row来源进行判断
-      console.log(row);
-      this.preview(row.path, row);
-    },
-
-    preview(path, row) {
-      let source = path.substring(path.lastIndexOf(".") + 1, path.length);
-      if (
-        source == "AVI" ||
-        source == "avi" ||
-        source == "MOV" ||
-        source == "QT" ||
-        source == "ASF" ||
-        source == "RM" ||
-        source == "NAVI" ||
-        source == "DivX" ||
-        source == "MPEG" ||
-        source == "MPG" ||
-        source == "DAT" ||
-        source == "mp4" ||
-        source == "wmv"
-      ) {
-        // this.previewVisible = true;
-        var cmd =
-          // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
-          "{'opcode':7,'path':'" + path + "'}";
-        wfapp.start(cmd);
-
-        this.previewPath = path;
-        this.innerVisiblevideo = true;
-        // 播放视频
-      } else if (
-        source == "ppt" ||
-        source == "pptx" ||
-        source == "PPT" ||
-        source == "PPTX"
-      ) {
-        this.$message("暂不支持PPT文档在线预览,请下载!");
-      } else if (
-        source == "DOCX" ||
-        source == "docx" ||
-        source == "DOC" ||
-        source == "doc"
-      ) {
-        this.$message("暂不支持word文档在线预览,请下载!");
-      } else if (source == "rar" || source == "zip" || source == "7z") {
-        this.$message("暂不支持压缩文件在线解压，请下载!");
-      } else if (source == "PDF" || source == "pdf") {
-        this.handleChange(row.id);
-      } else if (
-        source == "gif" ||
-        source == "jpg" ||
-        source == "jpeg" ||
-        source == "png" ||
-        source == "tif"
-      ) {
-        this.handleChange(row.id);
-      } else {
-        this.$confirm("文件暂不支持，请下载", "提示", {
+    //取消文件预览
+    //点击查看
+    otherAnnexs(row) {
+      if (row.id == '') {
+        this.$confirm("新上传的文件请先保存后查看此文件", "提示", {
           confirmButtonText: "确定",
           type: "info"
-        }).then(() => {});
+        });
+      } else {
+        if (row.simType == "2d") {
+          this.dimensionality.id = row.id;
+          this.dimensionality.name = row.name;
+          this.dimensionality.type = row.typeName;
+          this.dimensionality.look = false;
+          this.go2D(this.dimensionality);
+        } else if (row.simType == "3d") {
+          this.tasks.taskExperimentId = this.form.id
+          this.tasks.id = row.id;
+          this.tasks.name = row.name;
+          this.tasks.type = row.typeName;
+          this.tasks.look = !this.islook;
+          this.go3D(this.tasks);
+        } else if (row.typeName == "pdf" || row.typeName == "PDF") {
+          this.innerVisibleNewpdf = true;
+          this.handleChange(row.name, row.path);
+        } else if (
+          row.typeName == "gif" ||
+          row.typeName == "jpg" ||
+          row.typeName == "jpeg" ||
+          row.typeName == "png" ||
+          row.typeName == "tif"
+        ) {
+          this.innerVisibleNewpdf = true;
+          this.handleChange(row.name, row.path);
+        } else if (
+          row.typeName == "AVI" ||
+          row.typeName == "avi" ||
+          row.typeName == "MOV" ||
+          row.typeName == "QT" ||
+          row.typeName == "ASF" ||
+          row.typeName == "RM" ||
+          row.typeName == "NAVI" ||
+          row.typeName == "DivX" ||
+          row.typeName == "MPEG" ||
+          row.typeName == "MPG" ||
+          row.typeName == "DAT" ||
+          row.typeName == "mp4" ||
+          row.typeName == "wmv"
+        ) {
+          this.previewPath = row.path;
+          this.innerVisiblevideo = true;
+        } else {
+          this.$confirm("文件暂不支持，请下载", "提示", {
+            confirmButtonText: "确定",
+            type: "info"
+          });
+        }
       }
     },
-    compileClick(row) {
-      console.log(row);
+    //点击快照查看
+    snapshotLook(row) {
+      if (row.simType == "2d") {
+        this.dimensionality.id = row.id;
+        this.dimensionality.name = row.name;
+        this.dimensionality.type = row.typeName;
+        this.dimensionality.look = false;
+        this.go2D(this.dimensionality);
+      } else if (row.simType == "3d") {
+        this.tasks.taskExperimentId = this.form.id
+        this.tasks.id = row.projectId;
+        this.tasks.name = row.name;
+        this.tasks.type = row.typeName;
+        this.tasks.look = !this.islook;
+        this.go3D(this.tasks);
+      } else {
+        this.$message.error({
+          message: "该文件不支持查看，请下载"
+        });
+      }
+    },
+
+    // 下载文件
+    download(name, path) {
+      // console.log(name,path)
+      if(name==null||path==null){
+           this.$message.error({
+          message: '下载错误或者为空'
+        });
+        return;
+      }
+      download({
+        name: name,
+        url: path,
+      }).then(res => {
+        const blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
+        FileSaver.saveAs(blob, name);
+      })
+    },
+    // 删除实验报告
+    deletework() {
+      this.form.report = "";
+    },
+    // 上传实验报告文件
+    beforeUploadword(file) {
+      let source = file.name.substring(file.name.lastIndexOf(".") + 1, file.name.length);
+      if (source == "pdf" || source == "PDF") {
+        this.form.report.file = file;
+        this.form.report.name = file.name;
+        this.$message({
+          message: "上传实验报告成功",
+          type: "success"
+        });
+      } else {
+        this.$message.error({
+          message: "仅限上传pdf格式，上传失败"
+        });
+      }
+    },
+    //获取新建二维仿真下拉框内容
+    templateLibrary() {
+      this.taskExperiment.name = "";
+      this.taskExperiment.type = "";
+      this.taskExperiment.expType = "";
+      this.testTemplateLibrary = true;//模态框显示
+      sceneTypes({
+        alias: '2d'
+      }).then(res => {
+        this.simulationResourcesType = res.data.object;
+      })
+    },
+    //获取新建三维仿真下拉框内容
+    visiblecopyscene() {
+      this.taskExperiment.name = "";
+      this.taskExperiment.type = "";
+      this.taskExperiment.expType = "";
+      this.dialogVisiblecopyscene = true;//模态框显示
+      sceneTypes({
+        alias: '3d'
+      }).then(res => {
+        this.pattern = res.data.object;
+      })
+      //添加实验类型
+      experiment_type_list().then(res => {
+        this.patterncon = res.data.object;
+      });
     },
     go2D(row) {
-      console.log(row);
-      if ((row.type == "" || row.name == "")&&row.id=='') {
+      if ((row.type == "" || row.name == "") && row.id == "") {
         this.$message.error({
           message: "没有名称或类型"
         });
@@ -483,10 +446,11 @@ export default {
         this.$emit("handleSelect", 10);
         this.$router.push("/relay/Dimension2");
       }
+      this.dimensionality.name = ''//新建二维输入框清空
+      this.dimensionality.type = ''//新建二维输入框清空
     },
     go3D(row) {
-      console.log(row);
-      if ((row.type == "" || row.name == "")&&row.id=='') {
+      if ((row.type == "" || row.name == "") && row.id == "") {
         this.$message.error({
           message: "没有名称或类型"
         });
@@ -506,52 +470,252 @@ export default {
         this.$router.push("/relay/Dimension3");
       }
     },
-    // 上传文件
+    // 上传其他附件文件
     beforeUpload(file) {
-      let fd = new FormData();
-      fd.append("file", file); //传文件
-      console.log(file);
-      fd.append("resourceTypeId", "");
-      fd.append("resourceTypeName", "");
-      // fd.append('id',this.srid);//传其他参数
-      resource(fd).then(res => {
-        console.log(res, 2224);
-        this.form.annexs.push(res.data.object);
+      this.form.otherAnnexs.push({
+        id: '',
+        file: file,
+        name: file.name,
+        typeName: file.name.substring(file.name.lastIndexOf(".") + 1, file.name.length),
+        dimensionality: '',
       });
-      return false; //屏蔽了action的默认上传
+      this.$message({
+        message: "上传文件成功",
+        type: "success"
+      });
     },
-    // 下载
-    // 下载文件
-    download(src, name) {
-      let data = src;
-
-      if (!data || data == "" || data == null) {
-        this.$message.error({
-          message: "不存在该文件"
-        });
-
+    //添加其他附件二维
+    addOtherAnnexes() {
+      this.testTemplateLibrary = false;//关闭新建二维模态框
+      this.taskExperiment.type = this.erweiSelect.id;
+      if (this.taskExperiment.name == "" || this.taskExperiment.type == "") {
+        this.$message.error("没有名称或类型");
         return;
       }
-      let courseUrl = "";
-      if (JSON.parse(sessionStorage.getItem("course"))) {
-        courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-        console.log(courseUrl, "课程服");
+      addSimulationAnnex({
+        taskExperimentId: this.taskExperiment.taskExperimentId,
+        name: this.taskExperiment.name,
+        type: this.taskExperiment.type,
+        expType: this.taskExperiment.expType
+      }).then(res => {
+        if (res.data.code == "0") {
+          this.form.otherAnnexs.push({
+            id: res.data.object.id,
+            name: this.taskExperiment.name,
+            typeName: this.erweiSelect.name,
+            simType: res.data.object.simType,
+          });
+          //调用表格的查询方法
+        }
+      });
+    },
+    //添加其他附件三维
+    addOtherSanwei() {
+      this.dialogVisiblecopyscene = false;
+      this.taskExperiment.type = this.sanweiSelect1.id;
+      this.taskExperiment.expType = this.sanweiSelect2.id;
+      if (this.taskExperiment.name == "" || this.taskExperiment.type == "") {
+        this.$message.error({
+          message: "没有名称或类型"
+        });
+        this.dimensionality.name = ''//清空内容
+        this.dimensionality.typeName = ''//清空内容
+        return;
+      }
+      addSimulationAnnex({
+        taskExperimentId: this.taskExperiment.taskExperimentId,
+        name: this.taskExperiment.name,
+        type: this.taskExperiment.type,
+        expType: this.taskExperiment.expType,
+      }).then(res => {
+        if (res.data.code == "0") {
+          this.form.otherAnnexs.push({
+            id: res.data.object.id,
+            name: this.taskExperiment.name,
+            typeName: this.sanweiSelect1.name,
+            simType: res.data.object.simType,
+          });
+          this.dimensionality.name = ''//清空内容
+          this.dimensionality.typeName = ''//清空内容
+          //调用表格的查询方法
+        }
+      });
+    },
+    // pdf到详情页面
+    handleChange(name, path) {
+      this.innerVisibleNewpdf = true;
+      if (path != "") {
+        this.goExamine(name, path);
       } else {
         this.$message.error({
-          message: "下载失败"
+          message: "该资源不存在"
         });
       }
-      const fileName = name;
-      let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      console.log(url);
-      const elink = document.createElement("a");
-      // elink.download = fileName;
-      elink.style.display = "none";
-      elink.href = url;
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
+    },
+    //删除其他附件
+    det(id) {
+      this.$confirm("此操作将永久删除该任务, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        for (let i = 0; i < this.form.otherAnnexs.length; i++) {
+          if (this.form.otherAnnexs[i].id == id) {
+            this.form.otherAnnexs.splice(i, 1);
+            break;
+            return;
+          }
+        }
+        this.$message({
+          message: "删除成功",
+          type: "success"
+        })
+      }).catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
+    },
+    //点击原题
+    compileClick(row) {
+      if (row.simType == '2d') {
+        this.dimensionality.id = row.id;
+        this.dimensionality.name = row.name;
+        this.dimensionality.type = row.typeName;
+        this.dimensionality.look = false;
+        this.go2D(this.dimensionality);
+      } else if (row.simType == '3d') {
+        this.tasks.taskExperimentId = this.form.id
+        this.tasks.id = row.id;
+        this.tasks.name = row.name;
+        this.tasks.type = row.typeName;
+        this.tasks.look = !this.islook;
+        this.go3D(this.tasks);
+      }
+    },
+    // 提交保存的时候提交实验报告和其他附件到服务器
+    SubmitAnExperimentReport(type) {
+      //实验报告提交
+      this.loading = true;
+      if (this.form.report.file != null && this.form.report.file != "") {
+        let fd = new FormData();
+        fd.append("file", this.form.report.file); //上传文件
+        fd.append("type", "report");
+        fd.append("taskExperimentId", this.form.id);
+        taskUpload(fd).then(res => {
+          if (res.data.code == -1) {
+            this.$message({
+              message: "实验报告上传失败",
+              type: "warning"
+
+            });
+            this.loading = false;
+          }
+          this.form.report.id = res.data.object;
+          this.otherAnnexsUpload1(0, type);//其他附件提交
+        })
+      } else {
+        this.otherAnnexsUpload1(0, type);//其他附件提交
+      }
+    },
+    otherAnnexsUpload1(item, type) {
+      let length = this.form.otherAnnexs.length;
+      if (item < length) {
+        if (this.form.otherAnnexs[item].file != undefined) {
+          let fd1 = new FormData();
+          fd1.append("file", this.form.otherAnnexs[item].file); //上传文件
+          fd1.append("type", "annex");
+          fd1.append("taskExperimentId", this.form.id);
+          taskUpload(fd1).then(res => {
+            if (res.data.code == -1) {
+              this.$message({
+                message: "其他附件上传失败",
+                type: "warning"
+              });
+              this.loading = false;
+            }
+            this.form.otherAnnexs[item].id = res.data.object;
+            if (item == length) {
+              return true
+            }
+            this.otherAnnexsUpload1(item + 1, type);
+          }).catch(function (error) {
+            this.$message({
+              message: "其他附件上传失败",
+              type: "warning"
+            });
+            this.loading = false;
+          });
+        } else {
+          this.otherAnnexsUpload1(item + 1, type);
+        }
+      } else if (length == 0 || item == length) {
+        // this.$message({
+        //   message: "文件上传成功",
+        //   type: "warning"
+        // });
+        this.saveOrSubmit(type);
+      }
+    },
+    // 提交报告
+    saveOrSubmit(type) {
+      //  要确定上传完成提交
+      let otherIds = [];
+      for (var i = 0; i < this.form.otherAnnexs.length; i++) {
+        if (this.form.otherAnnexs[i].id != null && this.form.otherAnnexs[i].id != "") {
+          otherIds.push(this.form.otherAnnexs[i].id);
+        }
+      }
+      // 先提交word实验报告(假设提交成功)
+      if (type == "submit") {
+        this.$confirm("提交实验报告后将不可更改, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          saveTaskExperiment({
+            taskExperimentId: this.form.id,
+            operating: "submit",
+            reportId: this.form.report.id,
+            otherAnnexs: otherIds
+          }).then(res => {
+            if (res.data.msg == "SUCCESS") {
+              this.$message({
+                message: "提交成功",
+                type: "success"
+              });
+              this.$emit('detpage');
+            }
+          });
+        }).catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消提交"
+          });
+        });
+      } else {
+        saveTaskExperiment({
+          taskExperimentId: this.form.id,
+          operating: "save",
+          reportId: this.form.report.id,
+          otherAnnexs: otherIds
+        }).then(res => {
+          if (res.data.code == "0") {
+            this.$message({
+              message: "保存成功",
+              type: "success"
+            });
+            this.$emit('detpage');
+          }
+        }).catch(() => {
+          this.$message({
+            type: "info",
+            message: "保存失败"
+          });
+          this.loading = false;
+        });
+      }
     },
     // 详情页入口
     goExamine(name, path) {
@@ -559,122 +723,43 @@ export default {
       examine.sourcePath = this.$route.path;
       examine.name = name;
       examine.path = path;
-      console.log(examine);
       sessionStorage.setItem("examine", JSON.stringify(examine));
       let user = JSON.parse(sessionStorage.getItem("user"));
-      this.$refs.child.gopdf(name, path);
     },
-    // 状态
-    completionStatusc(row, column) {
-      //   console.log(row.status)
-      if (row.status == "new") {
-        return "未开始";
-      } else if (row.status == "save") {
-        return "进行中";
-      } else if (row.status == "submit") {
-        return "已提交";
-      }
-    },
-    // 删除附件
-    det(id) {
-      console.log(id);
-      for (let i = 0; i < this.form.annexs.length; i++) {
-        if (this.form.annexs[i].id == id) {
-          this.form.annexs.splice(i, 1);
-          break;
-          return;
-        }
-      }
-    },
-    // 保存报告
-    saveWord(type) {
-      console.log("保存报告");
-
-      this.isSave = true;
-      report({
-        taskExperimentId: this.id,
-        projectId: this.projectId,
-        resourceId: this.downloadId,
-        annexs: this.fileList,
-        remark: this.remark,
-        status: type
-      }).then(res => {
-        if (res.data.msg == "SUCCESS") {
-          this.$message({
-            message: "保存成功",
-            type: "success"
-          });
-          this.isSave = false;
-          this.reportlistNew();
-          this.snalistNew();
-        }
-      });
-    },
-    // 提交报告
-    submit(type) {
-      console.log("提交报告");
-      // 先提交word实验报告(假设提交成功)
-      this.$confirm("提交实验报告后将不可更改, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "提交成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消提交"
-          });
-        });
-    },
-
-    handleClose(row) {},
-
     // 打开快照折线图详情
     eacher(path) {
+      if (!path) {
+        this.$message.error({
+          message: "无法打开"
+        });
+        return
+      }
       this.innerVisiblePolyline = true;
-      // console.log("dianji ");
       let data = {};
-      // "http://192.168.2.223:8081/static/sim/a3c22184-b8de-4819-9f07-ec20a16866de.CreatorSim"
       this.$http
         .get(path)
         .then(res => {
-          console.log(res.body);
           data = res.body.SimData;
           this.duration = res.body.duration;
           this.stepLength = res.body.stepLength;
           let one = (this.duration / this.stepLength).toFixed(4);
           let two = [];
-          // console.log(one);
           for (let i = 0; i < this.stepLength; i++) {
             two[i] = one * i;
           }
-          // console.log(two);
           this.stepLengthlist = two;
-          // this.stepLengthlist.push(this.duration)
           for (var item in data) {
-            // console.log(item, data[item], "qq");
             this.series.push({
               name: data[item].Name,
               type: "line",
+              barWidth: '60%',
               data: data[item].data
             });
             this.legend.push(data[item].Name);
           }
-
-          // console.log(this.series);
-          // console.log(this.stepLengthlist);
-
-          // this.sdawd = this.series[0];
-          // console.log(this.sdawd);
           this.visible2 = true;
           // 基于准备好的dom，初始化echarts实例
-          let myChart = this.$echarts.init(document.getElementById("myChart2"));
+          let myChart = this.$echarts.init(document.getElementById("myChart2"), null);
           // 绘制图表
           myChart.setOption({
             // title: { text: '在Vue中使用echarts' },
@@ -693,7 +778,6 @@ export default {
             dataZoom: [
               {
                 dataZoomIndex: 1,
-
                 start: 0,
                 end: 10
               },
@@ -713,90 +797,64 @@ export default {
           });
         });
     },
-    // 获取实验指导
-    guidelist() {
-      guidelist({
-        taskExperimentId: this.id
-      }).then(res => {
-        console.log(res, "实验指导");
-        this.guideid = res.data.object.id;
-        this.guidepath = res.data.object.path;
-        this.guidename = res.data.object.name;
-      });
-    },
 
-    reportlistNew() {
-      // 获取实验报告
-      reportlist({
-        taskExperimentId: this.id
-      }).then(res => {
-        console.log(res, "实验报告");
-        this.form.reportname = res.data.object.name;
-        this.form.reportid = res.data.object.id;
-        this.form.reportpath = res.data.object.path;
-        this.form.annexs = res.data.object.annexs;
-        if (!res.data.object.id) {
-          this.form.reportname = res.data.object.report.name;
-        } else {
-          this.form.reportname = res.data.object.id;
-        }
-
-        this.reportname = res.data.object.report.name;
-        this.reportid = res.data.object.report.id;
-        this.reportpath = res.data.object.report.path;
-      });
-    },
-    //  加载快照列表
-    getListNew() {
-      snalist({
-        taskExperimentId: this.id,
-        offset: this.offset,
-        limit: this.limit
-      }).then(res => {
-        console.log(res.data, "实验快照");
-        this.length = res.data.length;
-        if (res.data.object.length > 0) {
-          // this.id = res.data.object[0].id;
+    initData() {
+      if (this.row.id != undefined && this.row.id != "") {
+        this.taskExperiment.taskExperimentId = this.row.id;
+        experimentDetails({
+          taskExperimentId: this.row.id
+        }).then(res => {
           console.log(res.data.object);
-          this.snapshoot[0].list = res.data.object;
-          // this.length=res.data.length;
-        }
-      });
+          
+          let data = res.data.object
+          this.form.reportTemName = data.reportTemName;//实验报告模板名称
+          this.form.reportTemPath = data.reportTemPath;//实验报告模板路径
+          this.form.textarea = data.description;//要求
+          this.form.guide.path = data.guidePath;//实验指导书路径
+          this.form.guide.name = data.guideName;//实验指导书名字
+          this.form.report.name = data.reportName;//实验报告名字
+          this.form.report.id = data.reportId;//实验报告Id
+          this.form.report.path = data.reportPath;//实验报告路径
+          this.form.snapshoot = data.simAnnexs;//仿真实验题表单
+          this.form.otherAnnexs = data.otherAnnexs;//其他附件
+          this.form.reference = data.referAnnexs;//参考附件表单
+          this.form.teacherScore = data.score;//批阅分数
+          this.form.teacherComment = data.comment;//批阅评语
+        });
+      }
     }
   },
   computed: {
     ...mapState(["taskList"])
   },
   created() {
-    console.log(this.row,this.showheight);
-    this.tableData[0] = this.row;
-
-    this.id = this.row.id;
-    this.reportlistNew();
-    this.guidelist();
-    this.getListNew();
-    if (this.row.status == "new") {
+    this.initData();
+    this.form.id = this.row.id;
+    if (this.row.statu == "new") {
       return "未开始";
-    } else if (this.row.status == "save") {
+    } else if (this.row.statu == "save") {
       return "进行中";
-    } else if (this.row.status == "submit") {
+    } else if (this.row.statu == "submit") {
       this.islook = false;
+      this.open=true;
       return "已提交";
-    } else if (this.row.status == "approved") {
+    } else if (this.row.statu == "approved") {
       this.islook = false;
-      this.idapproved = false;
+      this.isapproved = true;
+      this.open=true;
       return "已批阅";
-    } else if (this.row.status == "expired") {
+    } else if (this.row.statu == "expired") {
       this.islook = false;
       return "已过期";
     }
   },
-
-  mounted() {}
 };
 </script>
 
 <style lang="scss" scoped>
+.myChart2 {
+  min-width: 100px;
+}
 .box {
   width: 100%;
   height: 100%;
@@ -806,6 +864,27 @@ export default {
     height: 100%;
     overflow: auto;
   }
+}
+.laboratoryBook {
+  height: 37px;
+  padding-left: 8px;
+  width: 260px;
+  cursor: pointer;
+  overflow: hidden;
+  padding-right: 20px;
+  border-radius: 5px;
+  border: 1px solid #dddddd;
+  position: relative;
+}
+.el-icon-circle-close {
+  line-height: 40px;
+  font-size: 22px;
+  position: absolute;
+  right: 5px;
+  color: #dddddd;
+}
+.el-icon-circle-close:hover {
+  color: rgb(7, 5, 24);
 }
 .span {
   padding-right: 100px;

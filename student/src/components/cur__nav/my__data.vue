@@ -60,23 +60,19 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
       this.limit = val;
       this.getTeacherListNew();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       this.offset = (val-1) * this.limit;
       this.getTeacherListNew();
     },
     interface(id) {
-      console.log(id);
     },
     get(){
         let file=event.target.files;
        
         this.file.push(file)
-         console.log(file,this.file)
     },
     // 序号
     indexMethod(index) {
@@ -89,11 +85,9 @@ export default {
       let pReg = /^\w{6,12}$/;
       if (this.formadd.name != "" && mReg.test(this.formadd.phone)) {
         this.dialogFormVisibleadd = false;
-        console.log(this.formadd);
         this.formadd.age = Number(this.formadd.age);
         addTeacher(this.formadd)
           .then(res => {
-            console.log();
             this.getTeacherListNew();
           })
           .catch(() => {
@@ -111,7 +105,6 @@ export default {
     },
     // 编辑
     compileClick(row) {
-      // console.log(row);
       let froms = {
         id: row.id,
         name: row.name,
@@ -120,7 +113,6 @@ export default {
         phone: row.phone,
         email: row.email
       };
-      // console.log(this.from);
       this.form = froms;
       this.dialogFormVisible = true;
     },
@@ -131,10 +123,8 @@ export default {
         this.dialogFormVisible = false;
 
         this.form.age = Number(this.form.age);
-        console.log(this.form);
         modifyTeacher(this.form)
           .then(res => {
-            console.log();
             this.getTeacherListNew();
           })
           .catch(() => {
@@ -161,7 +151,6 @@ export default {
           deletedaTeacher({
             id: id
           }).then(res => {
-            console.log(res);
             this.getTeacherListNew();
             this.$message({
               type: "success",
@@ -182,7 +171,6 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(res => {
-        console.log(res);
         this.tableData = res.data.object;
         this.length = res.data.length;
       });

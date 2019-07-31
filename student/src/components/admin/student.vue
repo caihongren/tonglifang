@@ -17,15 +17,15 @@
       </div>
       <template>
         <el-table :data="tableData" border style="width: 90%;margin:5px 3%">
-          <el-table-column fixed prop="number" label="学号" min-width="100"></el-table-column>
-          <el-table-column prop="name" label="学生名称" min-width="150"></el-table-column>
-          <el-table-column prop="gender" label="性别" min-width="120"></el-table-column>
-          <el-table-column prop="age" label="年龄" min-width="120"></el-table-column>
-          <el-table-column prop="phone" label="电话" min-width="200"></el-table-column>
-          <el-table-column prop="email" label="邮箱" min-width="400"></el-table-column>
-          <el-table-column prop="classes" label="已编班级" min-width="100"></el-table-column>
+          <el-table-column fixed prop="number" label="学号" min-width="50"></el-table-column>
+          <el-table-column prop="name" label="学生名称" min-width="75"></el-table-column>
+          <el-table-column prop="gender" label="性别" min-width="60"></el-table-column>
+          <el-table-column prop="age" label="年龄" min-width="60"></el-table-column>
+          <el-table-column prop="phone" label="电话" min-width="100"></el-table-column>
+          <el-table-column prop="email" label="邮箱" min-width="100"></el-table-column>
+          <el-table-column prop="classes" label="已编班级" min-width="150"></el-table-column>
 
-          <el-table-column label="操作" min-width="200">
+          <el-table-column label="操作" min-width="100">
             <template slot-scope="scope">
               <el-button @click="compileClick(scope.row)" type="primary" size="small">编辑</el-button>
               <el-button type="primary" @click="det(scope.row.id)" size="small">删除</el-button>
@@ -169,23 +169,18 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
       this.limit = val;
       this.getStudentListNew();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       this.offset = (val-1) * this.limit;
       this.getStudentListNew();
     },
     interface(id) {
-      console.log(id);
     },
     handleClick(row) {
-      console.log(row);
     },
     addstudent() {
-      console.log(this.formadd);
       let mReg = /^1(3|5|7|8)\d{9}$/;
       let pReg = /^\w{6,12}$/;
       if (
@@ -199,7 +194,6 @@ export default {
         this.formadd.age = Number(this.formadd.age);
         addStudent(this.formadd)
           .then(res => {
-            console.log(res);
             this.getStudentListNew();
           })
           .catch(() => {
@@ -217,7 +211,6 @@ export default {
     },
     // 编辑
     compileClick(row) {
-      // console.log(row);
       let froms = {
         id: row.id,
         number: row.number,
@@ -228,7 +221,6 @@ export default {
         email: row.email,
         class: row.class
       };
-      // console.log(this.from);
       this.form = froms;
 
       this.dialogFormVisible = true;
@@ -243,11 +235,9 @@ export default {
       ) {
         this.dialogFormVisible = false;
 
-        console.log(this.form);
         this.form.age = Number(this.form.age);
         modifyStudent(this.form)
           .then(res => {
-            console.log();
             this.getStudentListNew();
           })
           .catch(() => {
@@ -274,7 +264,6 @@ export default {
           deleteStudent({
             id: id
           }).then(res => {
-            console.log(res);
             this.$message({
               type: "success",
               message: "删除成功!"
@@ -295,7 +284,6 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(res => {
-        console.log(res);
         this.tableData = res.data.object;
 
         this.length = res.data.length;

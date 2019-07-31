@@ -294,11 +294,13 @@ import {
   addTemplate,
   resource,
   deleteTemplate,
-  getResource_by_id
+  getResource_by_id,
+  download,//下载
 } from "../API/api";
 import Unity3D from "./uity3D";
 import { log } from "util";
 import Examine from "../views/Examine";
+import FileSaver from "file-saver";
 export default {
   data() {
     return {
@@ -458,28 +460,36 @@ export default {
     },
     // 下载文件
     download(src, name) {
-      let data = src;
-      // console.log(src,name,'下载')
-      if (!data) {
-        this.$message.error("不存在该文件,没有上传文件");
-        return;
-      }
-      let courseUrl = "";
-      if (JSON.parse(sessionStorage.getItem("course"))) {
-        courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-        console.log(courseUrl, "课程服");
-      }
-      const fileName = name;
-      let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      console.log(url);
-      const elink = document.createElement("a");
-      // elink.download = fileName;
-      elink.style.display = "none";
-      elink.href = url;
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
+      download({
+        name: name,
+        url: src,
+      }).then(res => {
+        console.log(res, '下载')
+        const blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
+        FileSaver.saveAs(blob, name);
+      })
+      // let data = src;
+      // // console.log(src,name,'下载')
+      // if (!data) {
+      //   this.$message.error("不存在该文件,没有上传文件");
+      //   return;
+      // }
+      // let courseUrl = "";
+      // if (JSON.parse(sessionStorage.getItem("course"))) {
+      //   courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
+      //   console.log(courseUrl, "课程服");
+      // }
+      // const fileName = name;
+      // let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
+      // console.log(url);
+      // const elink = document.createElement("a");
+      // // elink.download = fileName;
+      // elink.style.display = "none";
+      // elink.href = url;
+      // document.body.appendChild(elink);
+      // elink.click();
+      // URL.revokeObjectURL(elink.href); // 释放URL 对象
+      // document.body.removeChild(elink);
     },
     // 删除模板或者内蓉
     deleteTemplate(row, type) {
@@ -673,12 +683,6 @@ export default {
           if (this.shuangchuantype == 0) {
             // 实验指导
             if (
-              // source == "gif" ||
-              // source == "jpg" ||
-              // source == "jpeg" ||
-              // source == "png" ||
-              // source == "tif"
-
               source == "pdf" ||
               source == "PDF"
             ) {

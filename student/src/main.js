@@ -8,8 +8,11 @@ import router from './router'
 import iView from 'iview'
 import store from './store'
 import './registerServiceWorker'
+import XEUtils from 'xe-utils'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import vueBeauty from 'vue-beauty'
+import 'vue-beauty/package/style/vue-beauty.min.css'
 import './assets/iconfont/index'
 import moment from 'moment'
 
@@ -20,7 +23,10 @@ Vue.prototype.$echarts = echarts
 
 
 // Vue.config.productionTip = false
+
+Vue.use(vueBeauty)
 Vue.use(ElementUI)
+Vue.use(XEUtils)
 Vue.config.productionTip = false
 Vue.use(iView)
 // Vue.use(websocket)

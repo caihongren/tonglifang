@@ -17,13 +17,13 @@
       </div>
       <template>
         <el-table :data="tableData" border style="width: 90%;margin:5px 3%">
-          <el-table-column fixed prop="name" label="教师名称" min-width="200"></el-table-column>
-          <el-table-column prop="gender" label="性别" min-width="120"></el-table-column>
-          <el-table-column prop="age" label="年龄" min-width="120"></el-table-column>
-          <el-table-column prop="phone" label="电话" min-width="200"></el-table-column>
-          <el-table-column prop="email" label="邮箱" min-width="400"></el-table-column>
+          <el-table-column fixed prop="name" label="教师名称" min-width="100"></el-table-column>
+          <el-table-column prop="gender" label="性别" min-width="60"></el-table-column>
+          <el-table-column prop="age" label="年龄" min-width="60"></el-table-column>
+          <el-table-column prop="phone" label="电话" min-width="100"></el-table-column>
+          <el-table-column prop="email" label="邮箱" min-width="200"></el-table-column>
 
-          <el-table-column label="操作" min-width="200">
+          <el-table-column label="操作" min-width="100">
             <template slot-scope="scope">
               <el-button @click="compileClick(scope.row)" type="primary" size="small">编辑</el-button>
               <el-button type="primary" @click="det(scope.row.id)" size="small">删除</el-button>

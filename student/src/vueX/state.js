@@ -8,6 +8,6 @@ export default{
     courseList:[],
     // 元件库列表
     elementList:[],
-    
-   
+    // 二维设计存储
+    action: { name: null, domain: null, value: null},
 }
