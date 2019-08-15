@@ -1,70 +1,31 @@
 <template>
-  <div class="box">
-    <el-row :gutter="20">
-      <el-col :span="3">
-        <div class="grid-content bg-purple left">
-          <el-menu
-            default-active="1"
-            class="el-menu-vertical-demo"
-            
-            
-          >
-            <el-menu-item index="1">
-              <span slot="title">
-                <h3 @click="inter(1)">教师管理</h3>
-              </span>
-            </el-menu-item>
-            <el-menu-item index="2">
-              <span slot="title">
-                <h3 @click="inter(2)">学生管理</h3>
-              </span>
-            </el-menu-item>
-            <el-menu-item index="3">
-              <span slot="title">
-                <h3 @click="inter(3)">班级管理</h3>
-              </span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <span slot="title">
-                <h3 @click="inter(4)">课程管理</h3>
-              </span>
-            </el-menu-item>
-          </el-menu>
-          <!-- <ul class="ul">
-            <li @click="inter(1)">
-              <router-link to="/addstudent/teacher">
-                <el-button>
-                  <h3>教师管理</h3>
-                </el-button>
-              </router-link>
-            </li>
-            <li @click="inter(2)">
-              <router-link to="/addstudent/student">
-                <el-button>
-                  <h3>学生管理</h3>
-                </el-button>
-              </router-link>
-            </li>
-            <li @click="inter(3)">
-              <router-link to="/addstudent/Myclass">
-                <el-button>
-                  <h3>班级管理</h3>
-                </el-button>
-              </router-link>
-            </li>
-            <li @click="inter(4)">
-              <router-link to="/addstudent/course">
-                <el-button>
-                  <h3>课程管理</h3>
-                </el-button>
-              </router-link>
-            </li>
-          </ul> -->
-        </div>
+  <div style="height:100%" class="addstudent">
+    <el-row class="main" type="flex">
+      <el-col :span="4" class="left">
+        <el-menu
+          default-active="1"
+          class="el-menu-vertical-demo menuMain"
+          background-color="#313131"
+          active-text-color="#ffc113"
+        >
+          <el-menu-item index="1" @click="inter(1)" class="buoom butop">
+            <span class="icon iconfont menuContext" slot="title">&#xe637;　教师管理</span>
+          </el-menu-item>
+          <el-menu-item index="2" @click="inter(2)" class="buoom">
+            <span class="icon iconfont menuContext" slot="title">&#xe503;　学生管理</span>
+          </el-menu-item>
+          <el-menu-item index="3" @click="inter(3)" class="buoom">
+            <span class="icon iconfont  menuContext" slot="title">&#xe7be;　班级管理</span>
+          </el-menu-item>
+          <el-menu-item index="4" @click="inter(4)" class="buoom">
+            <span class="icon iconfont menuContext " slot="title">&#xe6e3;　课程管理</span>
+          </el-menu-item>
+        </el-menu>
+
       </el-col>
-      <el-col :span="20">
-        <div class="grid-content bg-purple right">
-          <router-view/>
+      <el-col :span="20" class="right">
+        <div class="rightContext">
+          <router-view />
         </div>
       </el-col>
     </el-row>
@@ -78,9 +39,14 @@ export default {
   },
   methods: {
     inter(id) {
-      let url=["/addstudent/teacher","/addstudent/student","/addstudent/Myclass","/addstudent/course"]
-      if(id>0){
-        this.$router.push(url[id-1]);
+      let url = [
+        "/addstudent/teacher",
+        "/addstudent/student",
+        "/addstudent/Myclass",
+        "/addstudent/course"
+      ];
+      if (id > 0) {
+        this.$router.push(url[id - 1]);
       }
     }
   },
@@ -89,46 +55,47 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.box {
-  width: 99%;
-  margin: 5px 0.5%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.main {
+  width: 100%;
   height: 100%;
-}
-h3 {
-  // color: rgb(43, 40, 40);
-  margin: 6px 30px;
-  font-size: 21px;
-  text-align: center;
-}
-.left {
-  border: 2px solid #ccc;
-  margin: 5px;
-  height: 500px;
-  .ul {
-    width: 100%;
-    padding: 0;
-    li {
-      width: 95%;
-      height: 50px;
-      line-height: 50px;
-      font-size: 20px;
-      //   border: 1px solid black;
-      margin: 15px 2.5%;
-      text-align: center;
-      border-radius: 5px;
+  min-width: 970px;
+  .left {
+    padding-top: 15px;
+    text-align: center;
+    height: 100%;
+    max-width: 250px;
+    min-width: 250px;
+    background-color: #313131;
+    .menuContext {
+      font-size: 18px;
+      font-family: "sans-serif";
+      padding-bottom: 17px;
+    }
+  }
+  .right {
+    height: 100%;
+    min-height: 750px;
+    background-color: #f1f1f1;
+    width: calc(100% - 250px);
+    .rightContext {
+      width: calc(100% - 70px);
+      margin: 15px;
 
-      h3 {
-        color: rgb(43, 40, 40);
-        margin: 6px 30px;
-        font-size: 21px;
-        text-align: center;
-      }
+      background-color: #ffffff;
+      height: 96%;
     }
   }
 }
-.right {
-  min-height: 750px;
+</style>
+<style>
+.left .el-menu {
+  border: 0;
+}
+.left .menuMain .butop {
+  border-top: none;
+}
+.addstudent .el-menu-item {
+  color: #fff;
 }
 </style>
+

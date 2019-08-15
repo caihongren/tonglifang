@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <h2>我的资料</h2>
-     <!-- <input    type="file" name="file"  @change="get"  multiple/>
+    <!-- <input    type="file" name="file"  @change="get"  multiple/>
      <input    type="file" name="file"  @change="get"  multiple/>
      <input    type="file" name="file"  @change="get"  multiple/> -->
   </div>
@@ -21,9 +21,9 @@ export default {
       limit: 10,
       currentPage4: 1,
       length: 40,
-      file:[],
+      file: [],
       tableData: [
-       
+
       ],
       rules: {
         name: [{ required: true, message: "请输入教师名称", trigger: "blur" }],
@@ -64,21 +64,21 @@ export default {
       this.getTeacherListNew();
     },
     handleCurrentChange(val) {
-      this.offset = (val-1) * this.limit;
+      this.offset = (val - 1) * this.limit;
       this.getTeacherListNew();
     },
     interface(id) {
     },
-    get(){
-        let file=event.target.files;
-       
-        this.file.push(file)
+    get() {
+      let file = event.target.files;
+
+      this.file.push(file)
     },
     // 序号
     indexMethod(index) {
       return index + 1 + this.offset * this.limit;
     },
-    handleClick(row) {},
+    handleClick(row) { },
     // addteacher
     addteacher() {
       let mReg = /^1(3|5|7|8)\d{9}$/;
@@ -92,12 +92,16 @@ export default {
           })
           .catch(() => {
             this.$message.error({
+              showClose: true,
+              duration: 1000,
               message: "手机号码重复或者错误",
               type: "warning"
             });
           });
       } else {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "名称或电话号码错误",
           type: "warning"
         });
@@ -129,12 +133,16 @@ export default {
           })
           .catch(() => {
             this.$message.error({
+              showClose: true,
+              duration: 1000,
               message: "手机号码重复或者错误",
               type: "warning"
             });
           });
       } else {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "名称或电话号码错误",
           type: "warning"
         });
@@ -142,7 +150,7 @@ export default {
     },
     // 删除
     det(id) {
-      this.$confirm("此操作将永久删除该老师, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该教师, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -153,6 +161,8 @@ export default {
           }).then(res => {
             this.getTeacherListNew();
             this.$message({
+              showClose: true,
+              duration: 1000,
               type: "success",
               message: "删除成功!"
             });
@@ -160,12 +170,14 @@ export default {
         })
         .catch(() => {
           this.$message({
+            showClose: true,
+            duration: 1000,
             type: "info",
             message: "已取消删除"
           });
         });
     },
-    // 加载老师列表
+    // 加载教师列表
     getTeacherListNew() {
       getTeacherList({
         offset: this.offset,
@@ -176,7 +188,7 @@ export default {
       });
     }
   },
-  mounted() {},
+  mounted() { },
   created() {
     // this.getTeacherListNew();
   }
@@ -190,7 +202,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 800px;
-  overflow: auto
+  overflow: auto;
 }
 .add {
   margin: 10px;

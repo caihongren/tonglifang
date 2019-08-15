@@ -2,7 +2,7 @@
   <div>
     <div>
       <button @click="threadPoxi()">
-        仿真实验进行中。。。。
+        仿真实训进行中。。。。
       </button>
     </div>
   </div>

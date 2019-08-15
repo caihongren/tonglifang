@@ -5,28 +5,17 @@
     </router-link>-->
     <el-aside width="100%" border="true">
       <div style="height:50px" class="bottonbox">
-        <span class="buttombox">任务编辑器</span>
+        <span class="buttombox" style=" color:#00a0e9">任务编辑器</span>
       </div>
-    </el-aside>
-    <ul class="ul">
-      <li class="li">备注</li>
-      <li class="li">下发对象</li>
-      <li class="li" style="width:28%">截止时间</li>
-      <li class="li" style="width:17%">实验模板选择</li>
-
-      <li class="li" style="width:14%;border-right:1px solid #ccc">操作</li>
+    </el-aside >
+    <ul class="ul" style="">
+      <li class="li headline" style="width:17%">实训模板选择</li>
+      <li class="li headline">下发对象</li>
+      <li class="li headline">备注</li>
+      <li class="li headline" style="width:28%">截止时间</li>
+      <li class="li headline" style="width:14%;border-right:1px solid #ccc">操作</li>
     </ul>
     <ul class="ul">
-      <li class="li">
-        <el-input v-model="addIssued.remark" placeholder="请输入内容" style="width:80%"></el-input>
-      </li>
-      <li class="li">
-        <el-button type="primary" size="mini" @click="modal1 = true" v-if="studentname.length>0?false:true">选择</el-button>
-        <p class="student" v-if="studentname.length>0?true:false" @click="modal1 = true">{{studentname}}</p>
-      </li>
-      <li class="li" style="width:28%">
-        <el-date-picker v-model="value1" type="date" :picker-options="pickerOptions1" format="yyyy 年 MM 月 dd 日" placeholder="选择截止日期时间"></el-date-picker>
-      </li>
       <li class="li" style="width:17%">
         <template>
           <el-select v-model="addIssued.taskTemplateId" clearable placeholder="请选择">
@@ -34,17 +23,29 @@
           </el-select>
         </template>
       </li>
+      <li class="li">
+        <el-button type="primary" size="mini" @click="modal1 = true" v-if="studentname.length>0?false:true" class="Arrow">选择</el-button>
+        <p class="student" v-if="studentname.length>0?true:false" @click="modal1 = true">{{studentname}}</p>
+      </li>
+      <li class="li">
+        <el-input v-model="addIssued.remark" placeholder="请输入内容" style="width:80%"></el-input>
+      </li>
+
+      <li class="li" style="width:28%">
+        <el-date-picker v-model="value1" type="date" :picker-options="pickerOptions1" format="yyyy 年 MM 月 dd 日" placeholder="选择截止日期时间"></el-date-picker>
+      </li>
+
       <li class="li" style="width:14%;border-right:1px solid #ccc">
-        <el-button type="primary" size="mini" @click="open2">下发</el-button>
+        <el-button type="primary" size="mini" @click="open2" class="Arrow">下发</el-button>
         <!-- <el-button type="primary" size="mini" @click="open4">删除取消</el-button> -->
       </li>
     </ul>
-    <el-dialog title="选择下发对象" :visible.sync="modal1" width="30%" append-to-body>
+    <el-dialog title="选择下发对象" :visible.sync="modal1" width="30%" append-to-body class="modify">
       <el-tree :data="students" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current :props="defaultProps"></el-tree>
       <span slot="footer" class="dialog-footer">
         <!-- <el-button @click="getCheckedNodes">通过 node 获取</el-button> -->
-        <el-button @click="modal1 = false">取 消</el-button>
-        <el-button type="primary" @click="getCheckedNodes">确 定</el-button>
+        <el-button type="primary" @click="modal1 = false" size="mini" class="closeButton"  >取 消</el-button>
+        <el-button type="primary" @click="getCheckedNodes" size="mini" class="preservation">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -64,7 +65,7 @@ export default {
     return {
       value1: "",
       offset: 0,
-      limit: 50,
+      limit: 10000,
       studentname: "",
       addIssued: {
         taskTemplateId: "",
@@ -87,12 +88,12 @@ export default {
       },
       pickerOptions1: {
         shortcuts: [
-          {
-            text: "今天",
-            onClick(picker) {
-              picker.$emit("pick", new Date());
-            }
-          },
+          // {
+          //   text: "今天",
+          //   onClick(picker) {
+          //     picker.$emit("pick", new Date());
+          //   }
+          // },
           {
             text: "明天",
             onClick(picker) {
@@ -106,6 +107,14 @@ export default {
             onClick(picker) {
               const date = new Date();
               date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            }
+          },
+          {
+            text: "一月后",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
               picker.$emit("pick", date);
             }
           }
@@ -122,22 +131,29 @@ export default {
     handleCurrentChange() { },
     open2() {
       //  下发时间为当前时间
-      let finishTime = this.value1;
+      let finishTime = this.value1
+
       if (finishTime == "") {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "请选择下发时间",
           type: "warning"
         });
         return;
       }
       this.addIssued.startTime = formatDate(new Date().setTime(new Date().getTime()));
+      finishTime.setHours(23)
+      finishTime.setMinutes(59, 59, 148)
       this.addIssued.finishTime = formatDate(finishTime);
+
       if (this.addIssued.accountIds.length > 0) {
         if (this.addIssued.taskTemplateId != "") {
           Nxmission(this.addIssued)
             .then(res => {
-              console.log(res);
               this.$message({
+                showClose: true,
+                duration: 1000,
                 message: "下发成功",
                 type: "success"
               });
@@ -146,12 +162,16 @@ export default {
             })
         } else {
           this.$message.error({
-            message: "请选择实验模板",
+            showClose: true,
+            duration: 1000,
+            message: "请选择实训模板",
             type: "warning"
           });
         }
       } else {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "请选择下发对象",
           type: "warning"
         });
@@ -180,26 +200,54 @@ export default {
       this.value1 = [];
       this.addIssued.accountIds = [];
       this.addIssued.taskTemplateId = "";
-      this.$message.error("删除成功");
+      this.$message.error({
+        showClose: true,
+        duration: 1000,
+        message: "删除成功",
+      });
     },
     ok() {
-      this.$Message.info("已选择");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "已选择",
+      });
     },
     cancel() {
-      this.$Message.info("重新选择");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "重新选择",
+      });
       // 关闭之后的回调
     },
     addok() {
-      this.$Message.info("添加成功");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "添加成功",
+      });
     },
     addcancel() {
-      this.$Message.info("添加失败");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "添加失败",
+      });
     },
     LOERok() {
-      this.$Message.info("选择成功");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "选择成功",
+      });
     },
     LOERcancel() {
-      this.$Message.info("选择失败");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "选择失败",
+      });
     }
   },
   mounted() {
@@ -232,6 +280,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.modify .el-dialog__title {
+  color: #00a0e9;
+}
+.Arrow{
+  background-color: #00a0e9;
+  border: none;
+  border-radius: 0px;
+}
 @media screen and (min-width: 1200px) and (max-width: 1500px) {
   .tablebox {
     width: 1200px;
@@ -288,6 +344,7 @@ export default {
     right: 320px;
   }
 }
+
 .student {
   width: 100%;
   height: 100%;
@@ -301,6 +358,7 @@ export default {
   width: 95%;
   height: 50px;
   margin: 0;
+  
   .li {
     float: left;
     width: 20%;
@@ -312,7 +370,11 @@ export default {
     text-align: center;
     line-height: 60px;
   }
+  .headline{
+    background-color:#b2e2f8
 }
+}
+
 .search {
   float: right;
   position: absolute;

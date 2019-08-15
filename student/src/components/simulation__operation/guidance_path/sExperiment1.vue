@@ -21,9 +21,9 @@
                 <div class="grid-content bg-purple">
                   <transition name="el-zoom-in-left">
                     <div v-show="show2" class="transition-box">
-                      <el-button type="primary" @click="gounity('')">实验模板</el-button>
+                      <el-button type="primary" @click="gounity('')">实训模板</el-button>
 
-                      <el-button type="primary" @click="goguidance()">进入实验快照</el-button>
+                      <el-button type="primary" @click="goguidance()">进入实训快照</el-button>
 
                     </div>
                   </transition>
@@ -42,7 +42,7 @@
           <!-- 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i> -->
           <!-- <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <div @click="gounity('')">实验模板</div>
+              <div @click="gounity('')">实训模板</div>
             </el-dropdown-item>
             <el-dropdown-item v-for="(item) in tableData" :key="item.id">
               <div @click="gounity(item.id)">{{item.updatedAt|dateformat}}</div>
@@ -61,7 +61,7 @@
             <li @click="twoChick=1">
               <router-link :to="'/sExperiment1/snapshot/'+id">
                 <div :style="{color:twoChick==1?'red':''}" class="el-icon-document-add"></div>
-                <span :style="{color:twoChick==1?'red':''}">实验快照</span>
+                <span :style="{color:twoChick==1?'red':''}">实训快照</span>
               </router-link>
             </li>
             <li @click="twoChick=2">
@@ -73,13 +73,13 @@
             <li @click="twoChick=3" v-if="!innertype.inner">
               <router-link :to="'/sExperiment1/Presentation/'+id">
                 <div :style="{color:twoChick==3?'red':''}" class="el-icon-document-copy"></div>
-                <span :style="{color:twoChick==3?'red':''}">实验报告</span>
+                <span :style="{color:twoChick==3?'red':''}">实训报告</span>
               </router-link>
             </li>
             <li @click="twoChick=4">
               <router-link :to="'/sExperiment1/guidance/'+id">
                 <div :style="{color:twoChick==4?'red':''}" class="el-icon-view"></div>
-                <span :style="{color:twoChick==4?'red':''}">实验指导</span>
+                <span :style="{color:twoChick==4?'red':''}">实训指导</span>
 
               </router-link>
             </li>
@@ -183,7 +183,7 @@ export default {
         wfapp.start(cmd);
       }
     },
-    // 判断是否内置实验
+    // 判断是否内置实训
   },
   watch: {
     "$route.params.id": function (newval, oldval) {

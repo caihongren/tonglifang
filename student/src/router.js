@@ -5,9 +5,16 @@ import relay from './paging/relay.vue'
 //登录注册页面
 import register from './views/Register.vue'
 import login from './views/login.vue'
+import download from './views/download.vue'
+
+
+
+
+
 //404
 import NotFound from './views/404.vue'
 import Examine from './views/Examine.vue'
+import user from './views/user.vue'
 
 
 
@@ -22,7 +29,7 @@ import componentLibrary from './components/cur__nav/componentLibrary.vue'
 
 
 
-//仿真实验操作 
+//仿真实训操作 
 import guidance from './components/simulation__operation/guidance.vue'
 import Presentation from './components/simulation__operation/Presentation.vue'
 import Enclosure from './components/simulation__operation/Enclosure.vue'
@@ -36,10 +43,10 @@ import sExperiment1 from './components/simulation__operation/guidance_path/sExpe
 //课程学习
 import courseIntroduction from './components/study_operation/courseIntroduction.vue'
 import curriculumLearning from './components/study_operation/curriculumLearning.vue'
+import averageScore from './components/study_operation/averageScore.vue'
 
 
-
-// paging 老师端******************
+// paging 教师端******************
 import relayteacher from './paging/relayteacher.vue'
 //relay paging
 import taskManagement from './relay_paging/taskManagement.vue'
@@ -50,7 +57,7 @@ import simulationDatabase from './relay_paging/simulationDatabase.vue'
 import dimension2 from './relay_paging/Dimension2.vue'
 import dimension2demo from './relay_paging/draw/index.vue'
 import dimension3 from './relay_paging/Dimension3.vue'
-import averageScore from './relay_paging/averageScore.vue'
+
 
 
 
@@ -87,6 +94,11 @@ export default new Router({
             path: '/',
             redirect: '/login'
         },
+        {
+            path: '/download',
+            name: 'download',
+            component: download
+        },
 
         {
             path: '/home',
@@ -103,6 +115,13 @@ export default new Router({
             path: '/register',
             name: 'register',
             component: register
+        },
+
+          // 个人中心
+          {
+            path: '/user',
+            name: '/user',
+            component: user
         },
         {
             path: '*',
@@ -132,13 +151,13 @@ export default new Router({
                     path: '/relay',
                     redirect: '/relay/simulation'
                 },
-                //仿真实验
+                //仿真实训
                 {
                     path: '/relay/simulation',
                     name: 'simulation',
                     component: simulation,
                     children: [
-                        //仿真实验操作
+                        //仿真实训操作
                         // {
                         //   path: '/simulation/guidance',
                         //   name: 'guidance',
@@ -156,12 +175,12 @@ export default new Router({
                                     path: "/sExperiment1/guidance/:id",
                                     name: "guidance",
                                     component: guidance
-                                }, //实验指导
+                                }, //实训指导
                                 {
                                     path: "/sExperiment1/Presentation/:id",
                                     name: "Presentation",
                                     component: Presentation
-                                }, //实验报告
+                                }, //实训报告
                                 {
                                     path: "/sExperiment1/Enclosure/:id",
                                     name: "Enclosure",
@@ -171,7 +190,7 @@ export default new Router({
                                     path: "/sExperiment1/snapshot/:id",
                                     name: "snapshot",
                                     component: snapshot
-                                }, //实验快照
+                                }, //实训快照
                                 {
                                     path: "/sExperiment1/exportData/:id",
                                     name: "exportData",
@@ -187,6 +206,7 @@ export default new Router({
 
                     ]
                 },
+              
                 {
                     path: '/relay/myTest',
                     name: '/relay/myTest',
@@ -260,7 +280,7 @@ export default new Router({
         },
 
 
-        //  跳转到老师端##############################
+        //  跳转到教师端##############################
         {
             path: '/relayteacher',
             name: 'relayteacher',
@@ -290,6 +310,7 @@ export default new Router({
                         }
                     ]
                 },
+             
                 //元件库
                 {
                     path: '/relayteacher/componentLibrary',
@@ -297,13 +318,13 @@ export default new Router({
                     component: componentLibrary
                 },
 
-                //实验模板件库
+                //实训模板件库
                 {
                     path: '/relayteacher/experimentalTemplateLibrary',
                     name: 'experimentalTemplateLibrary',
                     component: experimentalTemplateLibrary
                 },
-                //新开实验模板库
+                //新开实训模板库
                 {
                     path: '/relayteacher/newExperimentalTemplateLibrary',
                     name: 'newExperimentalTemplateLibrary',
@@ -327,8 +348,8 @@ export default new Router({
                     name: 'dimension2',
                     component: dimension2
                 },
-                 // 二维设计图
-                 {
+                // 二维设计图
+                {
                     path: '/relayteacher/dimension2demo',
                     name: 'dimension2demo',
                     component: dimension2demo
@@ -370,7 +391,7 @@ export default new Router({
                     name: 'Editor',
                     component: Editor
                 },
-                //新建实验
+                //新建实训
                 {
                     path: '/task/Addtask',
                     name: 'Addtask',

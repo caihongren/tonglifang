@@ -70,7 +70,7 @@ export default {
     }
   },
   mounted() {
-     //判断学生老师  字段
+     //判断学生教师  字段
     let role = JSON.parse(sessionStorage.getItem("user")).role;
     if (role == "teacher") {
       this.agentData.mode = 'task_experiment_exercise_template_editor'

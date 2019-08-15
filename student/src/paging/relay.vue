@@ -1,20 +1,20 @@
 <template>
   <div class="banner">
-    <div class="Breadcrumb" @click="guizone">
+    <div class="Breadcrumb" @click="guizone()">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>{{course}}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home' }" class="textcolor chongqing">首页</el-breadcrumb-item>
+        <el-breadcrumb-item  class="textcolor"> {{course}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <el-menu
       :default-active="activeIndex2"
       class="el-menu-demo"
       mode="horizontal"
-      style="background-color: #fff; position: absolute;top: -48px;left: 500px;"
+      style="background-color: #fff; position: absolute;top: -60px;left: 520px;"
       @select="handleSelect"
-      background-color="#fff"
-      text-color="black"
-      active-text-color="#409EFF"
+      background-color="#0078d7"
+      text-color="#fff"
+      active-text-color="#ffc113"
     >
       <router-link to="/relay/study">
         <el-menu-item index="1">课程学习</el-menu-item>
@@ -24,7 +24,7 @@
       </router-link>
 
       <router-link to="/relay/myTest">
-        <el-menu-item index="3">实验任务</el-menu-item>
+        <el-menu-item index="3">实训任务</el-menu-item>
       </router-link>
 
       <router-link to="/relay/Dimension2" v-if="iswatchStorage2D">
@@ -36,8 +36,8 @@
         </el-menu-item>
       </router-link>
     </el-menu>
-    <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div>
-    <keep-alive :include="['myTest']">
+    <!-- <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div> -->
+    <keep-alive :include="['myTest']" >
       <router-view
         @gounity="gounity"
         @derunity="derunity"
@@ -45,6 +45,7 @@
         @threadPoxi="threadPoxi"
         @handleSelect="handleSelect"
         @interspace="interspace"
+        
       ></router-view>
     </keep-alive>
   </div>
@@ -121,8 +122,10 @@ export default {
     // 元件库3D
     yuangounity(type) {
       let token = localStorage.getItem("token");
+      let courseid= JSON.parse(sessionStorage.getItem("course")).id ;
       let data = {
         token: token,
+         courseid:courseid,
         mode: "element_browser",
         type: type,
         name: "mode"
@@ -134,9 +137,9 @@ export default {
       // "{'opcode':4,'LocationX': 755,'LocationY':135,'LocationX_Right': 15,'LocationY_Buttom':10,'SizeX': 1620,'SizeY':760}";
       // "{'opcode':4,'LocationX': 950,'LocationY':150,'LocationX_Right': 10,'LocationY_Buttom':100,}";
 
-      if (typeof wfapp !== "undefined") {
-        wfapp.start(cmd);
-      }
+      // if (typeof wfapp !== "undefined") {
+      //   wfapp.start(cmd);
+      // }
     },
     // 三维设计空间显示
     interspace() {
@@ -332,6 +335,9 @@ export default {
     }
   },
   created() {
+      if(sessionStorage.getItem("user")==null){
+      this.$router.push('/login')
+    }
     let course = JSON.parse(sessionStorage.getItem("course"));
     this.course = course.course;
     this.initWebSocket();
@@ -344,7 +350,7 @@ export default {
     });
   },
   destroyed() {
-    this.guizone();
+    // this.guizone();
     this.websock.close(); // 离开路由之后断开websocket连接
   }
 };
@@ -354,23 +360,24 @@ export default {
 <style lang="less" scoped>
 .banner {
   position: relative;
-  height: 100%;
+    height: calc(100% - 60px);
   .Breadcrumb {
     position: absolute;
-    top: -25px;
-    left: 250px;
+    top: -35px;
+    left: 280px;
   }
   .el-menu-item {
-    font-size: 16px;
-    height: 48px;
-    line-height: 48px;
-    border-bottom: 2px solid red;
+    // font-size: 16px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 18px;
+    border-bottom: 0px solid red;
   }
 }
 .det {
   background-color: transparent;
   border: 0px solid red;
-  font-size: 14px;
+  font-size: 18px;
 
   color: inherit;
 }
@@ -379,6 +386,7 @@ export default {
   // margin-top: -1px;
   // margin-bottom: 10px;
 }
+
 </style>
 
 

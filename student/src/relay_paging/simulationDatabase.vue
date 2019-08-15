@@ -1,17 +1,26 @@
 <template>
   <div class="simulationResourcesOverallgroup">
+    <!-- 右边菜单栏 -->
+    <div class="menus">
+      <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" style="text-align: center; font-size:18px;">
+        <el-menu-item index="2" @click="istask=true">我的仿真资源</el-menu-item>
+        <el-menu-item index="3" @click="istask=false">内置仿真资源</el-menu-item>
+      </el-menu>
+    </div>
+
+    <!-- 正文 -->
     <div class="simulationResourcesOverall">
-      <div class="simulationResourcesOverall-top">
-        <h2 class="simulationResourcesOverall-left">我的仿真资源</h2>
-        <el-button type="primary" icon="el-icon-plus" @click="newlyBuildButton()" class="simulationResourcesOverall-right">新建</el-button>
-        <el-table :data="tableDataFalse" border stripe :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#ccc'}" class="Simulation operation">
-          <el-table-column prop="index" label="序号" min-width="140" class="table1" type="index"></el-table-column>
+      <div class="simulationResourcesOverall-top" v-show="istask">
+        <p class="simulationResourcesOverall-left">我的仿真资源</p>
+        <el-button type="primary" icon="el-icon-plus" @click="newlyBuildButton()" class="simulationResourcesOverall-right" size="mini">新建</el-button>
+        <el-table :data="tableDataFalse" border stripe :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#b2e2f8'}" class="Simulation operation">
+          <el-table-column prop="index" label="序号" class="table1" type="index"></el-table-column>
           <el-table-column prop="name" label="名称" min-width="120" sortable></el-table-column>
           <el-table-column prop="createdAt" label="保存时间" min-width="120" sortable>
             <template slot-scope="scope">{{scope.row.createdAt|dateformat}}</template>
           </el-table-column>
           <el-table-column prop="typeName" label="类型" min-width="100"></el-table-column>
-          <el-table-column label="操作" min-width="150">
+          <el-table-column label="操作" width="250">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="compile(scope.row)">编辑</el-button>
               <el-button @click="dialogVisiblecopyMy=true,select=scope.row.id,inputcopyname=''" type="text" size="small">克隆</el-button>
@@ -23,39 +32,39 @@
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="length"></el-pagination>
         </div>
       </div>
-      <div class="simulationResourcesOverall-bottom">
-        <h2 class="simulationResourcesOverall-leftbottom">内置仿真资源</h2>
-        <el-table :data="tableDataTrue" stripe border :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#ccc'}" class="Simulation operation">
-          <el-table-column prop="index" label="序号" min-width="40" class="table1" type="index"></el-table-column>
+      <div class="simulationResourcesOverall-bottom" v-show="!istask">
+        <p class="simulationResourcesOverall-leftbottom">内置仿真资源</p>
+        <el-table :data="tableDataTrue" stripe border :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#b2e2f8'}" class="Simulation operation">
+          <el-table-column prop="index" label="序号" class="table1" type="index"></el-table-column>
           <el-table-column prop="name" label="名称" min-width="120"></el-table-column>
           <el-table-column prop="typeName" label="类型" min-width="100"></el-table-column>
-          <el-table-column label="操作" min-width="150">
+          <el-table-column label="操作" width="350">
             <template slot-scope="scope">
               <el-button @click="look(scope.row)" type="text" size="small">查看</el-button>
-              <el-button @click="dialogVisiblecopy=true,select=scope.row.id,inputcopyname=''" type="text" size="small">克隆</el-button>
+              <el-button @click="dialogVisiblecopy=true,select=scope.row.id,inputcopyname=''" type="text" size="small" class="chongqing">克隆</el-button>
             </template>
           </el-table-column>
         </el-table>
-      </div>
-      <div style="margin:50px;">
-        <el-pagination @size-change="handleSizeChangeinner" @current-change="handleCurrentChangeinner" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="lengthinner"></el-pagination>
+        <div style="margin:50px;">
+          <el-pagination @size-change="handleSizeChangeinner" @current-change="handleCurrentChangeinner" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="lengthinner"></el-pagination>
+        </div>
       </div>
     </div>
     <!-- 新建弹出框 -->
-    <el-dialog :visible.sync="testTemplateLibrary" width="40%">
+    <el-dialog :visible.sync="testTemplateLibrary" width="40%" title="我的仿真资源">
       <div>
         <el-input placeholder="新建名称" v-model="addform.name" class="input-with-select">
           <el-select v-model="addform.type" slot="prepend" placeholder="请选择类型" style="width:150px">
             <el-option :label="item.name" :value="item.name" v-for="(item) in simulationResourcesType" :key="item.id"></el-option>
           </el-select>
-          <el-select v-model="addform.expTypeId" v-show="addform.type[0]=='三'?true:false" slot="prepend" placeholder="请选泽实验类型" style="width:150px;margin-left:10px">
+          <el-select v-model="addform.expTypeId" v-show="addform.type[0]=='三'?true:false" slot="prepend" placeholder="请选泽实训类型" style="width:150px;margin-left:10px">
             <el-option :label="item.name" :value="item.id" v-for="item in pattern" :key="item.id"></el-option>
           </el-select>
         </el-input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="testTemplateLibrary = false">取 消</el-button>
-        <el-button type="primary" @click="append()">确 定</el-button>
+        <el-button type="primary" @click="testTemplateLibrary = false" class="cancel" size="mini">取 消</el-button>
+        <el-button type="primary" @click="append()" class="Sure" size="mini">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -65,8 +74,8 @@
         <el-input placeholder="请输入新增模板名称" v-model="inputcopyname" class="input-with-select"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click=" dialogVisiblecopyMy = false">取 消</el-button>
-        <el-button type="primary" @click="ReplicateTheBuiltInExperimentMy()">确 定</el-button>
+        <el-button type="primary" @click=" dialogVisiblecopyMy = false" class="cancel" size="mini">取 消</el-button>
+        <el-button type="primary" @click="ReplicateTheBuiltInExperimentMy()" class="Sure" size="mini">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 克隆内置仿真资源出框      -->
@@ -75,8 +84,8 @@
         <el-input placeholder="请输入新增模板名称" v-model="inputcopyname" class="input-with-select"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click=" dialogVisiblecopy = false">取 消</el-button>
-        <el-button type="primary" @click="ReplicateTheBuiltInExperiment()">确 定</el-button>
+        <el-button type="primary" @click=" dialogVisiblecopy = false" class="cancel" size="mini">取 消</el-button>
+        <el-button type="primary" @click="ReplicateTheBuiltInExperiment()" class="Sure" size="mini">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -89,7 +98,7 @@ import {
   cloneSimulation, //克隆仿真资源
   deletSimulation, //删除仿真资源
   modifySimulation, //修改仿真资源
-  experiment_type_list //添加实验类型
+  experiment_type_list //添加实训类型
 } from "../API/api";
 export default {
   data() {
@@ -98,7 +107,7 @@ export default {
       limit: 10,
       length: 0,
       offsetinner: 0,
-      limitinner: 20,
+      limitinner: 10,
       lengthinner: 0,
       currentPage: 1,
       currentPage4: 1,
@@ -110,6 +119,7 @@ export default {
       testTemplateLibrary: false, //新建模态框初始隐藏
       dialogVisiblecopyMy: false, //克隆我的仿真资源弹出框隐藏
       dialogVisiblecopy: false, //克隆内置仿真资源弹出框隐藏
+      istask: true, //切换任务类型
       addform: {
         type: "",
         name: "",
@@ -158,7 +168,7 @@ export default {
     newlyBuildButton() {
       this.testTemplateLibrary = true; //模态框显示
       this.getSceneTypeList(); //获取仿真资源类型列表
-      this.experiment_type_list(); //添加实验类型
+      this.experiment_type_list(); //添加实训类型
     },
     //获取仿真资源类型列表
     getSceneTypeList() {
@@ -166,7 +176,7 @@ export default {
         this.simulationResourcesType = res.data.object;
       });
     },
-    //添加实验类型
+    //添加实训类型
     experiment_type_list() {
       experiment_type_list().then(res => {
         this.pattern = res.data.object;
@@ -207,58 +217,64 @@ export default {
 
     //删除仿真资源
     deleteTaskFormwork(id) {
-
       this.$confirm("此操作将永久删除该任务, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          if(sessionStorage.getItem("watchStorage3D")!=null){
-            if(JSON.parse(sessionStorage.getItem("watchStorage3D")).id==id){
-           
-              this.$emit("deet","3D")
+          if (sessionStorage.getItem("watchStorage3D") != null) {
+            if (JSON.parse(sessionStorage.getItem("watchStorage3D")).id == id) {
+              this.$emit("deet", "3D");
             }
           }
-           if(sessionStorage.getItem("watchStorage2D")!=null){
-            if(JSON.parse(sessionStorage.getItem("watchStorage2D")).id==id){
-           
-              this.$emit("deet","2D")
+          if (sessionStorage.getItem("watchStorage2D") != null) {
+            if (JSON.parse(sessionStorage.getItem("watchStorage2D")).id == id) {
+              this.$emit("deet", "2D");
             }
           }
           deletSimulation({
             id: id
           }).then(res => {
             this.$message({
+              showClose: true,
               message: "删除成功",
               type: "success",
-              duration:2000,
+              duration: 1000
             });
             this.mySimulationResources(); // 加载我的内置仿真模板列表
           });
         })
         .catch(() => {
           this.$message({
+            showClose: true,
             type: "info",
             message: "已取消删除",
-             duration:2000,
+            duration: 1000
           });
         });
-
     },
     //克隆我的仿真资源
     ReplicateTheBuiltInExperimentMy(id) {
       // this.dialogVisiblecopyMy = false;
       let type = true;
       if (this.inputcopyname == "" || this.inputcopyname.length == 0) {
-        this.$message.error("重名名为空");
+        this.$message.error({
+          showClose: true,
+          duration: 1000,
+          message: "重名名为空"
+        });
         type = false;
         return;
       }
       for (let i = 0; i < this.tableDataFalse.length; i++) {
         let item = this.tableDataFalse[i];
         if (item.name == this.inputcopyname) {
-          this.$message.error("存在重复名字");
+          this.$message.error({
+            showClose: true,
+            duration: 1000,
+            message: "存在重复名字"
+          });
           type = false;
           return;
         }
@@ -271,13 +287,20 @@ export default {
         }).then(res => {
           if (res.data.code == 0) {
             this.$message({
+              showClose: true,
+              duration: 1000,
               message: "克隆成功",
               type: "success"
             });
 
             this.mySimulationResources(); // 加载我的内置仿真模板列表
           } else {
-            this.$message.error("克隆失败");
+            this.$message({
+              showClose: true,
+              duration: 1000,
+              message: "克隆失败",
+              type: "error"
+            });
           }
         });
       }
@@ -286,14 +309,22 @@ export default {
     ReplicateTheBuiltInExperiment(id) {
       let type = true;
       if (this.inputcopyname == "" || this.inputcopyname.length == 0) {
-        this.$message.error("重名名为空");
+        this.$message.error({
+          showClose: true,
+          duration: 1000,
+          message: "重名名为空"
+        });
         type = false;
         return;
       }
       for (let i = 0; i < this.tableDataFalse.length; i++) {
         let item = this.tableDataFalse[i];
         if (item.name == this.inputcopyname) {
-          this.$message.error("存在重复名字");
+          this.$message.error({
+            showClose: true,
+            duration: 1000,
+            message: "存在重复名字"
+          });
           type = false;
           return;
         }
@@ -307,26 +338,35 @@ export default {
           if (res.data.code == 0) {
             this.$message({
               message: "克隆成功",
-              type: "success"
+              type: "success",
+              showClose: true,
+              duration: 1000
             });
             this.mySimulationResources(); // 加载我的内置仿真模板列表
             this.innerSimulationResources(); // 加载内置仿真模板列表
           } else {
-            this.$message.error("克隆失败");
+            this.$message.error({
+              showClose: true,
+              duration: 1000,
+              message: "克隆失败"
+            });
           }
         });
       }
     },
-    // 新建实验
+    // 新建实训
     append() {
       if (this.addform.name == "" || this.addform.type == "") {
-        this.$message.error({
-          message: "没有名称或类型"
+        this.$message({
+          showClose: true,
+          duration: 1000,
+          message: "没有名称或类型",
+          type: "error"
         });
         return;
       }
       for (let i = 0; i < this.simulationResourcesType.length; i++) {
-        if ((this.simulationResourcesType[i].name == this.addform.type)) {
+        if (this.simulationResourcesType[i].name == this.addform.type) {
           this.addform.typeId = this.simulationResourcesType[i].id;
           break;
         }
@@ -339,26 +379,38 @@ export default {
       if (this.addform.type[0] == "三") {
         if (this.addform.expTypeId == "") {
           this.$message.error({
-            message: "请选择三维实验类型"
+            showClose: true,
+            duration: 1000,
+            message: "请选择三维实训类型"
           });
           return;
         }
       }
-      addSimulation(from).then(res => {console.log(res.data.code);
+      addSimulation(from).then(res => {
         if (res.data.code == "-2") {
           this.$message({
+            showClose: true,
+            duration: 1000,
             type: "info",
             message: "新建名称重复"
           });
         } else if (res.data.code == "0") {
           this.$message({
+            showClose: true,
+            duration: 1000,
             message: "新增成功",
             type: "success"
           });
-          this.addform.name == "";
-          this.addform.type == "";
+          this.addform.name = "";
+          this.addform.type = "";
           this.mySimulationResources();
-
+        } else {
+          this.$message({
+            showClose: true,
+            duration: 1000,
+            type: "error",
+            message: "新建失败"
+          });
         }
       });
       this.testTemplateLibrary = false;
@@ -408,6 +460,8 @@ export default {
           })
           .catch(() => {
             this.$message({
+              showClose: true,
+              duration: 1000,
               type: "info",
               message: "已取消删除"
             });
@@ -417,6 +471,8 @@ export default {
 
       if ((row.type == "" || row.name == "") && row.id == "") {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "没有名称或类型"
         });
       } else {
@@ -448,6 +504,8 @@ export default {
           })
           .catch(() => {
             this.$message({
+              showClose: true,
+              duration: 1000,
               type: "info",
               message: "已取消删除"
             });
@@ -456,6 +514,8 @@ export default {
       }
       if ((row.type == "" || row.name == "") && row.id == "") {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "没有名称或类型"
         });
       } else {
@@ -485,24 +545,52 @@ export default {
 <style lang="less" scoped>
 .simulationResourcesOverallgroup {
   height: 100%;
-  width: 80%;
-  border: 1px solid #dddddd;
-  margin: 0 10%;
+  width: 100%;
+  padding-left: 250px;
   overflow: hidden;
-  .simulationResourcesOverall {
+  background-color: #f1f1f1;
+  position: relative;
+  .menus {
+    position: absolute;
+    left: 0px;
+    padding-top: 20px;
+    z-index: 2;
+    width: 250px;
     height: 100%;
-    width: 101.1%;
+    background-color: #313131;
+    .el-menu-item {
+      font-size: 18px;
+    }
+  }
+  .simulationResourcesOverall {
+    height: 93%;
+    width: 95%;
     overflow: auto;
+    background-color: #fff;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding-top: 20px;
+
     .simulationResourcesOverall-top {
       position: relative;
       margin-bottom: 80px;
       .simulationResourcesOverall-left {
-        margin-left: 30px;
+        padding-bottom: 20px;
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+        color: #00a0e9;
       }
       .simulationResourcesOverall-right {
+        background-color: #989898;
+        border: none;
         position: absolute;
-        top: 0px;
-        right: 47px;
+        border-radius: 0px;
+        top: 5px;
+        right: 50px;
+        :hover {
+          color: #0ac0d8;
+        }
       }
       .Simulation {
         width: 95%;
@@ -511,18 +599,43 @@ export default {
     }
     .simulationResourcesOverall-bottom {
       .simulationResourcesOverall-leftbottom {
-        margin-left: 30px;
+        padding-bottom: 20px;
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+        color: #00a0e9;
       }
       .Simulation {
         width: 95%;
         margin: 0 30px;
       }
-      .simulationOperation {
-        width: 97.5%;
-        margin-left: 20px;
-      }
     }
   }
+}
+</style>
+<style  lang="less" >
+.Simulation .el-button--text {
+  color: #989898;
+}
+.simulationResourcesOverallgroup .el-dialog__title {
+  color: #00a0e9;
+}
+.dialog-footer .cancel {
+  background-color: #66c6f2;
+  border-radius: 0px;
+  width: 70px;
+  height: 30px;
+  border: none;
+}
+.dialog-footer .Sure {
+  background-color: #00a0e9;
+  border: none;
+  width: 70px;
+  height: 30px;
+  border-radius: 0px;
+}
+.simulationResourcesOverallgroup .el-menu {
+  border: 0px solid red;
 }
 </style>
 

@@ -1,11 +1,11 @@
 <template>
   <div class="box">
-    <div >
+    <div>
       <div class="add">
         <el-row :gutter="20">
           <el-col :span="4">
             <div class="grid-content bg-purple" style="padding:15px 30px">
-              <!-- <el-button type="primary" @click="dialogFormVisibleadd = true" >新增老师</el-button> -->
+              <!-- <el-button type="primary" @click="dialogFormVisibleadd = true" >新增教师</el-button> -->
             </div>
           </el-col>
           <el-col :span="14">
@@ -19,7 +19,7 @@
         <el-table :data="tableData" border style="width: 90%;margin:5px 3%">
           <el-table-column fixed prop="name" label="任务名称" min-width="200"></el-table-column>
           <el-table-column prop="gender" label="提交时间" min-width="120"></el-table-column>
-          <el-table-column prop="age" label="实验报告" min-width="120"></el-table-column>
+          <el-table-column prop="age" label="实训报告" min-width="120"></el-table-column>
           <el-table-column prop="phone" label="批阅情况" min-width="200"></el-table-column>
           <el-table-column prop="email" label="任务信息" min-width="400"></el-table-column>
 
@@ -32,26 +32,13 @@
         </el-table>
       </template>
       <div style="margin:50px;">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="10"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="length"
-        ></el-pagination>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="length"></el-pagination>
       </div>
       <!-- 新增加 -->
-      <el-dialog title="新增老师" :visible.sync="dialogFormVisibleadd">
+      <el-dialog title="新增教师" :visible.sync="dialogFormVisibleadd">
         <el-form :model="formadd" :rules="rules">
-          <el-form-item label="老师名称：" :label-width="formLabelWidth" prop="name">
-            <el-input
-              v-model="formadd.name"
-              auto-complete="off"
-              focus="true"
-              placeholder="请输入名称（必填）"
-            ></el-input>
+          <el-form-item label="教师名称：" :label-width="formLabelWidth" prop="name">
+            <el-input v-model="formadd.name" auto-complete="off" focus="true" placeholder="请输入名称（必填）"></el-input>
           </el-form-item>
           <el-form-item label="性别：" :label-width="formLabelWidth">
             <el-select v-model="formadd.gender" placeholder="请选择性别">
@@ -63,12 +50,7 @@
             <el-input v-model="formadd.age" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="电话：" :label-width="formLabelWidth" prop="phone">
-            <el-input
-              v-model="formadd.phone"
-              auto-complete="off"
-              maxlength="11"
-              placeholder="请输入电话号码（必填）"
-            ></el-input>
+            <el-input v-model="formadd.phone" auto-complete="off" maxlength="11" placeholder="请输入电话号码（必填）"></el-input>
           </el-form-item>
           <el-form-item label="邮箱：" :label-width="formLabelWidth">
             <el-input v-model="formadd.email" auto-complete="off"></el-input>
@@ -80,9 +62,9 @@
         </div>
       </el-dialog>
       <!-- 编辑 -->
-      <el-dialog title="编辑老师" :visible.sync="dialogFormVisible">
+      <el-dialog title="编辑教师" :visible.sync="dialogFormVisible">
         <el-form :model="form" :rules="rules">
-          <el-form-item label="老师名称*：" :label-width="formLabelWidth">
+          <el-form-item label="教师名称*：" :label-width="formLabelWidth">
             <el-input v-model="form.name" auto-complete="off" placeholder="请输入名称（必填）"></el-input>
           </el-form-item>
           <el-form-item label="性别：" :label-width="formLabelWidth">
@@ -125,7 +107,7 @@ export default {
       currentPage4: 1,
       length: 40,
       tableData: [
-       
+
       ],
       rules: {
         name: [{ required: true, message: "请输入教师名称", trigger: "blur" }],
@@ -168,13 +150,13 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      this.offset = (val-1) * this.limit;
+      this.offset = (val - 1) * this.limit;
       this.getTeacherListNew();
     },
     interface(id) {
       console.log(id);
     },
-    handleClick(row) {},
+    handleClick(row) { },
     // addteacher
     addteacher() {
       let mReg = /^1(3|5|7|8)\d{9}$/;
@@ -190,12 +172,16 @@ export default {
           })
           .catch(() => {
             this.$message.error({
+              showClose: true,
+              duration: 1000,
               message: "手机号码重复或者错误",
               type: "warning"
             });
           });
       } else {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "名称或电话号码错误",
           type: "warning"
         });
@@ -231,12 +217,16 @@ export default {
           })
           .catch(() => {
             this.$message.error({
+              showClose: true,
+              duration: 1000,
               message: "手机号码重复或者错误",
               type: "warning"
             });
           });
       } else {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "名称或电话号码错误",
           type: "warning"
         });
@@ -244,7 +234,7 @@ export default {
     },
     // 删除
     det(id) {
-      this.$confirm("此操作将永久删除该老师, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该教师, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -256,6 +246,8 @@ export default {
             console.log(res);
             this.getTeacherListNew();
             this.$message({
+              showClose: true,
+              duration: 1000,
               type: "success",
               message: "删除成功!"
             });
@@ -263,12 +255,14 @@ export default {
         })
         .catch(() => {
           this.$message({
+            showClose: true,
+            duration: 1000,
             type: "info",
             message: "已取消删除"
           });
         });
     },
-    // 加载老师列表
+    // 加载教师列表
     getTeacherListNew() {
       getTeacherList({
         offset: this.offset,
@@ -280,7 +274,7 @@ export default {
       });
     }
   },
-  mounted() {},
+  mounted() { },
   created() {
     // this.getTeacherListNew();
   }
@@ -294,7 +288,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 800px;
-  overflow: auto
+  overflow: auto;
 }
 .add {
   margin: 10px;

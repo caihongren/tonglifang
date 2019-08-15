@@ -23,7 +23,7 @@
           <el-form-item label="选择身份">
             <el-select v-model="registerUser.identity" placeholder="请选择身份">
               <el-option label="管理员" value="manager"></el-option>
-              <el-option label="老师" value="teacher"></el-option>
+              <el-option label="教师" value="teacher"></el-option>
               <el-option label="学生" value="student"></el-option>
             </el-select>
           </el-form-item>

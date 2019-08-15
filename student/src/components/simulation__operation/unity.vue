@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div>
-      <span>仿真实验进行中........</span>
+      <span>仿真实训进行中........</span>
     </div>
   </div>
 </template>

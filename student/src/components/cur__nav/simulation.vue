@@ -42,7 +42,7 @@
           <div class="Choice" @click="showTwo=!showTwo">
             <el-row>
               <el-col :span="12">
-                <div class="grid-content bg-purple">内置实验</div>
+                <div class="grid-content bg-purple">内置实训</div>
               </el-col>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
@@ -89,7 +89,7 @@ export default {
   data() {
     return {
       itemArr: [],
-      type: "基础实验",
+      type: "基础实训",
       limit: 100,
       offset: 0,
       showOne: true,
@@ -99,11 +99,11 @@ export default {
       color: "2px solid #fff",
       taskOne: "全部",
       taskTwo: "全部",
-      tasks: ["全部", "教学实训", "工程实践", "验证实验"],
+      tasks: ["全部", "教学实训", "工程实践", "验证实训"],
       innertype: {
         inner: "",
         id: "id",
-        type: "基础实验"
+        type: "基础实训"
       }
     };
   },

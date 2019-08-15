@@ -10,7 +10,7 @@
       <div style="height:50px" class="bottonbox">
         <span class="buttombox">已下发任务清单</span>
         <el-button type="primary" size="mini">下发批阅</el-button>
-        <el-button type="primary" size="mini" class="batch">批量下载实验报告</el-button>
+        <el-button type="primary" size="mini" class="batch">批量下载实训报告</el-button>
         <el-button type="primary" size="mini">撤回</el-button>
         <router-link to="/task/Presentationteacher">
           <el-button type="primary" size="mini" class="Marking">批阅报告</el-button>
@@ -74,7 +74,7 @@ export default {
           LHtime: "2019-05-10",
           term: "2019-05-12——2019-05-20",
           Sbnam: "50/60",
-          explain: "按要求完成实验",
+          explain: "按要求完成实训",
           requirement: "有",
           noRead: "0",
           comment: "是"
@@ -85,7 +85,7 @@ export default {
           LHtime: "2019-05-10",
           term: "2019-05-12——2019-05-20",
           Sbnam: "45/70",
-          explain: "按要求完成实验",
+          explain: "按要求完成实训",
           requirement: "",
           noRead: "0",
           comment: "是"

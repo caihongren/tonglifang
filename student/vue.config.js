@@ -107,6 +107,7 @@ module.exports = {
                 '/apl': {　　　　　　　　　 //要访问的跨域的api的域名
                     //target: 'http://192.168.2.223:10000',
                     target: 'http://192.168.2.223:10000/zuul/creator/api/public/account',
+                    //target: 'http://192.168.2.200:10000/zuul/creator/api/public/account',
                     //target: 'http://cloud.asp0755.com/creator/api/public/account',
                     //target: 'http://192.168.0.104:8081',
                     // target: 'http://192.168.2.200:8080/creatoraccount',
@@ -119,11 +120,12 @@ module.exports = {
                 '/img': {
                     //target: 'http://192.168.0.104:8082',
                     //target: 'http://192.168.0.104:8082',
-                     //target: ' http://cloud.asp0755.com/creator/api/public/course1',
+                    //target: ' http://cloud.asp0755.com/creator/api/public/course1',
 
-
+                    
                     target: 'http://192.168.2.223:10000/zuul/creator/api/public/course',
                     // target: 'http://192.168.2.200:8080/creatorcourse',
+                    //target: 'http://192.168.2.200:10000/zuul/creator/api/public/course',
                     changeOrigin: true,
                     pathRewrite: {
                         '^/img': ''

@@ -40,7 +40,6 @@
       //   action: state => state.user.action,
       // }),
       myStyle(){
-         console.log(document.documentElement.clientHeight)
         return {
           right: this.param.right + 'px', top: this.param.top + 'px',
           bottom: this.param.bottom + 'px', left: this.param.left + 'px',
@@ -58,12 +57,9 @@
 
     },
     mounted: function(){
-      console.log('bomJson ', bomJson)
       this.isMounted = true;
       this.$refs.drawContent.scrollTo(400, 800);
       // var inner=document.getElementsByClassName('layer')
-      // console.log(inner)
-      // console.log(inner.innerHTML ,'内容')
 
     },
     data(){
@@ -87,11 +83,9 @@
 
       },
       componentRotate(o){
-        console.log('componentRotate', id)
 
       },
       selectComponent(o){ //选中元器件
-        console.log('selectComponent', o)
         this.selectNode = o;
       },
       selectClockwise(o){ //旋转

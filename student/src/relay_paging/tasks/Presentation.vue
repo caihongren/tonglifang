@@ -8,7 +8,7 @@
             <el-breadcrumb separator="/">
               <el-breadcrumb-item>
                 <a @click="$router.push('/relayteacher/taskManagement')">
-                  <h3>实验任务管理</h3>
+                  <h3>实训任务管理</h3>
                 </a>
               </el-breadcrumb-item>
               <el-breadcrumb-item>
@@ -19,7 +19,6 @@
             </el-breadcrumb>
           </div>
         </el-col>
-
         <el-col :span="4">
           <div>任务开始时间：{{ startTime|dateformat }}</div>
         </el-col>
@@ -35,11 +34,11 @@
       </el-row>
     </div>
     <el-container style="height:100%">
-      <el-aside class="asidebox" width="200px">
+      <el-aside class="asidebox" width="250px">
         <el-col :span="24">
-          <el-menu :default-active="String(sumber)" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-            <el-menu-item-group :title="itembox.className" v-for="(itembox,index) in student" :key="index">
-              <el-menu-item class="ddddd" style="height: 40px;line-height: 40px;" @click="sumber=item.index,studentClick(item)" v-bind:index=" String(item.index)" v-for="(item) in itembox.students" :disabled="item.statu=='new'?true:false" :key="item.index">
+          <el-menu :default-active="String(sumber)" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#313131" text-color="#fff" active-text-color="#ffd04b">
+            <el-menu-item-group :title="itembox.className" v-for="(itembox,index) in student" :key="index" style="font-size:18px;">
+              <el-menu-item style="height: 40px;line-height: 40px;" @click="sumber=item.index,studentClick(item)" v-bind:index=" String(item.index)" v-for="(item) in itembox.students" :disabled="item.statu=='new'||item.statu=='save'||item.statu=='expired'?true:false" :key="item.index">
                 <el-badge class="item" :is-dot="item.statu=='submit'?true:false">{{item.studentName}}</el-badge>
               </el-menu-item>
             </el-menu-item-group>
@@ -47,62 +46,65 @@
         </el-col>
       </el-aside>
       <!-- main内容部分 -->
-      <el-container>
-        <el-main style="padding:3px 20px">
+      <el-container style="background-color: #f1f1f1;">
+        <el-main style="margin:10px 20px;padding:0px;background-color: #fff;">
           <div class="mainbox">
-            <div class="browse">{{pdfName}}</div>
+            
+            <div class="browse">{{pdfname}}
+              <el-button class='but' @click="oldpdf()" type="primary" size="mini" v-show="ispdf">返回实训报告</el-button>
+            </div>
             <div class="pdf">
               <div class="content">
-                <iframe
-                  :src="pdfPath"
-                  class="iframe"
-                  style="width:100%;height:95%"
-                  v-if="pdfPath==''?false:true"
-                ></iframe>
-                <div v-show="pdfPath==''?true:false">没有数据。。。。</div>
+                <iframe :src="pdfPath" class="iframe" style="width:100%;height:95%" v-if="pdfPath==''?false:true"></iframe>
+                <div v-show="pdfPath==''?true:false" class="textshu"> 暂无数据。。。。</div>
               </div>
             </div>
-            <div class="left" @click="switchover(-1)">左</div>
-            <div class="right" @click="switchover(1)">右</div>
+            <div class="left" @click="switchover(-1)">
+              <i class="el-icon-arrow-left" style="font-size: 20px;"></i>
+            </div>
+            <div class="right" @click="switchover(1)">
+              <i class="el-icon-arrow-right" style="font-size: 20px;"></i>
+            </div>
           </div>
         </el-main>
-        <el-aside width="410px">
-          <div style="margin: 20px;">仿真实验题</div>
-          <div style="margin: 20px;">
-            <el-table :data="row.tasks" style="width: 100%" border>
-              <el-table-column prop="name" label="名称" min-width="250"></el-table-column>
+        <el-aside style="width: 396px;background-color: #fff;margin: 10px 20px 0px 0px;padding: 0 20px;">
+          <div style="margin: 20px;" class="text chongqing">仿真实训题</div>
+          <div style="margin: 20px;" class="chongqing">
+            <el-table :data="row.tasks" style="width: 100%" border :header-cell-style="{background:'#b2e2f8'}">
+              <el-table-column prop="projectName" label="名称" min-width="150"></el-table-column>
               <el-table-column label="操作" min-width="100">
                 <template slot-scope="scope">
-                  <el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>
-                  <el-button type="text" size="small" @click="download(scope.row.path,scope.row.name)">下载</el-button>
+                  <el-button @click="preview(scope.row,scope.row.scenePath)" type="text" size="small">查看</el-button>
+                  <el-button type="text" size="small" @click="download(scope.row.scenePath,scope.row.projectName)">下载</el-button>
                 </template>
               </el-table-column>
             </el-table>
           </div>
 
-          <div style="margin: 20px;">附件</div>
+          <div style="margin: 20px;" class="text">附件</div>
           <div style="margin: 20px;">
-            <el-table :data="row.accessory" style="width: 100%" border>
+            <el-table :data="row.accessory" style="width: 100%" border :header-cell-style="{background:'#b2e2f8'}">
               <el-table-column prop="name" label="名称" min-width="150"></el-table-column>
 
               <el-table-column label="操作" min-width="100">
                 <template slot-scope="scope">
-                  <el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>
+                  <el-button @click="preview(scope.row,scope.row.path)" type="text" size="small">查看</el-button>
                   <el-button type="text" size="small" @click="download(scope.row.path,scope.row.name)">下载</el-button>
                 </template>
               </el-table-column>
             </el-table>
           </div>
-          <div style="margin: 20px;">批阅</div>
+          <div style="margin: 20px;" class="text">批阅</div>
           <div style="margin: 20px;">
             <el-input type="textarea" :rows="2" placeholder="请输入评语" v-model="addfrom.remark"></el-input>
           </div>
+          <div style="margin: 20px;" class="text">评分</div>
           <div style="margin: 20px;">
-            <span style="margin-left: 20px;">评分：</span>
-            <el-input v-model="addfrom.grade" placeholder="请输入评分" style="width:50%"></el-input>
+
+            <el-input v-model="addfrom.grade" placeholder="请输入百分制评分" style="width:100%"></el-input>
           </div>
           <div style="margin:20px;padding-bottom: 100px;">
-            <el-button type="primary" size="mini" style="width:100%;height:50px" @click="readOver()">批阅</el-button>
+            <el-button type="primary" size="mini" style="width:100%;height:40px; background-color: #00a0e9;font-size: 16px;" @click="readOver()" :disabled="disabled">批阅</el-button>
           </div>
         </el-aside>
       </el-container>
@@ -116,7 +118,7 @@
         <!-- 提供默认的播放视频  -->
       </video>
     </el-dialog>
-    <el-dialog width="90%" title="指导文件" top="8vh" append-to-body :visible.sync="innerVisibleNewpdf">
+    <el-dialog width="90%" top="8vh" append-to-body :visible.sync="innerVisibleNewpdf">
       <div style="height:75vh">
         <Examine ref="child" v-if="innerVisibleNewpdf"></Examine>
       </div>
@@ -128,48 +130,50 @@
 import FileSaver from "file-saver";
 import Examine from "../../views/Examine";
 import {
-  download,//下载
-  task_review_list,//老师批阅列表
-  task_review_details,//老师查看学生任务详情
-  task_review_score//老师批阅，打分，写评语
+  download, //下载
+  task_review_list, //教师批阅列表
+  task_review_details, //教师查看学生任务详情
+  task_review_score //教师批阅，打分，写评语
 } from "../../API/api";
 export default {
   name: "Presentationteacher",
   data() {
     return {
-      innerVisiblevideo: false,
-      innerVisibleNewpdf: false,
+      innerVisiblevideo: false, //视屏窗口
+      innerVisibleNewpdf: false, //图片窗口
       startTime: "", //任务开始时间
       finishTime: "", //任务结束时间
       total: "", //总人数
       complete: "", //已提交人数
-
       taskExperimentId: "", //当前任务id
       studentId: "", //当前学生id
-
-      pdfName: "", //中间pdf预览名字
+      pdfName: "实训报告", //中间pdf预览名字
       pdfPath: "", //中间pdf预览路径
-      guideName: "",
-      guidePath: "",
+      disabled: true,
       row: {
-        //右侧仿真实验题和附件
+        //右侧仿真实训题和附件
         tasks: [],
         accessory: []
       },
       res: "",
+      pdfname:'实训报告',
+      oldpaf:{
+        name:'',
+        path:'',
+      },
+      ispdf:false,
       name: "",
       sumber: 1,
       studentLength: 0, //学生最大 数量
       studentlist: new Map(),
       firststudent: [],
       theLasTonestudent: [],
-      // presentstudemt:[],  //当前student
       student: [],
       previewPath: "",
 
       addfrom: {
-        grade: "",//评分
-        remark: ""//评语
+        grade: "", //评分
+        remark: "" //评语
       },
 
       // 2D3D信息
@@ -200,6 +204,8 @@ export default {
         this.goExamine(name, path);
       } else {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "资源名称或路径不能为空"
         });
       }
@@ -221,7 +227,6 @@ export default {
     },
     // 切换学生的pdf
     switchover(sum) {
-      console.log(sum, '111')
       if (this.sumber <= 1 && sum < 0) {
         this.sumber = 1;
       } else if (this.sumber >= this.studentLength && sum > 0) {
@@ -231,20 +236,15 @@ export default {
       }
       if (this.studentlist.has(this.sumber)) {
         let studentId = this.studentlist.get(this.sumber).studentId;
-
         this.task_review_details(studentId);
         return;
-        // switchover(this.sumber+sum)
       } else {
-        // console.log(this.sumber, "this.sumber", this.studentlist);
         if (this.sumber == 1) {
-          // console.log(this.firststudent);
           this.task_review_details(this.firststudent.studentId);
           this.sumber = this.firststudent.index;
         } else if (this.sumber == this.studentLength) {
           this.theLasTonestudent;
           this.task_review_details(this.theLasTonestudent.studentId);
-
           this.sumber = this.theLasTonestudent.index;
         } else {
           this.switchover(sum);
@@ -252,25 +252,23 @@ export default {
       }
     },
     // 修改批阅状态
-    amendstudent(studentid){
-      console.log(studentid,this.student)
-        let student= this.student;
-        for(let i=0;i<student.length;i++){
-            for(let j=0;j<student[i].students.length;j++){
-                if(student[i].students[j].studentId==studentid){
-                    console.log(student[i].students[j])
-                    student[i].students[j].statu="approved";
-                    break;
-                    return;
-                }
-            }
+    amendstudent(studentid) {
+      let student = this.student;
+      for (let i = 0; i < student.length; i++) {
+        for (let j = 0; j < student[i].students.length; j++) {
+          if (student[i].students[j].studentId == studentid) {
+            student[i].students[j].statu = "approved";
+            break;
+            return;
+          }
         }
-        this.student=student;
+      }
+      this.student = student;
     },
 
     //文件预览
     preview(row, path) {
-      if (row.path == "") {
+      if (path == "") {
         this.$confirm("文件路径不支持", "提示", {
           confirmButtonText: "确定",
           type: "info"
@@ -283,14 +281,20 @@ export default {
           this.dimensionality.look = false;
           this.go2D(this.dimensionality);
         } else if (row.simType == "3d") {
-          this.tasks.id = row.id;
-          this.tasks.name = row.name;
+          this.tasks.id = row.projectId;
+          this.tasks.name = row.projectName;
           this.tasks.type = row.typeName;
           this.tasks.look = true;
           this.go3D(this.tasks);
         } else if (row.typeName == "pdf" || row.typeName == "PDF") {
+          this.oldpaf={
+            name: this.pdfName,
+            path: this.pdfPath,
+          };
           this.pdfPath = row.path;
           this.pdfName = row.name;
+           this.pdfname = row.name;
+           this.ispdf=true;
         } else if (
           row.typeName == "gif" ||
           row.typeName == "jpg" ||
@@ -324,16 +328,28 @@ export default {
           this.$confirm("文件暂不支持，请下载", "提示", {
             confirmButtonText: "确定",
             type: "info"
-          });
+          }).then(() => {
+
+          })
+          return;
         }
       }
     },
+    // pdf详情回实训
+    oldpdf(){
+        this.pdfName=this.oldpaf.name;
+        this.pdfPath=this.oldpaf.path;
+        this.pdfname='实训报告'
+        this.ispdf=false;
+    },
     // 下载文件
     download(src, name) {
-      console.log(src, name, '111');
-
       if (!src) {
-        this.$message.error("文件路径不正确,无法下载");
+        this.$message.error({
+          showClose: true,
+          duration: 1000,
+          message: "文件路径不正确,无法下载"
+        });
         return;
       }
       download({
@@ -359,6 +375,8 @@ export default {
           })
           .catch(() => {
             this.$message({
+              showClose: true,
+              duration: 1000,
               type: "info",
               message: "已取消删除"
             });
@@ -368,6 +386,8 @@ export default {
 
       if ((row.type == "" || row.name == "") && row.id == "") {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "没有名称或类型"
         });
       } else {
@@ -400,7 +420,9 @@ export default {
           })
           .catch(() => {
             this.$message({
-              // type: "info",
+              showClose: true,
+              duration: 1000,
+              type: "info",
               message: "已取消删除"
             });
           });
@@ -408,6 +430,8 @@ export default {
       }
       if ((row.type == "" || row.name == "") && row.id == "") {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "没有名称或类型"
         });
       } else {
@@ -429,13 +453,12 @@ export default {
         this.$router.push("/relayteacher/Dimension3");
       }
     },
-    //获取老师批阅列表
+    //获取教师批阅列表
     taskReviewList(taskExperimentId, courseId) {
       task_review_list({
         taskExperimentId: taskExperimentId,
         courseId: courseId
       }).then(res => {
-        console.log(res, "学生");
         this.student = [];
         let data = res.data.object;
         let firststudent = true;
@@ -445,26 +468,26 @@ export default {
           for (var j = 0; j < data[i].students.length; j++) {
             index++;
             data[i].students[j].index = index;
-            if (data[i].students[j].statu != "new") {
+            if (
+              data[i].students[j].statu != "new" &&
+              data[i].students[j].statu != "save" &&
+              data[i].students[j].statu != "expired"
+            ) {
               this.studentlist.set(index, data[i].students[j]);
               if (firststudent) {
                 this.firststudent = data[i].students[j];
                 firststudent = false;
               }
-
               this.theLasTonestudent = data[i].students[j];
             }
           }
         }
         this.studentLength = index;
         this.student = data;
-
         if (sessionStorage.getItem("studentid")) {
-
           let student = this.studentlist.get(
             sessionStorage.getItem("studentid") * 1
           );
-          console.log("student", this.taskExperimentId, student);
           this.task_review_details(student.studentId);
           this.sumber = student.index;
           setTimeout(res => {
@@ -472,73 +495,94 @@ export default {
           }, 1000);
           return;
         } else {
-          console.log("1111", this.firststudent);
           this.task_review_details(this.firststudent.studentId);
           this.sumber = this.firststudent.index;
         }
-        console.log(this.studentlist, "data");
       });
     },
-    //老师查看学生任务详情
+    //教师查看学生任务详情
     task_review_details(studentid) {
+      if (studentid == null || studentid == undefined) {
+        return;
+      }
       task_review_details({
         taskExperimentId: this.taskExperimentId,
         studentId: studentid
       }).then(res => {
-        console.log(res, "res");
         if (res.data.code == "0") {
-          this.row.tasks = res.data.object.simAnnexs;
-
+          // console.log(res);
+          this.ispdf=false;
+          this.pdfname='实训报告'
+          let simAnnexs = [];
           this.row.accessory = res.data.object.otherAnnexs;
-          this.studentId = studentid
+          this.studentId = studentid;
           this.pdfPath = res.data.object.reportPath;
           this.pdfName = res.data.object.reportName;
-          this.guideName = res.data.object.guideName;
-          this.guidePath = res.data.object.guidePath;
-
           this.addfrom.grade = res.data.object.score;
           this.addfrom.remark = res.data.object.comment;
+          for (let i = 0; i < res.data.object.simAnnexs.length; i++) {
+            if (
+              res.data.object.simAnnexs[i].scenePath != "" &&
+              res.data.object.simAnnexs[i].scenePath != null
+            ) {
+              simAnnexs.push(res.data.object.simAnnexs[i]);
+            }
+          }
+          this.row.tasks = simAnnexs;
+          this.disabled = false;
         } else {
         }
       });
     },
 
     studentClick(item) {
-      // console.log(item)
-
       this.task_review_details(item.studentId);
     },
-    //老师批阅，打分，写评语
+    //教师批阅，打分，写评语
     readOver() {
-      if (this.taskExperimentId == '' || this.studentId == "") {
-        this.$message.error("批阅错误");
+      if (this.taskExperimentId == "" || this.studentId == "") {
+        this.$message({
+          showClose: true,
+          duration: 1000,
+          message: "批阅错误",
+          type: "error"
+        });
         return;
-
       }
-      if (this.addfrom.grade < 0 && this.addfrom.grade > 100) {
+
+      if (this.addfrom.grade < 0 || this.addfrom.grade > 100) {
         this.addfrom.grade = "";
-        this.$message.error("请输入正确的数字评分0-100");
+        this.$message({
+          showClose: true,
+          duration: 1000,
+          message: "请输入正确的数字评分0-100",
+          type: "error"
+        });
         return;
       } else {
-        
-      task_review_score({
-        taskExperimentId: this.taskExperimentId,
-        studentId: this.studentId,
-        score: this.addfrom.grade,
-        comment: this.addfrom.remark
-      }).then(res => {
-        console.log(res)
-        if (res.data.code =="0") {
-          this.$message({
-            type: "info",
-            duration: 1000,
-            message: "批阅成功"
-          });
-          this.amendstudent(this.studentId)
-        }else{
-          this.$message.error('批阅失败')
-        }
-      });
+        task_review_score({
+          taskExperimentId: this.taskExperimentId,
+          studentId: this.studentId,
+          score: this.addfrom.grade,
+          comment: this.addfrom.remark
+        }).then(res => {
+          if (res.data.code == "0") {
+            this.$message({
+              type: "success",
+              showClose: true,
+              duration: 1000,
+              message: "批阅成功"
+            });
+            this.amendstudent(this.studentId);
+          } else {
+            this.$message({
+              showClose: true,
+              duration: 1000,
+              message: "批阅失败",
+              type: "error"
+            });
+          }
+        });
       }
     },
     initData(res) {
@@ -549,7 +593,6 @@ export default {
       } else {
         row = this.$route.query;
         this.res = row;
-        console.log(row, "qqq");
       }
       this.taskExperimentId = row.id;
       this.name = row.name;
@@ -561,22 +604,16 @@ export default {
       this.taskReviewList(this.taskExperimentId, courseId);
     }
   },
-
-
-
   created() {
-    console.log(this.$route.query, '333')
     let res = JSON.parse(sessionStorage.getItem("SourcePage"));
     if (this.$route.query.id) {
       this.initData();
     } else if (res.row != null) {
-      console.log(res.row);
       this.initData(res.row);
     }
   }
 };
 </script>
-
 <style lang="less" scoped>
 .Presentation {
   background-color: #fff;
@@ -586,15 +623,18 @@ export default {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  // text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #cdc673;
-  // margin-top: 20px;
+  // border: 1px solid #ccc;
+  // border-radius: 6px;
+  background-color: #b2e2f8;
 }
 .asidebox {
   height: 100%;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
+  background-color: #313131;
+  .el-menu {
+    background-color: #313131;
+    border: 0px;
+  }
 }
 // 附件列表
 .Enclosure,
@@ -602,8 +642,9 @@ export default {
   width: 100px;
   height: 100px;
   margin: 0 30%;
-  border: 1px solid #ccc;
+  border: 1px solid #f1f1f1;
 }
+
 .dataList {
   margin-top: 5px;
 }
@@ -627,7 +668,7 @@ export default {
   }
 }
 .mainbox {
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   height: 99%;
   overflow: hidden;
   position: relative;
@@ -636,9 +677,20 @@ export default {
     height: 40px;
     line-height: 40px;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
-    border-bottom: 1px solid #ccc;
+    color: #00a0e9;
+  
+    .but{
+       position: absolute;
+      top:6px;
+      right: 10px;
+      
+      // margin: 6px;
+      // float: right;
+    }
+
+    // border-bottom: 1px solid #ccc;
   }
   .pdf {
     height: 100%;
@@ -652,6 +704,7 @@ export default {
     position: absolute;
     left: 10px;
     top: 50%;
+    padding-top: 2px;
     border: 1px solid #ccc;
     border-radius: 50%;
     width: 50px;
@@ -671,6 +724,7 @@ export default {
     position: absolute;
     right: 10px;
     top: 50%;
+    padding-top: 2px;
     border: 1px solid #ccc;
     border-radius: 50%;
     width: 50px;
@@ -681,6 +735,15 @@ export default {
     cursor: pointer;
   }
 }
+.text {
+  font-size: 18px;
+  color: #00a0e9;
+}
+.textshu {
+  font-size: 18px;
+  color: #00a0e9;
+  padding-left: 20px;
+}
 </style>
 
 <style>
@@ -689,6 +752,9 @@ export default {
 }
 .Presentation .item .is-fixed {
   top: 11px;
+}
+.Presentation .el-menu-item-group__title {
+  font-size: 18px;
 }
 </style>
 

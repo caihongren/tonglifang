@@ -1,41 +1,50 @@
 <template>
   <el-row type="flex" class="row-bg">
-    <el-col :span="24">
+    <el-col :span="24" class="row-outline">
       <div class="outline">
-        <h3>
-          <i class="el-icon-menu"></i> 课程概述
-          <el-button class="Summary" size="small" type="primary" @click="courseOverviewUpdateButton()" v-show="teacherStudentShow">修改</el-button>
-        </h3>
-        <p class="courseOverview">{{ courseOverview }}</p>
-        <el-dialog title="修改课程概述" :visible.sync="courseOverviewDialogVisible">
+        <!-- 课程概述 -->
+        <div class="outline-top">
+          <h3 class="icon iconfont">&#xe538; 课程概述
+            <el-button class="Summary el-icon-edit-outline" size="mini" type="text" @click="courseOverviewUpdateButton()" v-show="teacherStudentShow"></el-button>
+          </h3>
+          <div class="line"></div>
+          <p class="courseOverview">{{ courseOverview }}</p>
+        </div>
+        <!-- 课程大纲 -->
+        <div class="outline-top">
+          <h3 class="icon iconfont">&#xe660; 课程大纲 </h3>
+          <div class="line"></div>
+          <div class="outline-c" v-for="item in chapterUnitDate" :key="item.id">
+            <span style="font-size:16px;color:#00a0ea;">{{ item.section }}{{"."}}{{ item.name }}</span>
+            <div v-for="unitItem in item.units" :key="unitItem.id">
+              <span style="padding-left: 20px; color:#6e6e6e;">{{ unitItem.section }}{{"."}}{{ unitItem.name }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- 授课目标 -->
+        <div class="outline-top">
+          <h3 class="el-icon-reading"> 授课目标
+            <el-button class="Summary2 el-icon-edit-outline" size="mini" type="text" @click="teachingObjectivesUpdateButton()" v-show="teacherStudentShow"></el-button>
+          </h3>
+          <div class="line"></div>
+          <p class="courseOverview">{{teachingObjectives}} </p>
+        </div>
+        <!-- 修改课程概述弹框 -->
+        <el-dialog title="修改课程概述" :visible.sync="courseOverviewDialogVisible" class="modify">
           <el-input type="textarea" :rows="8" v-model="courseOverviewInput" autocomplete="off"></el-input>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" class="cancel" @click="courseOverviewDialogVisible = false">取 消</el-button>
+            <el-button type="primary" size="mini" class="Sure" @click="courseOverviewUpdate()">确 定</el-button>
+          </span>
+        </el-dialog>
+        <!-- 修改授课目标弹框 -->
+        <el-dialog title="修改授课目标" :visible.sync="teachingObjectivesDialogVisible" class="modify">
+          <el-input type="textarea" :rows="8" v-model="teachingObjectivesInput" autocomplete="off"></el-input>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="courseOverviewDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="courseOverviewUpdate()">确 定</el-button>
+            <el-button type="primary" size="mini" class="cancel" @click="teachingObjectivesDialogVisible = false">取 消</el-button>
+            <el-button type="primary" size="mini" class="Sure" @click="teachingObjectivesUpdate()">确 定</el-button>
           </div>
         </el-dialog>
-        <h3>
-          <i class="el-icon-s-data"></i> 课程大纲 </h3>
-        <div class="outline-c" v-for="item in chapterUnitDate" :key="item.id">
-          <span style="font-size:16px">{{ item.section }}{{"."}}{{ item.name }}</span>
-          <div v-for="unitItem in item.units" :key="unitItem.id">
-            <span style="padding-left: 20px;">{{ unitItem.section }}{{"."}}{{ unitItem.name }}</span>
-          </div>
-        </div>
-        <div class="target">
-          <h3>
-            <i class="el-icon-reading"></i> 授课目标
-            <el-button class="Summary" size="small" type="primary" @click="teachingObjectivesUpdateButton()" v-show="teacherStudentShow">修改</el-button>
-          </h3>
-          <p class="target-c">{{teachingObjectives}} </p>
-          <el-dialog title="修改授课目标" :visible.sync="teachingObjectivesDialogVisible">
-            <el-input type="textarea" :rows="8" v-model="teachingObjectivesInput" autocomplete="off"></el-input>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="teachingObjectivesDialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="teachingObjectivesUpdate()">确 定</el-button>
-            </div>
-          </el-dialog>
-        </div>
 
       </div>
     </el-col>
@@ -49,6 +58,8 @@ import {
   modify_course_objectives
 } from "@/API/api";
 import { mapState, mapActions } from "vuex";
+import { type } from 'os';
+import { types } from 'util';
 export default {
   data() {
     return {
@@ -56,7 +67,7 @@ export default {
       courseOverview: "", //课程概述内容
       teachingObjectives: "", //授课目标内容
       chapterUnitDate: [{ id: null, name: "", section: 1 }], //章节目录数据
-      teacherStudentShow: false, //老师还是学生是否显示编组件
+      teacherStudentShow: false, //教师还是学生是否显示编组件
       courseOverviewDialogVisible: false, //修改课程概述弹出框是否显示
       teachingObjectivesDialogVisible: false, //修改课程概述弹出框是否显示
       courseOverviewInput: "", //修改授课目标编辑框
@@ -86,7 +97,6 @@ export default {
         courseId: this.id
       })
         .then(res => {
-          // console.log(res)
           this.teachingObjectives = res.data.object.objectives; //将课程介绍内容绑定到页面相应位置
         })
         .catch(function (error) {
@@ -140,10 +150,20 @@ export default {
       })
         .then(res => {
           if (res.data.code == 0) {
-            this.$message("修改成功！");
+            this.$message({
+              showClose: true,
+              duration: 1000,
+              message: "修改成功！",
+              type: "success"
+            });
             this.getCourseDescription(); //获取课程介绍内容
           } else {
-            this.$message("修改失败！");
+            this.$message({
+              showClose: true,
+              duration: 1000,
+              message: "修改失败！",
+              type: "error"
+            });
           }
         })
         .catch(function (error) {
@@ -163,10 +183,20 @@ export default {
       })
         .then(res => {
           if (res.data.code == 0) {
-            this.$message("修改成功！");
+            this.$message({
+              showClose: true,
+              duration: 1000,
+              message: "修改成功！",
+              type: "success"
+            });
             this.getCourseDescription(); //获取课程介绍内容
           } else {
-            this.$message("修改失败！");
+            this.$message({
+              showClose: true,
+              duration: 1000,
+              message: "修改失败！",
+              type: "error"
+            });
           }
         })
         .catch(function (error) {
@@ -185,7 +215,7 @@ export default {
       this.getChapterAnd_UnitList(); //获取所有章节
     }
 
-    //判断学生/老师，隐藏/显示菜单操作按钮
+    //判断学生/教师，隐藏/显示菜单操作按钮
     let role = JSON.parse(sessionStorage.getItem("user")).role;
     if (role == "student") {
       this.teacherStudentShow = false;
@@ -196,56 +226,88 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.row-outline {
+  width: 100%;
+}
 .outline {
   height: 100%;
-  width: 100%;
-  box-sizing: border-box;
+  width: 101%;
   overflow: auto;
-  padding-bottom: 100px;
+  padding-bottom: 30px;
   position: relative;
-  h3 {
-    font-size: 18px;
-    line-height: 30px;
-    padding: 0 30px;
-    .Summary {
-      position: absolute;
-      right: 300px;
+  padding-left: 20px;
+  padding-right: 67px;
+  .outline-top {
+    background-color: #fff;
+    margin-top: 20px;
+    h3 {
+      font-size: 18px;
+      line-height: 30px;
+      padding: 0 50px;
+      padding-top: 40px;
+      color: #c1262e;
+      .Summary {
+        position: absolute;
+        right: 180px;
+        font-size: 24px;
+        color: black;
+      }
+      .el-icon-s-data {
+        color: #c1262e;
+      }
+      .el-icon-reading {
+        color: #c1262e;
+      }
     }
-    .el-icon-menu {
-      color: #409eff;
+    .line {
+      margin: 0 50px 0 50px;
+      height: 2px;
+      background-color: #d9d9d9;
     }
-    .el-icon-s-data {
-      color: #9c3c7f;
-    }
-    .el-icon-reading {
-      color: rgb(219, 146, 11);
-    }
-  }
-  .courseOverview {
-    padding: 0 200px 0 60px;
-    font-size: 16px;
-    font-family: 微软雅黑;
-    text-indent: 2em;
-    line-height: 30px;
-  }
-  .outline-c {
-    padding: 0 60px;
-    font-size: 16px;
-    font-family: 微软雅黑;
-    line-height: 30px;
-  }
-  .target {
-    // margin-top: 30px;
-    width: 100%;
-    .target-c {
+    .courseOverview {
+      padding: 0 50px 0 50px;
       font-size: 16px;
       font-family: 微软雅黑;
-      line-height: 30px;
-      padding: 0 200px 0 60px;
       text-indent: 2em;
       line-height: 30px;
+      color: #6e6e6e;
+      padding-top: 30px;
+    }
+    .Summary2 {
+      position: absolute;
+      right: 180px;
+      font-size: 24px;
+      color: black;
+      margin-top: -30px;
     }
   }
+
+  .outline-c {
+    padding: 0 50px;
+    font-size: 16px;
+    font-family: 微软雅黑;
+    line-height: 30px;
+    padding-top: 30px;
+  }
+}
+.dialog-footer .cancel {
+  background-color: #66c6f2;
+  border-radius: 0px;
+  width: 70px;
+  height: 30px;
+  border: none;
+}
+.dialog-footer .Sure {
+  background-color: #00a0e9;
+  border: none;
+  width: 70px;
+  height: 30px;
+  border-radius: 0px;
+}
+</style>
+<style >
+.modify .el-dialog__title {
+  color: #00a0e9;
 }
 </style>
 

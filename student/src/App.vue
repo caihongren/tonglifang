@@ -1,47 +1,50 @@
 <template>
   <div id="app">
-    <el-row type="flex">
-      <el-col :span="5">
-        <img src="./image/tonglifanglogo.png" style="margin-left: 5%;" slt />
+    <el-row type="flex" class="Navigation">
+      <el-col :span="3" class="Navigation-l" v-show="logintype" style="min-width:250px">
+        <img src="./image/logo6.png" slt class="logog" />
       </el-col>
-      <el-col :span="11"></el-col>
-      <el-col :span="5"></el-col>
-      <el-col :span="1">
-        <div class="grid-content" style=" margin: 15px 0;" v-show="logintype">
-          <i @click="refresh()" class="el-icon-refresh"></i>
-        </div>
-      </el-col>
+      <el-col :span="19"></el-col>
       <el-col :span="2">
-        <el-dropdown trigger="click" v-show="logintype">
-          <el-button type="primary">
-            {{userlist.name}}
+        <el-dropdown trigger="click" v-show="logintype" class="loginText">
+          <el-button type="text">
+            {{name}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <button @click="login">
+            <!-- <button @click="login">
               <el-dropdown-item>退出登录</el-dropdown-item>
-            </button>
-            <!-- <el-dropdown-item>
-              <div @click="login">退出登录</div>
-            </el-dropdown-item>-->
+            </button>-->
             <!-- 个人中心 -->
-            <!-- <el-dropdown-item><div @click="login"> 个人中心 </div></el-dropdown-item> -->
-
-            <!-- <button   @click="login"><el-dropdown-item>退出登录</el-dropdown-item></button> -->
+            
+            <el-dropdown-item >
+              <div @click="gouser()" v-if="status=='student'||status=='teacher'">个人中心</div>
+              
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <div @click="login">退出登录</div>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
     </el-row>
     <router-view />
-    <!-- <a id="autoRun" href="CreatorShell://" style="visibility: hidden;"  ref="autoRun" @runUnity="showU3d" /> -->
   </div>
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
+
+// window.onbeforeunload = function(e) {
+//   window.localStorage.setItem("token", "123");
+// };
+
 export default {
   data() {
     return {
-      logintype: false
+      logintype: false,
+      isuser: false,
+      status: "",
+      name:'',
     };
   },
   methods: {
@@ -52,31 +55,65 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    refresh() {
-      this.$router.go(0);
-    },
     login() {
       // 退出清除缓存信息
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       sessionStorage.removeItem("user");
 
       let userupdata = {
         // name:'请登录'
       };
-      sessionStorage.setItem("user", JSON.stringify(userupdata));
+      // sessionStorage.setItem("user", JSON.stringify(userupdata));
 
-      this.user();
-     
+      // this.user();
+
       this.$router.push("/login");
+    },
+    // 去个人中心
+    gouser(){
+        sessionStorage.setItem(
+          "GoUser",
+          JSON.stringify({
+            path: this.$route.path,
+          
+          })
+        );
+
+        if(this.status=='student'){
+            this.$router.push('/user')
+        }else if(this.status=='teacher'){
+            this.$router.push('/user')
+        }else{
+             this.$router.push('/login')
+        }
+    },
+    usertype() {
+      let user = JSON.parse(sessionStorage.getItem("user"));
+    
+      this.name=user.name;
+      if (user.role == "student") {
+        this.status = "student";
+      } else if (user.role == "teacher") {
+        this.status = "teacher";
+      } else {
+        this.status = "";
+        // console.log(this.status);
+      }
     }
   },
   watch: {
     $route: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         if (val.path == "/register" || val.path == "/login") {
           this.logintype = false;
         } else {
           this.logintype = true;
+          if (val.path == "/home") {
+            this.isuser = false;
+          } else {
+            this.isuser = true;
+          }
+          this.usertype();
         }
       },
       // 深度观察监听
@@ -86,13 +123,27 @@ export default {
   computed: {
     ...mapState(["userlist"])
   },
+  mounted() {
+   
+    // 关闭浏览器窗口的时候清空浏览器缓存在localStorage的数据
+   
+  },
+  beforeDestroy() {
+    // localStorage.setItem("token", '123');
+  },
   created() {
     if (this.$route.path == "/register" || this.$route.path == "/login") {
       this.logintype = false;
     } else {
       this.logintype = true;
+      if (this.$route.path == "/home") {
+        this.isuser = false;
+      } else {
+        this.isuser = true;
+      }
+      this.usertype();
     }
-    this.user();
+    // this.user();
 
     // window.location.href="CreatorShell://";
 
@@ -107,16 +158,32 @@ export default {
     //         this.$refs.autoRun.click();
     //     }
   },
-  mounted() { }
+  mounted() {}
 };
 </script>
 
 
 <style >
+.Navigation {
+  background-color: #0078d7;
+}
+.Navigation-l {
+  padding-top: 5px;
+  height: 60px;
+  background-color: #282828;
+}
+.logog {
+  margin-left: 5%;
+  /* width: 100%; */
+  height: 50px;
+}
+.loginText{
+  margin-left: 40px;
+}
 .el-icon-refresh {
   font-size: 25px;
   padding-left: 15px;
-  color: #919090;
+  color: #f3f3f3;
 }
 html,
 body {
@@ -126,6 +193,7 @@ body {
   padding: 0px !important;
   margin: 0px;
   overflow: hidden;
+  min-width: 1000px;
 }
 a {
   display: inline-block;
@@ -195,4 +263,16 @@ button {
 .el-upload-list--text {
   display: none;
 }
+
+/* 重庆分支功能隐藏 */
+
+.chongqing {
+  /* display: none !important; */
+}
 </style>
+<style scoped>
+.el-button--text {
+  color: #fff;
+}
+</style>
+

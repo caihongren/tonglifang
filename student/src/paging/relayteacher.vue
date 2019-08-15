@@ -1,26 +1,35 @@
 <template>
   <div class="relaybanner">
-    <div class="Breadcrumb" @click="guizone">
+    <div class="Breadcrumb" @click="guizone()">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>{{course}}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home' }" class="textcolor chongqing">首页</el-breadcrumb-item>
+        <el-breadcrumb-item class="textcolor">{{course}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-menu :default-active="activeIndex" class="el-menu-demo ralateacher" mode="horizontal" style="background-color: #fff; position: absolute;top: -50px;left: 500px;" @select="handleSelect" background-color="#fff" text-color="black" active-text-color="#409EFF">
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo ralateacher"
+      mode="horizontal"
+      style=" position: absolute;top: -60px;left: 520px;line-height:60px;"
+      @select="handleSelect"
+      background-color="#0078d7"
+      text-color="#fff"
+      active-text-color="#ffc113"
+    >
       <router-link to="/relayteacher/study/courseIntroduction">
         <el-menu-item index="1" class="Surveybox">课程管理</el-menu-item>
       </router-link>
       <router-link to="/relayteacher/componentLibrary">
         <el-menu-item index="2">元件库</el-menu-item>
       </router-link>
-      <router-link to="/relayteacher/simulationDatabase">
+      <router-link to="/relayteacher/simulationDatabase" class="chongqing">
         <el-menu-item index="3">仿真资源库</el-menu-item>
       </router-link>
       <router-link to="/relayteacher/newExperimentalTemplateLibrary">
-        <el-menu-item index="4">实验模板库</el-menu-item>
+        <el-menu-item index="4">实训模板库</el-menu-item>
       </router-link>
       <router-link to="/relayteacher/taskManagement">
-        <el-menu-item index="5">实验任务管理</el-menu-item>
+        <el-menu-item index="5">实训任务管理</el-menu-item>
       </router-link>
       <router-link to="/relayteacher/Dimension2" v-if="iswatchStorage2D">
         <el-menu-item index="10">二维设计空间</el-menu-item>
@@ -35,13 +44,20 @@
           <el-tag closable :disable-transitions="true" class="det" @close="deet('3D')">三维设计空间</el-tag>
         </el-menu-item>
       </router-link>
-      <router-link to="/relayteacher/Dimension2demo">
+      <!-- <router-link to="/relayteacher/Dimension2demo">
         <el-menu-item index="12">二维设计空间demo</el-menu-item>
-      </router-link>
+      </router-link>-->
     </el-menu>
-    <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div>
+    <!-- <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div> -->
     <keep-alive :include="['newExperimentalTemplateLibrary','taskManagement',]">
-      <router-view @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity" @threadPoxi="threadPoxi" @handleSelect="handleSelect" @deet='deet'></router-view>
+      <router-view
+        @gounity="gounity"
+        @derunity="derunity"
+        @yuangounity="yuangounity"
+        @threadPoxi="threadPoxi"
+        @handleSelect="handleSelect"
+        @deet="deet"
+      ></router-view>
     </keep-alive>
   </div>
 </template>
@@ -51,6 +67,7 @@ export default {
   data() {
     return {
       activeIndex: "1",
+      iscourse: false,
       course: "",
       id: "",
 
@@ -124,8 +141,10 @@ export default {
     // 元件库3D
     yuangounity(type) {
       let token = localStorage.getItem("token");
+      let courseid= JSON.parse(sessionStorage.getItem("course")).id ;
       let data = {
         token: token,
+        courseid:courseid,
         name: "mode",
         mode: "element_browser",
         type: type
@@ -137,7 +156,9 @@ export default {
       // "{'opcode':4,'LocationX': 755,'LocationY':135,'LocationX_Right': 15,'LocationY_Buttom':10,'SizeX': 1620,'SizeY':760}";
       // "{'opcode':4,'LocationX': 950,'LocationY':150,'LocationX_Right': 10,'LocationY_Buttom':100,}";
 
-      wfapp.start(cmd);
+      //  if (typeof wfapp !== "undefined") {
+      //     wfapp.start(cmd);
+      //   }
     },
     // 关闭3D/
     derunity() {
@@ -160,7 +181,7 @@ export default {
       // 若是 正在开启状态，则等待300毫秒
       else if (this.websock.readyState === this.websock.CONNECTING) {
         let that = this; //保存当前对象this
-        setTimeout(function () {
+        setTimeout(function() {
           that.websocketsend(data);
         }, 300);
       }
@@ -168,7 +189,7 @@ export default {
       else {
         this.initWebSocket();
         let that = this; //保存当前对象this
-        setTimeout(function () {
+        setTimeout(function() {
           that.websocketsend(data);
         }, 500);
       }
@@ -198,7 +219,7 @@ export default {
       that.lockReconnect = true;
       //没连接上会一直重连，设置延迟避免请求过多
       that.timeoutnum && clearTimeout(that.timeoutnum);
-      that.timeoutnum = setTimeout(function () {
+      that.timeoutnum = setTimeout(function() {
         //新连接
         that.initWebSocket();
         that.lockReconnect = false;
@@ -218,7 +239,7 @@ export default {
       var self = this;
       self.timeoutObj && clearTimeout(self.timeoutObj);
       self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
-      self.timeoutObj = setTimeout(function () {
+      self.timeoutObj = setTimeout(function() {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.websock.readyState == 1) {
           //如果连接正常
@@ -231,7 +252,7 @@ export default {
           console.log("重连");
           self.reconnect();
         }
-        self.serverTimeoutObj = setTimeout(function () {
+        self.serverTimeoutObj = setTimeout(function() {
           //超时关闭
           self.websock.close();
         }, self.timeout);
@@ -275,7 +296,6 @@ export default {
       if (typeof wfapp !== "undefined") {
         wfapp.start(cmd);
       }
-
     },
 
     on_click_show_unity_window() {
@@ -286,7 +306,6 @@ export default {
       if (typeof wfapp !== "undefined") {
         wfapp.start(cmd);
       }
-
     },
     // 2d3D信息
     type2D3D() {
@@ -308,14 +327,14 @@ export default {
       }
     },
     deet(type) {
-      console.log(type)
+      console.log(type);
       if (type == "3D") {
         this.resetSetItem("watchStorage3D", null);
         if ("/relayteacher/Dimension3" == this.$route.path) {
           let SourcePage = JSON.parse(sessionStorage.getItem("SourcePage"));
           this.handleSelect(SourcePage.index);
           this.derunity();
-          console.log(SourcePage.path, 'path')
+          console.log(SourcePage.path, "path");
           this.$router.replace(SourcePage.path);
         } else {
           let page = sessionStorage.getItem("pageTeacher");
@@ -330,18 +349,21 @@ export default {
       } else if (type == "2D") {
       }
       this.iswatchStorage3D = false;
-    },
+    }
   },
   created() {
     let course = JSON.parse(sessionStorage.getItem("course"));
+    if(sessionStorage.getItem("user")==null){
+      this.$router.push('/login')
+    }
     this.course = course.course;
     this.initWebSocket();
     if (sessionStorage.getItem("pageTeacher")) {
-      console.log(
-        "当前页面",
-        this.activeIndex,
-        sessionStorage.getItem("pageTeacher")
-      );
+      // console.log(
+      //   "当前页面",
+      //   this.activeIndex,
+      //   sessionStorage.getItem("pageTeacher")
+      // );
       this.activeIndex = sessionStorage.getItem("pageTeacher");
     }
     this.type2D3D();
@@ -351,7 +373,7 @@ export default {
   },
   destroyed() {
     console.log("离开断开websocket连接");
-    this.guizone();
+    // this.guizone();
     this.websock.close(); // 离开路由之后断开websocket连接
   }
 };
@@ -369,25 +391,37 @@ a {
   // margin-bottom: 10px;
 }
 .el-menu-item {
-  height: 48px;
-  min-width: 100px;
+  height: 60px;
+  line-height: 65px;
+  // min-width: 100px;
   margin: auto;
 }
 .relaybanner {
   position: relative;
-  height: 92%;
+  // height: 92%;
+  height: calc(100% - 60px);
 }
 .Breadcrumb {
   position: absolute;
-  top: -25px;
-  left: 250px;
+  top: -35px;
+  left: 280px;
 }
 .det {
   background-color: transparent;
   border: 0px solid red;
-  font-size: 14px;
+  font-size: 18px;
 
   color: inherit;
+}
+</style>
+
+
+<style>
+.textcolor .el-breadcrumb__inner {
+  color: #fff !important;
+}
+.ralateacher .el-menu-item{
+    font-size: 18px;
 }
 </style>
 

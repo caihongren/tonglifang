@@ -4,31 +4,33 @@
     <el-row type="flex" class="row-bg">
       <!-- 左侧目录块 -->
       <el-col :span="5" class="leftCol">
-        <div>
+        <div style="height:36px;background-color: #fff">
           <!-- 目录操作按钮 -->
-          <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple-dark" style="padding-left:20px">
-                <el-button type="primary" @click="get_all_materials(), chapterReset()" v-show="teacherStudentShow">全部</el-button>
-              </div>
-            </el-col>
-            <el-col :span="12">
-              <div v-show="teacherStudentShow">
-                <el-button type="primary" @click="addDialog()" class="addButton">新增</el-button>
-                <el-button type="primary" @click="showEdit = !showEdit" class="edit" v-show="!showEdit">编辑</el-button>
-                <el-button type="primary" @click="showEdit = !showEdit" class="edit" v-show="showEdit">完成</el-button>
-              </div>
-            </el-col>
+          <el-row :gutter="10" class="grid-content">
+            <div>
+              <el-col :span="12">
+                <div style="padding-left:20px">
+                  <el-button type="primary" @click="get_all_materials(), chapterReset()" size="mini" class="wholeAll">全部</el-button>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div v-show="teacherStudentShow" class="chongqing">
+                  <el-button type="primary" @click="addDialog()" class="addButton" size="mini">新增</el-button>
+                  <el-button type="primary" @click="showEdit = !showEdit" class="edit" v-show="!showEdit" size="mini">编辑</el-button>
+                  <el-button type="primary" @click="showEdit = !showEdit" class="edit" v-show="showEdit" size="mini">完成</el-button>
+                </div>
+              </el-col>
+            </div>
           </el-row>
           <!-- 新增章节弹出框 -->
           <el-dialog title="新增章节" :visible.sync="addDialogVisible" class="newlyAddedForm">
             <el-form :model="addForm">
-              <el-form-item label="新增类型" :label-width="formLabelWidth">
+              <el-form-item label="新增类型" :label-width="formLabelWidth" class="addInput">
                 <el-select v-model="addForm.type" placeholder="请选择" @change="appendSelect()">
                   <el-option v-for="item in typeselectData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="章" :label-width="formLabelWidth" v-if="chapterSelectVisible">
+              <el-form-item label="章" :label-width="formLabelWidth" v-if="chapterSelectVisible" class="addInput">
                 <el-select v-model="addForm.chapter" placeholder="请选择" @change="chapterChange(addForm.chapter)">
                   <el-option v-for="item in chapterSelectData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
@@ -36,15 +38,15 @@
               <el-form-item label="名称" :label-width="formLabelWidth">
                 <el-input v-model="addForm.name" autocomplete="off" class="addInput"></el-input>
               </el-form-item>
-              <el-form-item label="位置" :label-width="formLabelWidth">
+              <el-form-item label="位置" :label-width="formLabelWidth" class="addInput">
                 <el-select v-model="addForm.level" placeholder="请选择">
                   <el-option v-for="item in levelLength" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-              <el-button @click="addDialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="() => append()">立即添加</el-button>
+              <el-button type="primary" @click="addDialogVisible = false" size="mini" class="cancel">取 消</el-button>
+              <el-button type="primary" @click="() => append()" size="mini" class="Sure">添 加</el-button>
             </div>
           </el-dialog>
         </div>
@@ -53,10 +55,10 @@
         <div class="menu1">
           <!-- 章节目录 -->
           <div class="Catalog-t" @click="openCloseAllMenu()">目录</div>
-          <el-button type="primary" size="small" @click="get_all_materials(), chapterReset()" class="wholeStudent" v-show="!teacherStudentShow">全部</el-button>
+        
           <div class="chapter">
-            <el-tree :data="data" node-key="id" :default-expanded-keys="expandedKeys" :expand-on-click-node="false" :props="defaultProps" ref="menuTree">
-              <span class="custom-tree-node" :title=node.label slot-scope="{ node, data }">
+            <el-tree :data="data" node-key="id" :default-expanded-keys="expandedKeys" :expand-on-click-node="false" :props="defaultProps" ref="menuTree" :default-expand-all="true">
+              <span class="custom-tree-node" :title="node.label" slot-scope="{ node, data }">
                 <span @click="handleNodeClick(node)" class="menuContext">{{ node.data.section}}{{"."}}{{ node.label }}</span>
                 <!-- 目录右侧修改删除操作按钮 -->
                 <span v-show="showEdit">
@@ -65,75 +67,52 @@
                   <!-- 删除章节 -->
                   <el-button type="text" size="mini" @click="() => remove(node, data)" class="deleteButton"></el-button>
                   <!-- 修改章节弹出框form表单 -->
-                  <el-dialog title="修改章节" :visible.sync="updateDialogVisible" class="modifyForm">
-                    <el-input v-model="updateMenuLabelInput" autocomplete="off" class="addInput"></el-input>
-                    <div slot="footer" class="dialog-footer">
-                      <el-button @click="updateDialogVisible = false">取 消</el-button>
-                      <el-button type="primary" @click="() => update(updateNode)">立即修改</el-button>
-                    </div>
-                  </el-dialog>
                 </span>
               </span>
             </el-tree>
           </div>
-          <div style="height:200px"></div>
+          <!-- <div style="height:100px"></div> -->
         </div>
       </el-col>
       <!-- 右侧内容展示块 -->
       <el-col :span="19">
-        <div class="grid-content bg-purple right" id="right">
+        <div class="right" id="right">
           <!-- 顶部文件操作按钮 -->
           <div class="operationButtons">
-            <el-button type="primary" @click="fileUpdateBlock()" v-show="teacherStudentShow" class="rename">
-              重命名
-              <i class="el-icon-edit el-icon--edit"></i>
-            </el-button>
+            <el-button type="primary" @click="fileUpdateBlock()" v-show="teacherStudentShow" class="rename el-icon-edit el-icon--edit" size="mini">重命名</el-button>
             <!-- 文件重命名弹出框 -->
-            <el-dialog title="重命名" :visible.sync="fileUpdateVisible" class="fileUpdateDialog">
+            <el-dialog title="重命名" :visible.sync="fileUpdateVisible" class="fileUpdateDialog modifyForm">
               <el-form :model="fileUpdateForm">
                 <el-form-item label="文件名" @keyup.enter="fileUpdate()">
                   <el-input v-model="fileUpdateForm.name" autocomplete="off"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="fileUpdateVisible = false">取 消</el-button>
-                <el-button type="primary" @click="fileUpdate()">确 定</el-button>
+                <el-button type="primary" @click="fileUpdateVisible = false" size="mini" class="cancel">取 消</el-button>
+                <el-button type="primary" @click="fileUpdate()" size="mini" class="Sure">确 定</el-button>
               </div>
             </el-dialog>
-            <el-button type="primary" @click="fileDelete()" v-show="teacherStudentShow">
-              删除
-              <i class="el-icon-delete el-icon--right"></i>
-            </el-button>
-            <el-button type="primary" @click="fileDowload()" class="download">
-              下载
-              <i class="el-icon-download"></i>
-            </el-button>
-
+            <el-button type="primary" @click="fileDelete()" v-show="teacherStudentShow" size="mini" class="rename el-icon-delete el-icon--right">删除</el-button>
+            <el-button type="primary" @click="fileDowload()" class="rename el-icon-download el-button" v-show="teacherStudentShow" size="mini" :loading="isdownload">下载</el-button>
+            <el-button type="primary" @click="fileDowload()" class="download2 rename el-icon-download" size="mini" v-show="studentShow" :loading="isdownload">下载</el-button>
             <div class="uploadDiv" v-show="teacherStudentShow">
-              <el-upload class="upload-demo" action="/img/upload_material" :before-upload="beforeUpload">
-                <el-button size="small" type="primary" class="upload">
-                  上传
-                  <i class="el-icon-upload el-icon--right"></i>
-                </el-button>
+              <el-upload action="/img/upload_material" :before-upload="beforeUpload">
+                <el-button type="primary" class="rename el-icon-upload el-icon--right" size="mini">上传</el-button>
               </el-upload>
             </div>
-            <el-button type="primary" @click="moveFileButton()" v-show="teacherStudentShow">
-              移动
-              <i class="el-icon-rank"></i>
-            </el-button>
+            <el-button type="primary" @click="moveFileButton()" v-show="teacherStudentShow" size="mini" class="rename el-icon-rank">移动</el-button>
             <!-- 文件移动弹出框 -->
-            <el-dialog title="移动资料" :visible.sync="fileMoveVisible" class="move">
+            <el-dialog title="移动资料" :visible.sync="fileMoveVisible" class="move modifyForm">
               章
               <el-select v-model="fileMoveChapterSelect" placeholder="请选择" @change="fileMoveChapterChange(fileMoveChapterSelect)">
                 <el-option v-for="item in chapterSelectData" :key="item.id" :label="item.name" :value="item.id"></el-option>
-              </el-select>
-              节
+              </el-select>节
               <el-select v-model="fileMoveUnitSelect" placeholder="请选择">
                 <el-option v-for="item in unitData" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="fileMoveVisible = false">取 消</el-button>
-                <el-button type="primary" @click="moveFile()">确 定</el-button>
+                <el-button type="primary" @click="fileMoveVisible = false" size="mini" class="cancel">取 消</el-button>
+                <el-button type="primary" @click="moveFile()" size="mini" class="Sure">确 定</el-button>
               </div>
             </el-dialog>
           </div>
@@ -141,22 +120,22 @@
           <div class="fileContext">
             <!-- 文件罗列卡片 -->
 
-            <div class="fileCard" v-for="item in fileArray" :key="item.id" align="center" @mouseover="fileCardMouseover(item.id)" @mouseout="fileCardMouseout(item.id)">
+            <div class="fileCard" v-for="item in fileArray" :key="item.id" align="center" @click="pitchOn(item.id)" @dblclick="preview(item.path)" @mouseover="fileCardMouseover(item.id)" @mouseout="fileCardMouseout(item.id)">
               <!-- 文件图标 -->
-              <img :src="judge(item.path)">
+              <img :src="judge(item.path)" />
               <!-- 文件名 -->
-              <span class="text" :title=item.name :id="'span'+item.id" style="display:block;">{{ item.name }}</span>
+              <span class="text" :title="item.name" :id="'span'+item.id" style="display:block;">{{ item.name }}</span>
               <!-- 遮罩层 -->
-              <div :id="'bmbox'+item.id" class="bmbox" align="left">
-                <input type="checkbox" :id="'checkbox'+item.id" @change="fileCheckboxChange(item.id)">
-                <div style="width:100px;height:60px;" @click="preview(item.path)"></div>
+              <div :id="'bmbox'+item.id" align="left" v-bind:class="IsInArray(fileOperationArray, item.id) ? 'bmbox1' : 'bmbox'">
+                <input type="checkbox" :id="'checkbox'+item.id" @change="fileCheckboxChange(item.id)" :checked="IsInArray(fileOperationArray, item.id)" />
+                <div style="width:100px;height:60px;"></div>
               </div>
             </div>
             <!-- 文件预览失败警告框 -->
             <el-dialog title :visible.sync="previewVisible">
               <video id="player" width="100%" height="100%" controls>
                 您的浏览器不支持HTML5
-                <source :src="previewPath">
+                <source :src="previewPath" />
                 <!-- 提供默认的播放视频  -->
               </video>
             </el-dialog>
@@ -166,11 +145,20 @@
           </div>
         </div>
         <div class="filePreview" id="filePreview">
-          <el-button type="primary" @click="cancelPreview()">返回</el-button>
-          <iframe :src="pdfPreviewPath" class="iframe" style="width:100%;height:100%"></iframe>
+          <el-button type="primary" @click="cancelPreview()" size="mini" class="renReturname">返回</el-button>
+          <iframe :src="pdfPreviewPath" class="iframe"></iframe>
         </div>
       </el-col>
     </el-row>
+
+    <!-- 弹窗 -->
+    <el-dialog title="修改章节" :visible.sync="updateDialogVisible" class="modifyForm" width="40%" left="-40%">
+      <el-input v-model="updateMenuLabelInput" autocomplete="off" class="addInput"></el-input>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="updateDialogVisible = false" size="mini" class="cancel">取 消</el-button>
+        <el-button type="primary" @click="() => update(updateNode)" size="mini" class="Sure">修 改</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -192,8 +180,9 @@ import {
   modify_material_name, //修改文件名
   fileDownload, //资源下载
   modify_material_chapter_and_unit, //移动文件
-  download,//下载
+  download //下载
 } from "@/API/api";
+let time = null;
 import FileSaver from "file-saver";
 export default {
   data() {
@@ -207,6 +196,7 @@ export default {
         section: "section"
       },
       isExpanded: false, //展开/关闭所有目录
+      isdownload: false,
       typeselectData: [{ id: 1, name: "新增章" }, { id: 2, name: "新增节" }], //新增章节时，选择新增章还是节的下拉框内容
       addDialogVisible: false, //新增章节form表单弹出框
       updateDialogVisible: false, //修改章节弹出框是否显示
@@ -239,7 +229,8 @@ export default {
       },
       fileUpdateVisible: false, //文件重命名form表单弹出框
       pdfPreviewPath: "", //pdf预览路径
-      teacherStudentShow: false, //学生还是老师是否显示相关信息
+      teacherStudentShow: false, //学生还是教师是否显示相关信息
+      studentShow: false,
       fileMoveVisible: false, //文件移动弹出框
       fileMoveChapterSelect: "", //文件移动章下拉框
       fileMoveUnitSelect: "", //文件移动节下拉框
@@ -253,6 +244,17 @@ export default {
     };
   },
   methods: {
+    IsInArray(arr, value) {
+      for (var i = 0; i < arr.length; i++) {
+        if (value === arr[i]) {
+          // document.getElementById(
+          //   "bmbox" + value
+          // ).style.display = "block";
+          return true;
+        }
+      }
+      return false;
+    },
     //获取所有章节
     get_chaptersMy() {
       get_chapter_and_unit_list().then(res => {
@@ -331,6 +333,8 @@ export default {
         this.currentChapter = node.parent.key;
         this.currentUnit = node.key;
       }
+
+      this.clearFileOperation();//清空已选中文件
     },
     //根据章获取学习资料
     get_materials_by_chapter(chapterId) {
@@ -357,7 +361,7 @@ export default {
         offset: this.nowCurrent,
         limit: this.nowPageSize
       }).then(res => {
-        if (res.data.code == 0) {console.log(res.data.object)
+        if (res.data.code == 0) {
           this.fileArray = res.data.object;
           this.fileTotal = res.data.length;
         } else {
@@ -367,7 +371,7 @@ export default {
 
     //点击全部 展开所有章节
     openCloseAllMenu() {
-      for (var i = 0; i < this.$refs.menuTree.store._getAllNodes().length; i++) {
+      for (var i = 0;i < this.$refs.menuTree.store._getAllNodes().length;i++) {
         this.$refs.menuTree.store._getAllNodes()[i].expanded = this.isExpanded;
       }
       this.isExpanded = !this.isExpanded;
@@ -407,10 +411,20 @@ export default {
           level: this.addForm.level
         }).then(res => {
           if (res.data.code == 0) {
-            this.$message("添加章成功");
+            this.$message({
+              showClose: true,
+              message: "添加章成功",
+              duration: 1000,
+              type: "success"
+            });
             this.get_chaptersMy(); //获取所有章节
           } else {
-            this.$message("添加章失败");
+            this.$message({
+              showClose: true,
+              message: "添加章失败",
+              duration: 1000,
+              type: "error"
+            });
           }
         });
       } else if (this.addForm.type == 2) {
@@ -421,10 +435,20 @@ export default {
           level: this.addForm.level
         }).then(res => {
           if (res.data.code == 0) {
-            this.$message("添加节成功");
+            this.$message({
+              showClose: true,
+              message: "添加节成功",
+              duration: 1000,
+              type: "success"
+            });
             this.get_chaptersMy(); //获取所有章节
           } else {
-            this.$message("添加节失败");
+            this.$message({
+              showClose: true,
+              message: "添加节失败",
+              duration: 1000,
+              type: "error"
+            });
           }
         });
       }
@@ -444,10 +468,20 @@ export default {
           chapterName: this.updateMenuLabelInput
         }).then(res => {
           if (res.data.code == 0) {
-            this.$message("修改章成功！");
+            this.$message({
+              showClose: true,
+              message: "修改章成功！",
+              duration: 1000,
+              type: "success"
+            });
             this.updateMenuLabelInput = "";
           } else {
-            this.$message("修改章失败！");
+            this.$message({
+              showClose: true,
+              message: "修改章失败！",
+              duration: 1000,
+              type: "error"
+            });
           }
           this.get_chaptersMy();
         });
@@ -458,10 +492,20 @@ export default {
           unitName: this.updateMenuLabelInput
         }).then(res => {
           if (res.data.code == 0) {
-            this.$message("修改节成功！");
+            this.$message({
+              showClose: true,
+              message: "修改节成功！",
+              duration: 1000,
+              type: "success"
+            });
             this.updateMenuLabelInput = "";
           } else {
-            this.$message("修改节失败！");
+            this.$message({
+              showClose: true,
+              message: "修改节失败！",
+              duration: 1000,
+              type: "error"
+            });
           }
           this.get_chaptersMy();
         });
@@ -480,13 +524,24 @@ export default {
               chapterId: node.key
             }).then(res => {
               if (res.data.code == 0) {
-                this.$message("删除章成功！");
+                this.$message({
+                  showClose: true,
+                  message: "删除章成功！",
+                  duration: 1000,
+                  type: "success"
+                });
                 const parent = node.parent;
                 const children = parent.data.children || parent.data;
                 const index = children.findIndex(d => d.id === data.id);
                 children.splice(index, 1);
+                this.get_all_materials();
               } else {
-                this.$message("删除章失败！");
+                this.$message({
+                  showClose: true,
+                  message: "删除章失败！",
+                  duration: 1000,
+                  type: "error"
+                });
               }
               this.get_chaptersMy();
             });
@@ -495,19 +550,34 @@ export default {
               unitId: node.key
             }).then(res => {
               if (res.data.code == 0) {
-                this.$message("删除节成功！");
+                this.$message({
+                  showClose: true,
+                  message: "删除节成功！",
+                  duration: 1000,
+                  type: "success"
+                });
+                this.get_all_materials();
                 const parent = node.parent;
                 const children = parent.data.children || parent.data;
                 const index = children.findIndex(d => d.id === data.id);
                 children.splice(index, 1);
               } else {
-                this.$message("删除节失败！");
+                this.$message({
+                  showClose: true,
+                  message: "删除节失败！",
+                  duration: 1000,
+                  type: "error"
+                });
               }
             });
           }
         })
         .catch(() => {
-          this.$message("已取消删除");
+          this.$message({
+            showClose: true,
+            message: "已取消删除",
+            duration: 1000
+          });
         });
     },
 
@@ -521,6 +591,7 @@ export default {
       } else if (this.chapterType == 3) {
         this.get_materials_by_unit(this.chapterResetId);
       }
+
     },
     //学习资料分页改变页码时触发此函数
     fileHandleCurrentChange(val) {
@@ -548,7 +619,13 @@ export default {
                 materialId: this.fileOperationArray[i]
               }).then(res => {
                 if (res.data.code == 0) {
-                  this.$message("删除成功！");
+                  this.$message({
+                    showClose: true,
+                    message: "删除成功！",
+                    duration: 1000,
+                    type: "success"
+                  });
+
                   this.clearFileOperation(); //清空已选中文件
                   if (this.currentUnit != "") {
                     this.get_materials_by_unit(this.currentUnit); //根据当前所在的节获取学习资料
@@ -558,16 +635,29 @@ export default {
                     this.get_all_materials(); //获取所有学习资料
                   }
                 } else {
-                  this.$message("删除失败！");
+                  this.$message({
+                    showClose: true,
+                    message: "删除失败！",
+                    duration: 1000,
+                    type: "error"
+                  });
                 }
               });
             }
           })
           .catch(() => {
-            this.$message("已取消删除");
+            this.$message({
+              showClose: true,
+              message: "已取消删除",
+              duration: 1000
+            });
           });
       } else {
-        this.$message("请选择文件");
+        this.$message({
+          showClose: true,
+          message: "请选择文件",
+          duration: 1000
+        });
       }
     },
     //清空已选中文件
@@ -578,17 +668,24 @@ export default {
         ).checked = false;
         document.getElementById(
           "bmbox" + this.fileOperationArray[i]
-        ).style.display =
-          "none";
+        ).style.display = "none";
       }
       this.fileOperationArray = []; //清空已选中文件
     },
-    //  下载文件
+    //  下载 文件
     fileDowload() {
       if (this.fileOperationArray.length > 1) {
-        this.$message("只能下载一个文件");
+        this.$message({
+          showClose: true,
+          message: "只能下载一个文件",
+          duration: 1000
+        });
       } else if (this.fileOperationArray.length == 0) {
-        this.$message("请选择文件");
+        this.$message({
+          showClose: true,
+          message: "请选择文件",
+          duration: 1000
+        });
       } else {
         for (var i = 0; i < this.fileOperationArray.length; i++) {
           for (var j = 0; j < this.fileArray.length; j++) {
@@ -603,13 +700,27 @@ export default {
     },
     // 下载文件
     Dowload(src, name) {
+      this.$message({
+        showClose: true,
+        message: "正在下载。。。请稍后",
+        duration: 2000
+      });
+      // return;
+      this.isdownload = true;
       download({
         name: name,
-        url: src,
+        url: src
       }).then(res => {
+        this.isdownload = false;
+        this.$message({
+          showClose: true,
+          message: "下载成功！",
+          duration: 1000,
+          type: "success"
+        });
         const blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });
         FileSaver.saveAs(blob, name);
-      })
+      });
     },
     //移动文件按钮
     moveFileButton() {
@@ -617,7 +728,11 @@ export default {
         this.get_chaptersAll(); //获取所有的章
         this.fileMoveVisible = true;
       } else {
-        this.$message("请选择文件");
+        this.$message({
+          showClose: true,
+          message: "请选择文件",
+          duration: 1000
+        });
       }
     },
     //移动文件，选择移动位置时，选择章后，动态改变节的下拉框
@@ -634,7 +749,12 @@ export default {
           unitId: this.fileMoveUnitSelect
         }).then(res => {
           if (res.data.code == 0) {
-            this.$message("移动成功！");
+            this.$message({
+              showClose: true,
+              message: "移动成功！",
+              type: "success",
+              duration: 1000
+            });
             this.clearFileOperation();
             if (this.currentUnit != "") {
               this.get_materials_by_unit(this.currentUnit); //根据当前所在的节获取学习资料
@@ -644,7 +764,12 @@ export default {
               this.get_all_materials(); //获取所有学习资料
             }
           } else {
-            this.$message("移动失败！");
+            this.$message({
+              showClose: true,
+              message: "移动失败！",
+              type: "error",
+              duration: 1000
+            });
           }
           this.fileMoveChapterSelect = "请选择";
           this.fileMoveUnitSelect = "请选择";
@@ -667,6 +792,8 @@ export default {
     },
     //选中或去掉某个多选框时调用此方法
     fileCheckboxChange(value) {
+      clearTimeout(time);
+      time = null;
       if (document.getElementById("checkbox" + value).checked == true) {
         document.getElementById("bmbox" + value).style.display = "block";
         this.fileOperationArray.push(value);
@@ -679,17 +806,34 @@ export default {
       } else {
       }
     },
+    // 单击图片选中
+    pitchOn(value) {
+      if (time != null) {
+        clearTimeout(time);
+        return;
+      }
+      time = setTimeout(() => {        document.getElementById("checkbox" + value).click();
+        time = null;
+      }, 200);
+    },
     //修改文件名按钮
     fileUpdateBlock() {
       if (this.fileOperationArray.length != 0) {
         this.fileUpdateVisible = true;
         for (var i = 0; i < this.fileArray.length; i++) {
-          if (this.fileOperationArray[this.fileOperationArray.length - 1] == this.fileArray[i].id) {
+          if (
+            this.fileOperationArray[this.fileOperationArray.length - 1] ==
+            this.fileArray[i].id
+          ) {
             this.fileUpdateForm.name = this.fileArray[i].name;
           }
         }
       } else {
-        this.$message("请选择文件");
+        this.$message({
+          showClose: true,
+          message: "请选择文件",
+          duration: 1000
+        });
       }
     },
     //修改文件名
@@ -702,8 +846,7 @@ export default {
         ).checked = false;
         document.getElementById(
           "bmbox" + this.fileOperationArray[i]
-        ).style.display =
-          "none";
+        ).style.display = "none";
       }
       //调用接口修改文件名
       modify_material_name({
@@ -711,7 +854,12 @@ export default {
         materialName: this.fileUpdateForm.name
       }).then(res => {
         if (res.data.code == 0) {
-          this.$message("修改成功");
+          this.$message({
+            showClose: true,
+            message: "修改成功",
+            type: "success",
+            duration: 1000
+          });
           if (this.currentUnit != "") {
             this.get_materials_by_unit(this.currentUnit); //根据当前所在的节获取学习资料
           } else if (this.currentChapter != "") {
@@ -720,7 +868,12 @@ export default {
             this.get_all_materials(); //获取所有学习资料
           }
         } else {
-          this.$message("修改失败");
+          this.$message({
+            showClose: true,
+            message: "修改失败",
+            type: "error",
+            duration: 1000
+          });
         }
       });
       this.clearFileOperation(); //清空已选中文件
@@ -734,29 +887,44 @@ export default {
 
     //文件上传
     beforeUpload(file) {
-      if (this.currentUnit != "") {
-        let fd = new FormData();
-        fd.append("file", file); //传文件
-        fd.append("chapterId", this.currentChapter); //传其他参数
-        fd.append("unitId	", this.currentUnit); //传其他参数
-        upload_material(fd).then(res => {
-          if (res.data.code == 0) {
-            this.$message("上传成功");
-            this.handleNodeClick(this.node);
-            if (this.currentUnit != "") {
-              this.get_materials_by_unit(this.currentUnit); //根据当前所在的节获取学习资料
-            } else if (this.currentChapter != "") {
-              this.get_materials_by_chapter(this.currentChapter); //根据当前所在的章获取学习资料
-            } else {
-              this.get_all_materials(); //获取所有学习资料
-            }
+      //if (this.currentUnit != "") {
+      let fd = new FormData();
+      fd.append("file", file); //传文件
+      fd.append("chapterId", this.currentChapter); //传其他参数
+      fd.append("unitId	", this.currentUnit); //传其他参数
+      upload_material(fd).then(res => {
+        if (res.data.code == 0) {
+          this.$message({
+            showClose: true,
+            message: "上传成功",
+            type: "success",
+            duration: 1000
+          });
+          this.handleNodeClick(this.node);
+          if (this.currentUnit != "") {
+            this.get_materials_by_unit(this.currentUnit); //根据当前所在的节获取学习资料
+          } else if (this.currentChapter != "") {
+            this.get_materials_by_chapter(this.currentChapter); //根据当前所在的章获取学习资料
           } else {
-            this.$message("添加失败，请重试");
+            this.get_all_materials(); //获取所有学习资料
           }
-        });
-      } else {
-        this.$message("请选择上传的节");
-      }
+        } else {
+          this.$message({
+            showClose: true,
+            message: "添加失败，请重试",
+            type: "error",
+            duration: 1000
+          });
+        }
+      });
+      // } else {
+      //   this.$message({
+      //     showClose: true,
+      //     message: "请选择上传的节",
+      //     type: "warning",
+      //     duration: 1000
+      //   });
+      // }
       return false; //屏蔽了action的默认上传
     },
     newSubmitForm() {
@@ -781,7 +949,7 @@ export default {
         source == "PPT" ||
         source == "PPTX"
       ) {
-        return require("./../../image/PPT.png");
+        return require("./../../image/ppt.png");
       } else if (
         source == "AVI" ||
         source == "avi" ||
@@ -805,15 +973,16 @@ export default {
         source == "png" ||
         source == "tif"
       ) {
-        return require("./../../image/img.png");
+        return require("./../../image/picture.png");
       } else if (source == "rar" || source == "zip" || source == "7z") {
         return require("./../../image/rar.png");
       } else {
-        return require("./../../image/unrecognizable.png");
+        return require("./../../image/txt.png");
       }
     },
     //文件预览
     preview(path) {
+      time = null;
       let source = path.substring(path.lastIndexOf(".") + 1, path.length);
       if (
         source == "AVI" ||
@@ -843,16 +1012,31 @@ export default {
         source == "PPT" ||
         source == "PPTX"
       ) {
-        this.$message("暂不支持PPT文档在线预览,请下载!");
+        this.$message({
+          showClose: true,
+          message: "暂不支持PPT文档在线预览,请下载!",
+          type: "warning",
+          duration: 1000
+        });
       } else if (
         source == "DOCX" ||
         source == "docx" ||
         source == "DOC" ||
         source == "doc"
       ) {
-        this.$message("暂不支持word文档在线预览,请下载!");
+        this.$message({
+          showClose: true,
+          message: "暂不支持word文档在线预览,请下载!",
+          type: "warning",
+          duration: 1000
+        });
       } else if (source == "rar" || source == "zip" || source == "7z") {
-        this.$message("暂不支持压缩文件在线解压，请下载!");
+        this.$message({
+          showClose: true,
+          message: "暂不支持压缩文件在线解压，请下载!",
+          type: "warning",
+          duration: 1000
+        });
       } else if (source == "PDF" || source == "pdf") {
         this.pdfPreviewPath = path;
         document.getElementById("right").style.display = "none";
@@ -886,12 +1070,14 @@ export default {
     this.addForm.type = this.typeselectData[0].id; //新增章节时，默认新增章
   },
   mounted() {
-    //判断学生/老师，隐藏/显示菜单操作按钮
+    //判断学生/教师，隐藏/显示菜单操作按钮
     let role = JSON.parse(sessionStorage.getItem("user")).role;
     if (role == "student") {
       this.teacherStudentShow = false;
+      this.studentShow = true;
     } else {
       this.teacherStudentShow = true;
+      this.studentShow = false;
     }
   }
 };
@@ -901,42 +1087,58 @@ export default {
   height: 100%;
   width: 100%;
   overflow: auto;
+  margin-left: 20px;
   .row-bg {
     height: 100%;
     .leftCol {
       min-width: 350px;
       overflow: hidden;
+      .grid-content {
+        margin-top: 20px;
+        padding-top: 10px;
+        background-color: #fff;
+        .wholeAll {
+          background-color: #5fc1f2;
+          border: none;
+          border-radius: 0px;
+        }
+        .wholeAll :hover {
+          color: #808080;
+        }
+        .addButton {
+          margin-right: 10px;
+          background-color: #808080;
+          border: none;
+          border-radius: 0px;
+          :hover {
+            color: #65afd6;
+          }
+        }
+        .edit {
+          margin-right: 10px;
+          background-color: #808080;
+          border: none;
+          border-radius: 0px;
+          :hover {
+            color: #65afd6;
+          }
+        }
+      }
       .menu1 {
+        background-color: #fff;
         position: relative;
-        border-right: 1px solid #dddddd;
-        height: 100%;
-        min-width: 366px;
+        height: 91%;
+        min-width: 360px;
         overflow-y: scroll;
         .Catalog-t {
           width: 65px;
           height: 25px;
-          color: #66b1ff;
+          color: #c1262e;
+          font-weight: 700;
           border: none;
           font-size: 18px;
           margin: 10px 0px 10px 22px;
-        }
-        .wholeStudent {
-          position: absolute;
-          top: 8px;
-          right: 15px;
-        }
-        .menuTopButton {
-          float: right;
-          width: 160px;
-          .addButton {
-            margin-right: 10px;
-          }
-          .edit {
-            margin-right: 10px;
-          }
-        }
-        .addInput {
-          width: 220px;
+          margin-left: 28px;
         }
         .el-dialog {
           width: 30%;
@@ -944,12 +1146,8 @@ export default {
 
         .chapter {
           .menuContext {
-            width: 202px;
+            width: 247px;
             overflow: hidden;
-          }
-          .modifyForm {
-            width: 800px;
-            height: 600px;
           }
           .custom-tree-node {
             flex: 1;
@@ -973,19 +1171,25 @@ export default {
       }
     }
     .right {
-      height: 100%;
-      width: 98%;
+      height: 95%;
+      width: 92.55%;
+      background-color: #fff;
+      margin-top: 20px;
+      margin-left: 20px;
+
       .operationButtons {
-        padding: 0px 30px;
+        padding: 10px 30px;
+        .el-button {
+          margin-left: 10px;
+        }
         .rename {
           margin-right: 10px;
+          background-color: #808080;
+          border: none;
+          border-radius: 0px;
         }
-        .download {
+        .download2 {
           margin-right: 10px;
-        }
-        .upload {
-          margin-right: 10px;
-          height: 40px;
         }
         .uploadDiv {
           display: inline-block;
@@ -1015,6 +1219,15 @@ export default {
             position: absolute;
             top: -10px;
           }
+          .bmbox1 {
+            width: 100px;
+            height: 70px;
+            background: #dddddd;
+            background: rgba(67, 67, 71, 0.116);
+            margin-left: 9px;
+            position: absolute;
+            top: -10px;
+          }
           img {
             width: 50px;
             height: 70px;
@@ -1030,13 +1243,24 @@ export default {
       }
     }
     .filePreview {
-      width: 100%;
-      height: 100%;
+      background-color: #fff;
+      width: 95%;
+      height: 95%;
       display: none;
-      margin-left: 0px;
+      margin-left: 20px;
+      margin-top: 20px;
+      overflow: hidden;
+      padding-top: 10px;
+      padding-left: 20px;
+      .renReturname {
+        background-color: #808080;
+        border: none;
+        border-radius: 0px;
+      }
       .iframe {
-        height: 93%;
-        width: 98%;
+        height: 95%;
+        width: 102%;
+        border: none;
       }
     }
   }
@@ -1050,13 +1274,16 @@ export default {
     font-family: "微软雅黑";
   }
 }
+.modifyForm {
+  width: 800px;
+  height: 600px;
+}
 .Catalog-t:hover {
-  background-color: #ffd04b;
   cursor: pointer;
   overflow: hidden;
 }
 .newlyAddedForm {
-  width: 800px;
+  width: 850px;
 }
 .el-upload {
   .el-button--small {
@@ -1076,9 +1303,38 @@ export default {
 </style>
 <style>
 .addInput .el-input__inner {
-  width: 217px;
+  width: 280px;
 }
 .text:hover {
   color: #09aaff;
+}
+.introduceBox .el-tree {
+  background-color: white;
+}
+.introduceBox .teacherStudentShow .el-button--primary:hover {
+  color: #7db0cc;
+}
+.operationButtons .el-button--primary:hover {
+  color: #65afd6;
+}
+.newlyAddedForm .el-dialog__title {
+  color: #00a0e9;
+}
+.modifyForm .el-dialog__title {
+  color: #00a0e9;
+}
+.dialog-footer .cancel {
+  background-color: #66c6f2;
+  border-radius: 0px;
+  width: 70px;
+  height: 30px;
+  border: none;
+}
+.dialog-footer .Sure {
+  background-color: #00a0e9;
+  border: none;
+  width: 70px;
+  height: 30px;
+  border-radius: 0px;
 }
 </style>

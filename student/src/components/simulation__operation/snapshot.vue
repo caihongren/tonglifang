@@ -2,7 +2,7 @@
   <div style="margin-top:20px;padding:20px">
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column label="序号" width="150" fixed type="index" :index="indexMethod"></el-table-column>
-      <el-table-column prop="updated_at" label="实验时间" width="500">
+      <el-table-column prop="updated_at" label="实训时间" width="500">
         <template slot-scope="scope">{{scope.row.updated_at|dateformat}}</template>
       </el-table-column>
       <el-table-column fixed="right" label="操作">
@@ -27,7 +27,7 @@
         <div style="margin:20px;padding:20px">
           <div>
             <div class="Fraction">
-              <h2>实验快照统计</h2>
+              <h2>实训快照统计</h2>
             </div>
             <div id="myChart2" :style="{width: '700px', height: '500px'}"></div>
           </div>
@@ -179,12 +179,16 @@ export default {
           }).then(res => {
             if (res.data.code == "0") {
               this.$message({
+                showClose: true,
+                duration: 1000,
                 type: "success",
                 message: "删除成功!"
               });
               this.getListNew()
             } else {
               this.$message({
+                showClose: true,
+                duration: 1000,
                 type: "error",
                 message: "删除失败!"
               });
@@ -193,6 +197,8 @@ export default {
         })
         .catch(() => {
           this.$message({
+            showClose: true,
+            duration: 1000,
             type: "info",
             message: "已取消删除"
           });

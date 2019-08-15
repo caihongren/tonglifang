@@ -3,9 +3,12 @@
     <div class="conter">
       <div class="top">请选择要进入的课程</div>
       <ul>
-        <li v-for="(item,index) in curlist" :key="item.index" @click="goClass(index)">
-          课程{{index+1}}------{{item.course}}
-        </li>
+        <li
+          v-for="(item,index) in curlist"
+          :key="item.index"
+          @click="goClass(index)"
+          style="font-size:18px;"
+        >{{item.course}}</li>
       </ul>
     </div>
   </div>
@@ -29,6 +32,7 @@ export default {
       let user = JSON.parse(sessionStorage.getItem("user"));
       let course = this.curlist[index];
       sessionStorage.setItem("course", JSON.stringify(course));
+
       if (user.role == "teacher") {
         this.$router.push("/relayteacher/study/courseIntroduction");
       } else if (user.role == "student") {
@@ -36,15 +40,26 @@ export default {
       } else {
         this.$router.push("/login");
       }
+    },
+    //默认跳转到第一个
+    gofirst() {
+      if (this.curlist.length > 0) {
+        this.goClass(0);
+      }
     }
   },
+  mounted() {},
   created() {
-    curlist().then(res => {
-      this.curlist = res.data.object;
-    });
+    if (sessionStorage.getItem("user") == null) {
+      this.$router.push("/login");
+    }
     this.element([]);
     this.task([]);
     this.course([]);
+    curlist().then(res => {
+      this.curlist = res.data.object;
+      this.gofirst();
+    });
   }
 };
 </script>
@@ -57,8 +72,9 @@ export default {
       height: 60px;
       line-height: 60px;
       padding-left: 20px;
-      background-color: #334157;
-      color: #fff;
+      background-color: #fff;
+      color: #00a0e9;
+      font-size: 20px;
     }
     ul {
       margin-left: 150px;
@@ -71,7 +87,7 @@ export default {
         color: #fff;
         text-align: center;
         margin: 100px 10% 0 0;
-        background-color: #063279;
+        background-color: #313131;
       }
     }
   }

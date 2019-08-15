@@ -23,7 +23,7 @@
         </el-col>
       </el-row>
     </div>
-    <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实验二：电机点动控制实验指导书.pdf" style="width:100%;height:100%" ></iframe>
+    <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实训二：电机点动控制实训指导书.pdf" style="width:100%;height:100%" ></iframe>
    -->
   <iframe :src="pdfPath" class="iframe" style="width:100%;height:100%" ></iframe>
   
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      name: "实验指导",
+      name: "实训指导",
       pdfId: "",
       pdfPath:'',
       pdfType:true,
@@ -81,7 +81,7 @@ export default {
               // timeout: 10000,
               // withCredentials: false //跨域
               name:'demo.pdf',
-              path:"http://192.168.2.200:8080/creatorcourse/download_test?url=http://192.168.2.200:8080/creatorcourse/static/report/e9150eb0-7ff8-4b66-8e63-6a665f959d78.docx&name=实验七报告模板 .docx"
+              path:"http://192.168.2.200:8080/creatorcourse/download_test?url=http://192.168.2.200:8080/creatorcourse/static/report/e9150eb0-7ff8-4b66-8e63-6a665f959d78.docx&name=实训七报告模板 .docx"
               // headers: {'Content-Type': 'application/json;charset=UTF-8'},
             }).then(res => {
               // if (res.status == 200) {

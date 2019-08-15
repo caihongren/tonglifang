@@ -7,51 +7,57 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 const doUrl = url => {
 
-    let courseUrl = 'http://192.168.2.200:8080/creatorcourse'
-    if (JSON.parse(sessionStorage.getItem("course"))) {
-        courseUrl = JSON.parse(sessionStorage.getItem("course")).url
+  let courseUrl = 'http://192.168.2.200:8080/creatorcourse'
+  if (JSON.parse(sessionStorage.getItem("course"))) {
+    courseUrl = JSON.parse(sessionStorage.getItem("course")).url
+  }
+
+
+  const rules = [{
+      //  target: 'http://192.168.2.223:8080', //
+      // target: 'http://localhost:8080/creatoraccount',
+      // target: 'http://192.168.2.200:8080/creatoraccount', //
+      // target: 'http://sso.icubespace.com/account',
+      //target: 'http://192.168.2.200:10000/zuul/creator/api/public/account',
+      target: 'http://cloud.asp0755.com/creator/api/public/account',
+
+      pathRewrite: '^/apl',
+
+    },
+    {
+      // target: 'http://192.168.2.223:8081', 
+      // target: 'http://192.168.2.200:8080/creatorcourse', //
+      // target: 'http://sso.icubespace.com/course',
+      target: courseUrl,
+      pathRewrite: '^/img',
     }
 
-
-    const rules = [{
-            //  target: 'http://192.168.2.223:8080', //
-            // target: 'http://localhost:8080/creatoraccount',
-            // target: 'http://192.168.2.200:8080/creatoraccount', //
-            // target: 'http://sso.icubespace.com/account',
-            target: 'http://cloud.asp0755.com/creator/api/public/account',
-
-            pathRewrite: '^/apl',
-
-        },
-        {
-            // target: 'http://192.168.2.223:8081', 
-            // target: 'http://192.168.2.200:8080/creatorcourse', //
-            // target: 'http://sso.icubespace.com/course',
-            target: courseUrl,
-            pathRewrite: '^/img',
-        }
-
-    ]
-    let match = null;
-    for (let index = 0; index < rules.length; index++) {
-        const rule = rules[index];
-        match = url.match(new RegExp(rule.pathRewrite, 'i'));
-        if (match) {
-            return url.replace(match[0], rule.target)
-        }
+  ]
+  let match = null;
+  for (let index = 0; index < rules.length; index++) {
+    const rule = rules[index];
+    match = url.match(new RegExp(rule.pathRewrite, 'i'));
+    if (match) {
+      return url.replace(match[0], rule.target)
     }
-    if (!match) return url
+  }
+  if (!match) return url
 }
 axios.interceptors.request.use(
         config => {
             //获取本地缓存中的令牌mytoken
             let token = localStorage.getItem('token')
+            let courseid= '123';
+            if(sessionStorage.getItem("course")!=null){
+                courseid= JSON.parse(sessionStorage.getItem("course")).id;
+               
+            }
 
             config.url = process.env.NODE_ENV == 'production' ? doUrl(config.url) : config.url;
             // if (config.url != "/apl/signin") {
             config.headers['token'] = token;
             config.headers['Cube-Token'] = token;
-            config.headers['Cube-Domain'] = "123";
+            config.headers['Cube-Domain'] = courseid;
             // }
 
             return config
@@ -65,6 +71,7 @@ export const demo = () => {
 
 }
 
+
 //登录n
 export const login = (params) => {
         // return axios.post("http://sso.icubespace.com/account/signin",params)
@@ -72,18 +79,40 @@ export const login = (params) => {
             // return axios.post("/apl/signin", params)
 
     }
-    // 获取课程
+    //发送退出  登录时间
+export const loginTime = () => {
+    return axios.post(`/apl/loginTime`)
+}
+
+
+
+// 获取课程
 export const curlist = () => {
         return axios.get(`/apl/get_course_list`)
     }
-    // 获取与用户同班级的信息
+    // 获取与用户同班级的信息  //教师获取课程下的学生
 export const getclass = (params) => {
-        return axios.post(`/apl/get_class_and_student`, params)
+    return axios.post(`/apl/get_class_and_student`, params)
+}
+
+// 平均成绩
+// 获取班级列表  
+export const get_class_by_teacher = (params) => {
+    return axios.post(`/apl/get_class_by_teacher`, params)
+}
+export const get_grade = (params) => {
+    return axios.post(`/img/get_grade`, params)
+}
+
+
+// 获取用户信息
+export const account_detail = (params) => {
+        return axios.post(`/apl/user_info`, params)
     }
-    //老师获取课程下的学生
-
-
-
+    // 用户自行修改密码
+export const change_password_self = (params) => {
+    return axios.post(`/apl/change_password_self`, params)
+}
 
 //获取课程介绍
 export const get_course_description = (params) => {
@@ -98,6 +127,13 @@ export const modify_course_description = (params) => {
 export const modify_course_objectives = (params) => {
     return axios.post(`/apl/modify_course_objectives`, params)
 }
+
+// 获取实验供给商代码
+
+export const get_product_name = (params) => {
+    return axios.post(`/img/get_product_name`, params)
+}
+
 
 //获取章节
 export const get_chapter_and_unit_list = () => {
@@ -188,16 +224,16 @@ export const get_component_group = () => {
     return axios.post(`/img/get_component_group`)
 }
 
-//老师批阅列表
+//教师批阅列表
 export const task_review_list = (params) => {
     return axios.post(`/img/task_review_list`, params)
 }
 
-//老师查看学生任务详情
+//教师查看学生任务详情
 export const task_review_details = (params) => {
         return axios.post(`/img/task_review_details`, params)
     }
-    //老师批阅，打分，写评语
+    //教师批阅，打分，写评语
 export const task_review_score = (params) => {
     return axios.post(`/img/task_review_score`, params)
 }
@@ -216,9 +252,13 @@ export const modify_component_introduction = (params) => {
     }
     //元件重命名
 export const rename_component = (params) => {
-        return axios.post(`/img/rename_component`, params)
-    }
-    //元件删除
+  return axios.post(`/img/rename_component`, params)
+}
+//元件添加
+export const add_component = (params) => {
+  return axios.post(`/img/add_component`, params)
+}
+//元件删除
 export const delete_component = (params) => {
         return axios.post(`/img/delete_component`, params)
     }
@@ -232,9 +272,23 @@ export const get_component_by_id = (params) => {
     }
     //修改元件参数
 export const modify_component_parameter = (params) => {
-        return axios.post(`/img/modify_component_parameter`, params)
-    }
-    //实验模板库
+  return axios.post(`/img/modify_component_parameter`, params)
+}
+//修改元件模型
+export const modify_component_model = (params) => {
+  return axios.post(`/img/modify_component_model`, params)
+}
+//添加元件组
+export const add_component_group = (params) => {
+    return axios.post(`/img/add_component_group`, params)
+  }
+//删除元件组
+export const delete_component_group = (params) => {
+    return axios.post(`/img/delete_component_group`, params)
+  }
+
+
+//实训模板库
 
 export const getTemplateList = (params) => {
     return axios.post(`/img/get_template_list`, params)
@@ -259,7 +313,7 @@ export const getTemplate = (params) => {
 }
 
 
-//获取实验任务列表
+//获取实训任务列表
 
 export const bySubmitter = (params) => {
         return axios.post(`/img/get_task_experiment_by_submitter`, params)
@@ -268,15 +322,15 @@ export const bySubmitter = (params) => {
 export const simulist = (params) => {
         return axios.post(`/img/get_task_experiment_by_submitter`, params)
     }
-    // 获取学生实验任务列表
+    // 获取学生实训任务列表
 export const experimentDetails = (params) => {
         return axios.post(`/img/get_task_experiment_details`, params)
     }
-    // 获取制定任务的实验指导
+    // 获取制定任务的实训指导
 export const guidelist = (params) => {
         return axios.post(`/img/get_task_experiment_guide`, params)
     }
-    // 获取制定任务的实验报告
+    // 获取制定任务的实训报告
 export const reportlist = (params) => {
         return axios.post(`/img/get_task_experiment_report`, params)
     }
@@ -285,18 +339,20 @@ export const annex = (params) => {
     return axios.post(`/img/get_task_experiment_annex`, params)
 }
 
-// 获取实验快照列表
+// 获取实训快照列表
 export const snalist = (params) => {
         return axios.post(`/img/get_task_experiment_project_list`, params)
     }
     // 删除快照 del_task_experiment_project
 export const snadel = (params) => {
-    return axios.post(`/img/del_task_experiment_project`, params)
+        return axios.post(`/img/del_task_experiment_project`, params)
+    }
+    // 设置模板为内置
+export const updateTemplateInner = (params) => {
+    return axios.post(`/img/update_template_inner`, params)
 }
 
-
-
-// 删除实验模板
+// 删除实训模板
 export const deleteTemplate = (params) => {
     return axios.post(`/img/delete_task_experiment_template`, params)
 }
@@ -331,7 +387,9 @@ export const project = (params) => {
     }
     // 资源下载
 export const download = (params) => {
-        return axios.post(`/img/download`, params, { responseType: 'blob' })
+        return axios.post(`/img/download`, params, {
+            responseType: 'blob'
+        })
     }
     // 根据资源id获取属性
 export const getResource_by_id = (params) => {
@@ -344,24 +402,24 @@ export const getResource_by_id = (params) => {
 export const Nxmission = (params) => {
         return axios.post('/img/add_task_experiment', params)
     }
-    //实验模板列表
+    //实训模板列表
 export const templateList = (params) => {
         return axios.post('/img/task_experiment_template_list', params)
 
     }
-    // 修改实验模板属性
+    // 修改实训模板属性
 export const updateTemplate = (params) => {
         return axios.post('/img/update_task_experiment_template', params)
 
     }
-    // 复制实验模版并重命名
+    // 复制实训模版并重命名
 export const copyTemplate = (params) => {
     return axios.post('/img/copy_task_experiment_template', params)
 
 }
 
 
-// 添加实验模版
+// 添加实训模版
 export const addTemplate = (params) => {
     return axios.post('/img/add_task_experiment_template', params)
 
@@ -402,7 +460,7 @@ export const getScene = () => {
         return axios.post('/img/get_scene_type_list')
 
     }
-    //添加实验类型
+    //添加实训类型
 export const experiment_type_list = () => {
         return axios.post('/img/experiment_type_list')
 
@@ -472,6 +530,11 @@ export const getStudentList = (params) => {
         return axios.post('/apl/get_student_list', params)
 
     }
+    //修改用户密码
+export const changePassword = (params) => {
+        return axios.post('/apl/change_password', params)
+
+    }
     // 获取学生列表
 export const addStudent = (params) => {
         return axios.post('/apl/add_student', params)
@@ -530,11 +593,18 @@ export const modify_course_information = (params) => {
 
 }
 
+// 课程关系列表
 export const getCourseList = (params) => {
         return axios.post('/apl/get_course_list1', params)
 
     }
     // 课程列表
+export const getCourse = (params) => {
+    return axios.post('/apl/get_course', params)
+
+}
+
+
 export const addCourse = (params) => {
         return axios.post('/apl/add_course', params)
 

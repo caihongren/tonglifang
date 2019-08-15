@@ -9,23 +9,23 @@
           </div>
         </el-col>
         <!-- 标题 -->
-        <el-col :span="14">
+        <!-- <el-col :span="14">
           <div class="grid-content bg-purple-light">
-            <p class="text">{{name}}{{pdfType==true?'':'(暂时不支持此类文件在线浏览，请下载)'}}</p>
+            <p class="text">{{name}}{{pdfType==true?'':'(暂时不支持此类文件在线浏览，请下载)'}}</p> -->
             <!-- <p>{{pdfPath}}</p> -->
-          </div>
-        </el-col>
+          <!-- </div>
+        </el-col> -->
         <!-- 下载 -->
-        <el-col :span="2">
+        <!-- <el-col :span="2">
           <div class="grid-content bg-purple right">
             <el-button type="primary" @click="download(pdfPath)">下载</el-button>
           </div>
-        </el-col>
+        </el-col> -->
       </el-row>
     </div>
-    <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实验二：电机点动控制实验指导书.pdf" style="width:100%;height:100%" ></iframe>
+    <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实训二：电机点动控制实训指导书.pdf" style="width:100%;height:100%" ></iframe>
     -->
-    <iframe :src="pdfPath" class="iframe" style="width:100%;height:95%"></iframe>
+    <iframe :src="pdfPath" class="iframe" style="width:100%;height:100%"></iframe>
   </div>
 
   <!-- v-if="pdfType" -->
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       id: "",
-      name: "实验指导",
+      name: "实训指导",
       pdfId: "",
       pdfPath: "",
       pdfType: true,
@@ -151,7 +151,7 @@ export default {
   width: 96%;
 
   padding: 0 2%;
-  height: 75px;
+  height: 0px;
   background-color: #ccc;
   .lift {
     width: 80px;

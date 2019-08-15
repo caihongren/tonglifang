@@ -1,24 +1,40 @@
 <template>
   <div class="box">
+    <!-- 右边菜单栏 -->
+    <div class="menus">
+      <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" style="text-align: center; font-size:18px;">
+        <el-menu-item index="2">实训任务</el-menu-item>
+
+      </el-menu>
+    </div>
+
+    <!-- 正文 -->
     <div class="interior">
       <!-- 表格 -->
+      <div class="sousuo">
+
+        <el-input placeholder="搜索任务" v-model="input5" class="input-with-select" @keyup.enter.native='sousuo()'>
+
+          <el-button slot="append" class="el-icon-search" @click="sousuo()"></el-button>
+        </el-input>
+      </div>
       <div class="transition-box" v-show="isshowheight">
         <template>
-          <el-table :data="tableData" :default-sort="{prop:'startTime', order: 'descending'}" border style="width: 94%;margin:5px 3%;height:80%" stripe :header-cell-style="{background:'#ccc'}">
+          <el-table :data="tableData" :default-sort="{prop:'startTime', order: 'descending'}" border style="width: 94%;margin:5px 3%;height:80%" stripe :header-cell-style="{background:'#b2e2f8'}">
             <el-table-column prop="index" label="序号" type="index"></el-table-column>
             <el-table-column prop="name" label="名称" min-width="100" sortable></el-table-column>
             <el-table-column prop="masterName" label="教师" min-width="40" sortable></el-table-column>
             <el-table-column prop="startTime" label="下发时间" min-width="100" sortable>
               <template slot-scope="scope">{{scope.row.startTime|dateformat}}</template>
             </el-table-column>
-            <el-table-column prop="remark" label="要求" min-width="80"></el-table-column>
+            <el-table-column prop="remark" label="备注" min-width="80"></el-table-column>
             <el-table-column prop="finishTime" label="截止时间" min-width="100" sortable>
               <template slot-scope="scope">{{scope.row.finishTime|dateformat}}</template>
             </el-table-column>
             <el-table-column prop="statu" label="状态" :formatter="completionStatusc" min-width="50"></el-table-column>
-            <el-table-column label="操作" min-width="50">
+            <el-table-column label="操作" width="150">
               <template slot-scope="scope">
-                <el-button @click=" isshowheight=false,compileClick(scope.row)" type="primary" size="mini" >{{scope.row.statu=="approved"||scope.row.statu=="submit"?'去查看':'去完成'}}</el-button>
+                <el-button @click=" isshowheight=false,compileClick(scope.row)" type="text" size="mini" class="operationButton">{{scope.row.statu=="approved"||scope.row.statu=="submit"||scope.row.statu=="expired"?'去查看':'去完成'}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -32,7 +48,7 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item>
               <a @click="detpage">
-                <h2>仿真实验</h2>
+                <h2>仿真实训</h2>
               </a>
             </el-breadcrumb-item>
             <el-breadcrumb-item>
@@ -59,7 +75,7 @@
 
 <script>
 import {
-  bySubmitter,//获取实验任务列表
+  bySubmitter, //获取实训任务列表
   project
 } from "@/API/api";
 import { mapState, mapActions } from "vuex";
@@ -78,8 +94,10 @@ export default {
       innerVisible: false,
       row: {},
       show2: true,
-      name: "仿真实验",
-      tableData: []
+      name: "仿真实训",
+      tableData: [],
+      tableDataTruebox: [],//所有
+      input5: '',
     };
   },
   components: {
@@ -91,11 +109,11 @@ export default {
     // 状态
     handleSizeChange(val) {
       this.limit = val;
-      this.Submitter()    //获取实验任务列表
+      this.Submitter(); //获取实训任务列表
     },
     handleCurrentChange(val) {
       this.offset = (val - 1) * this.limit;
-      this.Submitter()    //获取实验任务列表
+      this.Submitter(); //获取实训任务列表
     },
     handleSelect(key) {
       this.$emit("handleSelect", key);
@@ -109,15 +127,16 @@ export default {
         return "已提交";
       } else if (row.statu == "approved") {
         return "已批阅";
+      } else if (row.statu == "expired") {
+        return "已终止";
       }
-       this.Submitter(); 
-
+      //  this.Submitter();
     },
     // 关闭详情页面
     detpage() {
       this.isshowheight = !this.isshowheight;
       this.innerVisible = !this.innerVisible;
-      this.Submitter()
+      this.Submitter();
     },
     // 编辑
     compileClick(row) {
@@ -125,7 +144,23 @@ export default {
       this.row = row;
       this.innerVisible = true;
     },
-    //获取实验任务列表
+    // 搜索
+    sousuo() {
+      this.tableData = []
+      let tableDataTruebox = this.tableDataTruebox
+      if (this.input5 != '') {
+        // console.log(this.input5)
+        for (let i = 0; i < tableDataTruebox.length; i++) {
+          if (tableDataTruebox[i].name.indexOf(this.input5) != -1) {
+            // console.log(tableDataTruebox[i])
+            this.tableData.push(tableDataTruebox[i])
+          }
+        }
+      } else {
+        this.Submitter()
+      }
+    },
+    //获取实训任务列表
     Submitter() {
       bySubmitter({
         offset: this.offset,
@@ -134,6 +169,15 @@ export default {
         this.tableData = res.data.object;
         this.length = res.data.object.length;
         this.task(res.data.object);
+      });
+    },
+    Submitterbox() {
+      bySubmitter({
+        offset: 0,
+        limit: 10000
+      }).then(res => {
+        console.log(res)
+        this.tableDataTruebox = res.data.object
       });
     }
   },
@@ -147,29 +191,81 @@ export default {
       this.tableData = this.taskList;
       this.length = this.taskList.length;
     } else {
-      this.Submitter();    //获取实验任务列表
+      this.Submitter(); //获取实训任务列表
     }
+    this.Submitterbox()
   }
+
 };
 </script>
 
 <style lang="scss" scoped>
+.operationButton {
+  color: #989898;
+  font-size: 14px;
+  border: none;
+  margin-top: 0px;
+  margin-right: 15px;
+  border-radius: 0px;
+  width: 70px;
+  height: 30px;
+}
 .box {
-  width: 95%;
-  margin: 0px 2.5%;
-  height: 90%;
+  height: 100%;
+  width: 100%;
+  padding-left: 250px;
   overflow: hidden;
-  .interior {
-    width: 102%;
+  background-color: #f1f1f1;
+  position: relative;
+  .menus {
+    position: absolute;
+    left: 0px;
+    padding-top: 20px;
+    z-index: 2;
+    width: 250px;
     height: 100%;
+    background-color: #313131;
+    .el-menu-item {
+      font-size: 18px;
+    }
+    .el-menu {
+      border: 0px solid red;
+    }
+  }
+
+  .interior {
+    height: 93%;
+    width: calc(100% - 78px);
     overflow: auto;
+    background-color: #fff;
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-left: 20px;
+    .sousuo {
+      width: 350px;
+      margin-left: 48px;
+      margin-bottom: 10px;
+      .el-icon-search:hover {
+        color: #fff;
+      }
+    }
   }
 }
 .breadcrumb {
   width: 94%;
-  height: 50px;
   margin: 0 3%;
   font-size: 20px;
+  h2 {
+    color: #00a0e9;
+  }
+}
+.box .sousuo .el-button {
+  background-color: #b2e2f8;
+  border-radius: 0px;
+}
+.box .sousuo .el-button:hover {
+  background-color: #66c6f2;
+  border-radius: 0px;
 }
 </style>
 
