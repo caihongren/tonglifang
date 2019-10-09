@@ -104,13 +104,14 @@ module.exports = {
             https: false,
             hotOnly: false,
             proxy: { // 配置跨域
-                '/apl': {　　　　　　　　　 //要访问的跨域的api的域名
-                    //target: 'http://192.168.2.223:10000',
-                    target: 'http://192.168.2.223:10000/zuul/creator/api/public/account',
+                '/apl': { //要访问的跨域的api的域名
+                    //target: 'http://106.75.128.230:10000/zuul/creator/api/public/account',
+                    //target: 'http://192.168.2.223:10000/zuul/creator/api/public/account',
                     //target: 'http://192.168.2.200:10000/zuul/creator/api/public/account',
                     //target: 'http://cloud.asp0755.com/creator/api/public/account',
                     //target: 'http://192.168.0.104:8081',
-                    // target: 'http://192.168.2.200:8080/creatoraccount',
+                    //target: 'http://192.168.0.200:9051',
+                     target: 'http://106.75.128.230:9051',
                     ws: true,
                     changOrigin: true,
                     pathRewrite: {
@@ -118,14 +119,14 @@ module.exports = {
                     }
                 },
                 '/img': {
-                    //target: 'http://192.168.0.104:8082',
-                    //target: 'http://192.168.0.104:8082',
-                    //target: ' http://cloud.asp0755.com/creator/api/public/course1',
 
-                    
-                    target: 'http://192.168.2.223:10000/zuul/creator/api/public/course',
+                    //target: ' http://cloud.asp0755.com/creator/api/public/course1',
+                    //target: ' http://106.75.128.230:10000/creator/api/public/course1',
+                    //target: 'http://192.168.2.223:10000/zuul/creator/api/public/course',
                     // target: 'http://192.168.2.200:8080/creatorcourse',
                     //target: 'http://192.168.2.200:10000/zuul/creator/api/public/course',
+                    //target: 'http://192.168.0.200:9051',
+                    target: 'http://106.75.128.230:9051',
                     changeOrigin: true,
                     pathRewrite: {
                         '^/img': ''

@@ -1,37 +1,18 @@
 <template>
   <div class="login">
     <div class="logo">
-      <img src="../image/logo2.png" alt />
+      <img src="../image/tonglifanglogo.png" alt />
     </div>
     <div class="loginimg"></div>
-    <section class="form_container">
+    <section class="form_container" >
       <div class="manage_tip">
-        <el-form
-          :model="loginUser"
-          :rules="rules1"
-          ref="loginForm"
-          label-width="20px"
-          class="loginUser"
-        >
-          <div style="font-size:16px;margin:10px 0">欢迎登录建筑智能化虚拟仿真实训软件</div>
+        <el-form :model="loginUser" :rules="rules1" ref="loginForm" label-width="20px" class="loginUser">
+          <div style="font-size:16px;margin:10px 0">仿真实训综合管理平台</div>
           <el-form-item prop="phone">
-            <el-input
-              v-model="loginUser.phone"
-              @keyup.enter.native="submitForm('loginForm')"
-              placeholder="Username"
-              prefix-icon="el-icon-user-solid"
-              class="Username"
-            ></el-input>
+            <el-input v-model="loginUser.phone" @keyup.enter.native="submitForm('loginForm')" placeholder="Username" prefix-icon="el-icon-user-solid" class="Username"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input
-              type="password"
-              v-model="loginUser.password"
-              @keyup.enter.native="submitForm('loginForm')"
-              placeholder="Password"
-              prefix-icon="el-icon-s-goods"
-              class="Password"
-            ></el-input>
+            <el-input type="password" v-model="loginUser.password" @keyup.enter.native="submitForm('loginForm')" placeholder="Password" prefix-icon="el-icon-s-goods" class="Password"></el-input>
           </el-form-item>
           <div class="detpass">
             <el-checkbox v-model="checked">记住密码</el-checkbox>
@@ -106,7 +87,10 @@ export default {
                 this.user();
                 if (user.role == "admin") {
                   this.$router.push("/addstudent/teacher");
-                } else {
+                } else if(user.role == "product"){
+                    // 产品管理
+                      this.$router.push("/resourceDownload");
+                }else {
                   this.$router.push("/home");
                 }
               } else {
@@ -121,7 +105,7 @@ export default {
             .catch(() => {
               this.$message.error({
                 showClose: true,
-                message: "用户名密码错误",
+                message: "连接失败",
                 type: "warning",
                 duration: 1000
               });
@@ -139,7 +123,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(val, oldVal) {},
+      handler: function (val, oldVal) { },
       // 深度观察监听
       deep: true
     }
@@ -171,11 +155,12 @@ export default {
   // background: url(./../image/timg.jpg);
   background-size: 100% 100%;
   .logo {
-    height: 100px;
-    padding-top: 7px;
+    height: 60px;
+    // padding-top: 20px;
+    padding-left:10px;
     img {
-      width: 385px;
-      height: 90px;
+      width: 200px;
+      height: 56px;
     }
   }
   .loginimg {
@@ -185,13 +170,14 @@ export default {
     background-size: 100% 100%;
   }
   .form_container {
-    // width: 380px;
+    width: 380px;
     // height: 210px;
     position: absolute;
     top: 25%;
     right: 10%;
     padding: 25px;
     text-align: center;
+    
 
     .manage_tip {
       background-color: #fff;

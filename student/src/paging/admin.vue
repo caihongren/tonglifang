@@ -5,8 +5,8 @@
       class="el-menu-demo Surveybox"
       mode="horizontal"
       @select="handleSelect"
-      background-color="#0078d7"
-      text-color="#fff"
+      background-color="#fff"
+      text-color="#ddd"
       active-text-color="#ffc113"
     >
       <!-- <router-link to="/addstudent/teacher">
@@ -49,10 +49,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.hhhh {
-  color: #fff;
-  background-color: #0078d7;
-}
 .relaybanner {
   position: relative;
     height:calc(100% - 60px);

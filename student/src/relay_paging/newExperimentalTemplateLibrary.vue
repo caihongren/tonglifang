@@ -2,10 +2,9 @@
   <div class="populationgroup">
     <!-- 右边菜单栏 -->
     <div class="menus">
-      <el-menu default-active="3" class="el-menu-vertical-demo" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" style="text-align: center; font-size:18px;">
-        <el-menu-item index="3" @click="istask=false,isshowheight=true,isadd=false">实训模板</el-menu-item>
+      <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" style="text-align: center; font-size:18px;">
         <el-menu-item index="2" @click="istask=true,isshowheight=true,isadd=false" class="chongqing">我的实训模板</el-menu-item>
-
+        <el-menu-item index="3" @click="istask=false,isshowheight=true,isadd=false">内置实训模板</el-menu-item>
       </el-menu>
     </div>
 
@@ -18,8 +17,8 @@
           <el-button type="primary" icon="el-icon-document-copy" class="testFormwork-right" @click="dialogVisiblecopy = true" size="mini">从内置模板克隆</el-button>
         </div>
         <div class="testFormwork-button">
-          <el-table ref="singleTable" :data="tableDataFalse" stripe border highlight-current-row :header-cell-style="{background:'#b2e2f8'}" class="tablebox">
-            <el-table-column prop="index" label="序号" class="table1" type="index"></el-table-column>
+          <el-table ref="singleTable" :data="tableDataFalse" stripe highlight-current-row :header-cell-style="{background:'#ebeffb'}" class="tablebox" :row-class-name="tableRowClassName">
+            <el-table-column prop="index" label="序号" class="table1" type="index" width="50"></el-table-column>
             <el-table-column prop="name" label="名称" min-width="120" sortable></el-table-column>
             <el-table-column prop="updatedAt" label="保存时间" min-width="120" sortable>
               <template slot-scope="scope">{{scope.row.updatedAt|dateformat}}</template>
@@ -30,8 +29,7 @@
                 <el-button @click="dialogVisiblecopyMy=true,select=scope.row.id" type="text" size="small">克隆</el-button>
                 <el-button type="text" @click="compileClick(scope.row) , isshowheight=false" size="small">编辑</el-button>
                 <el-button type="text" @click="deleteTaskFormwork(scope.row.id)" size="small">删除</el-button>
-                <el-button type="text" @click="transformation(scope.row.id)" size="small" v-if='isposition'>转换内置模板</el-button>
-
+                <el-button type="text" @click="transformation(scope.row.id)" size="small" v-if="isposition">转换内置模板</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -43,13 +41,13 @@
       <div class="population-button" v-show="!istask">
         <p class="built-inTemplate-top">实训模板</p>
         <div class="sousuo">
-          <el-input placeholder="搜索模板" v-model="input5" class="input-with-select bottom " @keyup.enter.native='sousuo()'>
+          <el-input placeholder="搜索模板" v-model="input5" class="input-with-select bottom" @keyup.enter.native="sousuo()">
             <el-button slot="append" class="el-icon-search" @click="sousuo()"></el-button>
           </el-input>
         </div>
         <div class="built-inTemplate-button">
-          <el-table ref="singleTable" :data="tableDataTrue" stripe border highlight-current-row :header-cell-style="{background:'#b2e2f8'}" class="tablebox">
-            <el-table-column prop="index" label="序号" class="table1" type="index"></el-table-column>
+          <el-table ref="singleTable" :data="tableDataTrue" stripe highlight-current-row :header-cell-style="{background:'#ebeffb'}" class="tablebox">
+            <el-table-column prop="index" label="序号" class="table1" type="index" width="50"></el-table-column>
             <el-table-column prop="name" label="名称" min-width="120" sortable></el-table-column>
             <el-table-column prop="description" label="要求" min-width="100"></el-table-column>
             <el-table-column label="查看详情" width="350">
@@ -94,7 +92,7 @@
       <div class="breadcrumb">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <a @click="isshowheight=!isshowheight,isadd=!isadd">
+            <a @click="isshowheight=!isshowheight,isadd=!isadd,innerSimulationResources()">
               <h2>实训模板库</h2>
             </a>
           </el-breadcrumb-item>
@@ -116,7 +114,7 @@ import {
   delete_template, //删除实训模板
   getTemplateList, // 加载实训模板列表
   cloneTemplate, //克隆
-  updateTemplateInner,//设置模板为内置
+  updateTemplateInner //设置模板为内置
 } from "../API/api";
 import newExperimentalTemplate from "./newExperimentalTemplate";
 export default {
@@ -143,24 +141,32 @@ export default {
       // addOrEditFlag: "",//点击的编辑还是新增按钮跳转到子组件
       isadd: false,
       isshowheight: true, //子组件的页面打开
-      istask: false, //切换任务类型
+      istask: true, //切换任务类型
       inputcopyname: "", //克隆时输入的新名称
       select: "", //克隆时选中的id
       // transformationId: "",//转换内置模板id
       testTemplateLibrary: false, //新建模态框初始隐藏
       dialogVisiblecopy: false, //从内置模板克隆模态框隐藏
       dialogVisiblecopyMy: false, //克隆模态框隐藏
-      isposition: false,  //教导主任，特殊老师权限。
+      isposition: false, //教导主任，特殊老师权限。
       tableDataFalse: [], //实训模板
-      tableDataTrue: [],//内置实训模板
-      tableDataTruebox: [],//内置所有
-      input5: '',
+      tableDataTrue: [], //内置实训模板
+      tableDataTruebox: [], //内置所有
+      input5: ""
     };
   },
   components: {
     newExperimentalTemplate
   },
   methods: {
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 !== 0) {
+        return 'warning-row';
+      } else if (rowIndex % 2 == 0) {
+        return 'success-row';
+      }
+      return '';
+    },
     // 我的仿真资源分页
     handleSizeChange(val) {
       this.limit = val;
@@ -185,17 +191,53 @@ export default {
 
     // 搜索
     sousuo() {
-      this.tableDataTrue = []
-      let tableDataTruebox = this.tableDataTruebox
-      if (this.input5 != '') {
+      this.tableDataTrue = [];
+      let tableDataTruebox = this.tableDataTruebox;
+      if (this.input5 != "") {
         for (let i = 0; i < tableDataTruebox.length; i++) {
           if (tableDataTruebox[i].name.indexOf(this.input5) != -1) {
-            this.tableDataTrue.push(tableDataTruebox[i])
+            this.tableDataTrue.push(tableDataTruebox[i]);
           }
         }
       } else {
-        this.innerSimulationResources()
+        this.innerSimulationResources();
       }
+    },
+    // 加载实训模板列表
+    mySimulationResources() {
+      getTemplateList({
+        offset: this.offset,
+        limit: this.limit,
+        inner: false
+      }).then(res => {
+        this.tableDataFalse = [];
+        this.length = res.data.length;
+        this.tableDataFalse = res.data.object;
+      });
+    },
+    // 获取内置仿真资源列表
+    innerSimulationResources() {
+      getTemplateList({
+        offset: this.offsetinner,
+        limit: this.limitinner,
+        inner: true
+      }).then(res => {
+        this.tableDataTrue = [];
+        this.lengthinner = res.data.length;
+        this.tableDataTrue = res.data.object;
+      });
+    },
+    // 获取全部内置仿真资源
+    innerSimulationResourcesbox() {
+      getTemplateList({
+        offset: 0,
+        limit: 10000,
+        inner: true
+      }).then(res => {
+        console.log(res);
+        this.tableDataTruebox = [];
+        this.tableDataTruebox = res.data.object;
+      });
     },
     //点击新建模态框显示
     newTemplate() {
@@ -212,47 +254,6 @@ export default {
       this.name = "新建模板";
       // this.newName = ''//新建模板名称清空
       // this.textarea = ''
-    },
-
-    // 加载实训模板列表
-    mySimulationResources() {
-      getTemplateList({
-        offset: this.offset,
-        limit: this.limit,
-        inner: false
-      }).then(res => {
-        this.tableDataFalse = [];
-        this.length = res.data.length;
-        for (let i = 0; i < res.data.object.length; i++) {
-          this.tableDataFalse.push(res.data.object[i]);
-        }
-      });
-    },
-    // 获取内置仿真资源列表
-    innerSimulationResources() {
-      getTemplateList({
-        offset: this.offsetinner,
-        limit: this.limitinner,
-        inner: true
-      }).then(res => {
-        this.tableDataTrue = [];
-        this.lengthinner = res.data.length;
-        this.tableDataTrue = res.data.object
-      });
-    },
-    // 获取全部内置仿真资源
-    innerSimulationResourcesbox() {
-      getTemplateList({
-        offset: 0,
-        limit: 10000,
-        inner: true
-      }).then(res => {
-        console.log(res)
-        this.tableDataTruebox = [];
-        this.lengthinner = res.data.length;
-        this.tableDataTruebox = res.data.object;
-
-      });
     },
     //删除实训模板
     deleteTaskFormwork(id) {
@@ -305,7 +306,6 @@ export default {
           });
         }
       });
-
     },
     // 克隆内置实训模板
     ReplicateTheBuiltInExperiment() {
@@ -385,21 +385,21 @@ export default {
     },
     //判断教导主任
     supervisor() {
-      let user = JSON.parse(sessionStorage.getItem("user")) ;
-     
-      if (user.position == "supervisor"&&user.role=='teacher') {
+      let user = JSON.parse(sessionStorage.getItem("user"));
+
+      if (user.position == "supervisor" && user.role == "teacher") {
         this.isposition = true;
       } else {
         this.isposition = false;
       }
-    },
+    }
   },
 
   created() {
     //特殊教导主任权限
-    this.supervisor()
+    this.supervisor();
     // 加载实训模板列表
-    this.innerSimulationResourcesbox()
+    this.innerSimulationResourcesbox();
     this.innerSimulationResources(); // 加载内置实训模板列表
     this.mySimulationResources(); // 加载我的实训模板列表
   }
@@ -414,7 +414,7 @@ export default {
   width: 100%;
   padding-left: 250px;
   overflow: hidden;
-  background-color: #f1f1f1;
+  // background-color: #f1f1f1;
   position: relative;
   .menus {
     position: absolute;
@@ -483,7 +483,7 @@ export default {
         width: 350px;
         margin-left: 30px;
         margin-bottom: 10px;
-        .el-icon-search:hover{
+        .el-icon-search:hover {
           color: #fff;
         }
       }
@@ -533,14 +533,16 @@ export default {
   height: 30px;
   border-radius: 0px;
 }
-.populationgroup .sousuo .el-button{
-   background-color: #b2e2f8;
- border-radius: 0px;
+.populationgroup .sousuo .el-button {
+  background-color: #ebeffb;
+  border-radius: 0px;
 }
-.populationgroup .sousuo .el-button:hover{
-
- background-color: #66c6f2;
- border-radius: 0px;
+.populationgroup .sousuo .el-button:hover {
+  background-color: #66c6f2;
+  border-radius: 0px;
+}
+.el-table .warning-row {
+  background: #f7faff;
 }
 </style>
 

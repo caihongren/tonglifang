@@ -3,28 +3,30 @@
     <div class="Breadcrumb" @click="guizone()">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/home' }" class="textcolor chongqing">首页</el-breadcrumb-item>
-        <el-breadcrumb-item  class="textcolor"> {{course}}</el-breadcrumb-item>
+        <el-breadcrumb-item class="textcolor"> {{course}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-menu
+    <!-- <el-menu
       :default-active="activeIndex2"
       class="el-menu-demo"
       mode="horizontal"
       style="background-color: #fff; position: absolute;top: -60px;left: 520px;"
       @select="handleSelect"
-      background-color="#0078d7"
-      text-color="#fff"
+      background-color="#fff"
+      text-color="#dddddd"
       active-text-color="#ffc113"
     >
       <router-link to="/relay/study">
         <el-menu-item index="1">课程学习</el-menu-item>
       </router-link>
       <router-link to="/relay/componentLibrary">
-        <el-menu-item index="2">元件库</el-menu-item>
+        <el-menu-item index="2">元器件库</el-menu-item>
       </router-link>
-
       <router-link to="/relay/myTest">
         <el-menu-item index="3">实训任务</el-menu-item>
+      </router-link>
+      <router-link to="/relay/resources">
+        <el-menu-item index="4">实训资源</el-menu-item>
       </router-link>
 
       <router-link to="/relay/Dimension2" v-if="iswatchStorage2D">
@@ -35,18 +37,32 @@
           <el-tag closable :disable-transitions="true" class="det" @close="det('3D')">三维设计空间</el-tag>
         </el-menu-item>
       </router-link>
-    </el-menu>
-    <!-- <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div> -->
-    <keep-alive :include="['myTest']" >
-      <router-view
-        @gounity="gounity"
-        @derunity="derunity"
-        @yuangounity="yuangounity"
-        @threadPoxi="threadPoxi"
-        @handleSelect="handleSelect"
-        @interspace="interspace"
-        
-      ></router-view>
+    </el-menu> -->
+    <el-radio-group v-model="activeIndex2" class="tabPosition"   @change="handleSelect"> 
+      <el-radio-button label="1" >
+        <span class="nave" @click="tabPositionpath('/relay/study')">课程学习</span>
+      </el-radio-button>
+      <el-radio-button label="2" >
+        <span class="nave" @click="tabPositionpath('/relay/componentLibrary')">元器件库</span>
+      </el-radio-button>
+      <!-- <el-radio-button label="3" >
+        <span class="nave" @click="tabPositionpath('/relay/myTest')">实训任务</span>
+      </el-radio-button> -->
+      <el-radio-button label="4" >
+        <span class="nave chongqing" @click="tabPositionpath('/relay/resources')">实训资源</span>
+      </el-radio-button>
+      <el-radio-button label="10"  v-if="iswatchStorage2D">
+        <span class="nave" @click="tabPositionpath('/relay/Dimension2')">二维设计空间</span>
+      </el-radio-button>
+      <el-radio-button label="11"  v-if="iswatchStorage3D">
+        <span class="nave" @click="tabPositionpath('/relay/Dimension3' )">
+          <el-tag closable :disable-transitions="true" class="det nave" @close="det('3D')">三维设计空间</el-tag>
+        </span>
+      </el-radio-button>
+    </el-radio-group>
+     
+    <keep-alive :include="['myTest',]">
+      <router-view @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity" @threadPoxi="threadPoxi" @handleSelect="handleSelect" @interspace="interspace"></router-view>
     </keep-alive>
   </div>
 </template>
@@ -93,14 +109,24 @@ export default {
   },
   watch: {},
   methods: {
+    tabPositionpath(path) {  //路由跳转
+      // console.log(path)
+      this.$router.push(path)
+    },
+  
     handleSelect(key, keyPath) {
       // 刷新存储导航页面
+  
+      console.log(key)
       this.activeIndex2 = key;
+
       sessionStorage.setItem("page", key);
     },
     // 回首页归零
     guizone() {
-      this.activeIndex2 = "1";
+      this.activeIndex2 = 1;
+      // this.activeIndex2 = "1";
+
       sessionStorage.setItem("page", "1");
     },
     gounity(row) {
@@ -122,10 +148,10 @@ export default {
     // 元件库3D
     yuangounity(type) {
       let token = localStorage.getItem("token");
-      let courseid= JSON.parse(sessionStorage.getItem("course")).id ;
+      let courseid = JSON.parse(sessionStorage.getItem("course")).id;
       let data = {
         token: token,
-         courseid:courseid,
+        courseid: courseid,
         mode: "element_browser",
         type: type,
         name: "mode"
@@ -171,7 +197,7 @@ export default {
       // 若是 正在开启状态，则等待300毫秒
       else if (this.websock.readyState === this.websock.CONNECTING) {
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 300);
       }
@@ -179,7 +205,7 @@ export default {
       else {
         this.initWebSocket();
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 500);
       }
@@ -209,7 +235,7 @@ export default {
       that.lockReconnect = true;
       //没连接上会一直重连，设置延迟避免请求过多
       that.timeoutnum && clearTimeout(that.timeoutnum);
-      that.timeoutnum = setTimeout(function() {
+      that.timeoutnum = setTimeout(function () {
         //新连接
         that.initWebSocket();
         that.lockReconnect = false;
@@ -229,7 +255,7 @@ export default {
       var self = this;
       self.timeoutObj && clearTimeout(self.timeoutObj);
       self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
-      self.timeoutObj = setTimeout(function() {
+      self.timeoutObj = setTimeout(function () {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.websock.readyState == 1) {
           //如果连接正常
@@ -240,7 +266,7 @@ export default {
           //否则重连
           self.reconnect();
         }
-        self.serverTimeoutObj = setTimeout(function() {
+        self.serverTimeoutObj = setTimeout(function () {
           //超时关闭
           self.websock.close();
         }, self.timeout);
@@ -335,14 +361,17 @@ export default {
     }
   },
   created() {
-      if(sessionStorage.getItem("user")==null){
+    if (sessionStorage.getItem("user") == null) {
       this.$router.push('/login')
     }
     let course = JSON.parse(sessionStorage.getItem("course"));
     this.course = course.course;
     this.initWebSocket();
     if (sessionStorage.getItem("page")) {
+      // this.activeIndex2 = sessionStorage.getItem("page");
       this.activeIndex2 = sessionStorage.getItem("page");
+
+
     }
     this.type2D3D();
     window.addEventListener("setItem", () => {
@@ -358,9 +387,25 @@ export default {
 
 
 <style lang="less" scoped>
+.tabPosition {
+  text-align: center;
+  position: absolute;
+  top: -47px;
+  left: 500px;
+  .nave {
+    line-height: 45px;
+    padding: 13px 25px;
+    
+  }
+  .det{
+    padding: 0;
+  }
+
+  // padding-top: 10px;
+}
 .banner {
   position: relative;
-    height: calc(100% - 60px);
+  height: calc(100% - 60px);
   .Breadcrumb {
     position: absolute;
     top: -35px;
@@ -378,7 +423,7 @@ export default {
   background-color: transparent;
   border: 0px solid red;
   font-size: 18px;
-
+padding: 0;
   color: inherit;
 }
 .el-menu-demo {
@@ -386,7 +431,39 @@ export default {
   // margin-top: -1px;
   // margin-bottom: 10px;
 }
-
+</style>
+<style >
+.banner .el-radio-button__inner {
+  border-color: #fff;
+  border-bottom: none;
+  border-radius: 0px;
+  padding: 0px 0px;
+  border-radius: 0px;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+.banner
+  .tabPosition
+  .el-radio-button__orig-radio:checked
+  + .el-radio-button__inner {
+  background-color: #4d7283;
+  color: #fff;
+  border-radius: 5px 5px 0 0;
+  border-color: #4d7283;
+  box-shadow: -1px 0 0 0 #4d7283;
+  height: 46px;
+}
+.banner .el-radio-button:first-child .el-radio-button__inner {
+  border-left: 1px solid #fff;
+}
+.banner .el-tag {
+  line-height: 0px;
+  padding: 0 0;
+}
+ .banner .el-radio-button:focus:not(.is-focus):not(:active):not(.is-disabled){
+    -webkit-box-shadow: 0 0 0px 0px #409EFF;
+    box-shadow: 0 0 0px 0px #409EFF;
+}
 </style>
 
 

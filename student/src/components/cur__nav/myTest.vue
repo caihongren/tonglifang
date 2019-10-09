@@ -11,16 +11,17 @@
     <!-- 正文 -->
     <div class="interior">
       <!-- 表格 -->
-      <div class="sousuo">
+      
+      <div class="transition-box" v-show="isshowheight">
+        <div class="sousuo">
 
         <el-input placeholder="搜索任务" v-model="input5" class="input-with-select" @keyup.enter.native='sousuo()'>
 
           <el-button slot="append" class="el-icon-search" @click="sousuo()"></el-button>
         </el-input>
       </div>
-      <div class="transition-box" v-show="isshowheight">
         <template>
-          <el-table :data="tableData" :default-sort="{prop:'startTime', order: 'descending'}" border style="width: 94%;margin:5px 3%;height:80%" stripe :header-cell-style="{background:'#b2e2f8'}">
+          <el-table :data="tableData" :default-sort="{prop:'startTime', order: 'descending'}" style="width: 94%;margin:5px 3%;height:80%" stripe :header-cell-style="{background:'#ebeffb'}" :row-class-name="tableRowClassName">
             <el-table-column prop="index" label="序号" type="index"></el-table-column>
             <el-table-column prop="name" label="名称" min-width="100" sortable></el-table-column>
             <el-table-column prop="masterName" label="教师" min-width="40" sortable></el-table-column>
@@ -105,6 +106,14 @@ export default {
   },
 
   methods: {
+      tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 !== 0) {
+        return 'warning-row';
+      } else if (rowIndex % 2 == 0) {
+        return 'success-row';
+      }
+      return '';
+    },
     ...mapActions(["task"]),
     // 状态
     handleSizeChange(val) {
@@ -234,8 +243,8 @@ export default {
   }
 
   .interior {
-    height: 93%;
-    width: calc(100% - 78px);
+    height: 95%;
+    width: calc(100% - 40px);
     overflow: auto;
     background-color: #fff;
     margin-top: 20px;
@@ -260,12 +269,17 @@ export default {
   }
 }
 .box .sousuo .el-button {
-  background-color: #b2e2f8;
+  background-color: #ebeffb;
   border-radius: 0px;
 }
 .box .sousuo .el-button:hover {
   background-color: #66c6f2;
   border-radius: 0px;
+}
+</style>
+<style>
+.el-table .warning-row {
+  background: #f7faff;
 }
 </style>
 

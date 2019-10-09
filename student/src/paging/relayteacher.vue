@@ -6,58 +6,36 @@
         <el-breadcrumb-item class="textcolor">{{course}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo ralateacher"
-      mode="horizontal"
-      style=" position: absolute;top: -60px;left: 520px;line-height:60px;"
-      @select="handleSelect"
-      background-color="#0078d7"
-      text-color="#fff"
-      active-text-color="#ffc113"
-    >
-      <router-link to="/relayteacher/study/courseIntroduction">
-        <el-menu-item index="1" class="Surveybox">课程管理</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/componentLibrary">
-        <el-menu-item index="2">元件库</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/simulationDatabase" class="chongqing">
-        <el-menu-item index="3">仿真资源库</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/newExperimentalTemplateLibrary">
-        <el-menu-item index="4">实训模板库</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/taskManagement">
-        <el-menu-item index="5">实训任务管理</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/Dimension2" v-if="iswatchStorage2D">
-        <el-menu-item index="10">二维设计空间</el-menu-item>
-      </router-link>
-      <!-- <router-link to="/relayteacher/Dimension3" v-if="iswatchStorage3D">
-        <el-menu-item index="11">
-三维设计空间
-        </el-menu-item>
-      </router-link>-->
-      <router-link to="/relayteacher/Dimension3" v-if="iswatchStorage3D">
-        <el-menu-item index="11">
-          <el-tag closable :disable-transitions="true" class="det" @close="deet('3D')">三维设计空间</el-tag>
-        </el-menu-item>
-      </router-link>
-      <!-- <router-link to="/relayteacher/Dimension2demo">
-        <el-menu-item index="12">二维设计空间demo</el-menu-item>
-      </router-link>-->
-    </el-menu>
-    <!-- <div style="border-bottom: 1px solid #f5f5f5;width:100%"></div> -->
+    <el-radio-group v-model="activeIndex" class="tabPosition" @change="handleSelect">
+      <el-radio-button label="1"  class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/study/courseIntroduction')">课程管理</span>
+      </el-radio-button>
+      <el-radio-button label="2" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/taskManagement')">任务管理</span>
+      </el-radio-button>
+      <el-radio-button label="3" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/componentLibrary')">元器件库</span>
+      </el-radio-button>
+      <el-radio-button label="4" class="disflax">
+        <span class="nave chongqing" @click="tabPositionpath('/relayteacher/simulationDatabase')">仿真资源库</span>
+      </el-radio-button>
+      <!-- <el-radio-button label="5" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/newExperimentalTemplateLibrary')">实训模板库</span>
+      </el-radio-button> -->
+      <el-radio-button label="6" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/resources')">实训资源</span>
+      </el-radio-button>
+      <el-radio-button label="10" v-if="iswatchStorage2D" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/Dimension2')">二维设计空间</span>
+      </el-radio-button>
+      <el-radio-button label="11" v-if="iswatchStorage3D" class="disflax" >
+        <span class="nave" @click="tabPositionpath('/relayteacher/Dimension3')">
+          <el-tag closable :disable-transitions="true" class="det nave" @close="deet('3D')">三维设计空间</el-tag>
+        </span>
+      </el-radio-button>
+    </el-radio-group>
     <keep-alive :include="['newExperimentalTemplateLibrary','taskManagement',]">
-      <router-view
-        @gounity="gounity"
-        @derunity="derunity"
-        @yuangounity="yuangounity"
-        @threadPoxi="threadPoxi"
-        @handleSelect="handleSelect"
-        @deet="deet"
-      ></router-view>
+      <router-view @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity" @threadPoxi="threadPoxi" @handleSelect="handleSelect" @deet="deet"></router-view>
     </keep-alive>
   </div>
 </template>
@@ -105,6 +83,10 @@ export default {
     };
   },
   methods: {
+    tabPositionpath(path) {
+      console.log(path)
+      this.$router.push(path)
+    },
     // deet() {
     //   this.iswatchStorage3D = false;
     // },
@@ -141,10 +123,10 @@ export default {
     // 元件库3D
     yuangounity(type) {
       let token = localStorage.getItem("token");
-      let courseid= JSON.parse(sessionStorage.getItem("course")).id ;
+      let courseid = JSON.parse(sessionStorage.getItem("course")).id;
       let data = {
         token: token,
-        courseid:courseid,
+        courseid: courseid,
         name: "mode",
         mode: "element_browser",
         type: type
@@ -181,7 +163,7 @@ export default {
       // 若是 正在开启状态，则等待300毫秒
       else if (this.websock.readyState === this.websock.CONNECTING) {
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 300);
       }
@@ -189,7 +171,7 @@ export default {
       else {
         this.initWebSocket();
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 500);
       }
@@ -219,7 +201,7 @@ export default {
       that.lockReconnect = true;
       //没连接上会一直重连，设置延迟避免请求过多
       that.timeoutnum && clearTimeout(that.timeoutnum);
-      that.timeoutnum = setTimeout(function() {
+      that.timeoutnum = setTimeout(function () {
         //新连接
         that.initWebSocket();
         that.lockReconnect = false;
@@ -239,7 +221,7 @@ export default {
       var self = this;
       self.timeoutObj && clearTimeout(self.timeoutObj);
       self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
-      self.timeoutObj = setTimeout(function() {
+      self.timeoutObj = setTimeout(function () {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.websock.readyState == 1) {
           //如果连接正常
@@ -252,7 +234,7 @@ export default {
           console.log("重连");
           self.reconnect();
         }
-        self.serverTimeoutObj = setTimeout(function() {
+        self.serverTimeoutObj = setTimeout(function () {
           //超时关闭
           self.websock.close();
         }, self.timeout);
@@ -353,7 +335,7 @@ export default {
   },
   created() {
     let course = JSON.parse(sessionStorage.getItem("course"));
-    if(sessionStorage.getItem("user")==null){
+    if (sessionStorage.getItem("user") == null) {
       this.$router.push('/login')
     }
     this.course = course.course;
@@ -380,6 +362,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.tabPosition {
+  position: absolute;
+  text-align: center;
+  top: -54px;
+  left: 500px;
+  .nave {
+    line-height: 51px;
+    padding: 13px 25px;
+  }
+}
 // 分页导航条
 a {
   text-decoration: none;
@@ -410,18 +402,51 @@ a {
   background-color: transparent;
   border: 0px solid red;
   font-size: 18px;
-
   color: inherit;
+  margin-top: -10px;
 }
 </style>
 
 
 <style>
 .textcolor .el-breadcrumb__inner {
-  color: #fff !important;
+  color: rgb(78, 75, 75) !important;
 }
-.ralateacher .el-menu-item{
-    font-size: 18px;
+.ralateacher .el-menu-item {
+  font-size: 18px;
+}
+.relaybanner .el-radio-button__inner {
+  border-color: #fff;
+  border-bottom: none;
+  border-radius: 0px;
+  padding: 0px 0px;
+  border-radius: 0px;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+
+.relaybanner
+  .tabPosition
+  .el-radio-button__orig-radio:checked
+  + .el-radio-button__inner {
+  background-color: #4d7283;
+  color: #fff;
+  border-radius: 5px 5px 0 0;
+  border-color: #4d7283;
+  box-shadow: -1px 0 0 0 #4d7283;
+  height: 53px;
+}
+.relaybanner .el-radio-button:first-child .el-radio-button__inner {
+  border-left: 1px solid #fff;
+}
+.relaybanner .tabPosition .el-tag {
+  line-height: 0px;
+  padding: 0 0;
+}
+
+.relaybanner .el-radio-button:focus:not(.is-focus):not(:active):not(.is-disabled){
+    -webkit-box-shadow: 0 0 0px 0px #409EFF;
+    box-shadow: 0 0 0px 0px #409EFF;
 }
 </style>
 

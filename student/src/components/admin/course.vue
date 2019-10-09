@@ -2,7 +2,7 @@
   <div class="box">
     <el-row class="topMain">
       <el-col :span="23" class="colText">
-        <h2>课程管理</h2>
+        <h2>排课管理</h2>
       </el-col>
       <el-col :span="1" class="colIcon">
         <span class="icon iconfont newlyAdded" @click="dialogFormVisibleadd = true">&#xe77b;</span>
@@ -53,7 +53,7 @@
       </div>
     </el-dialog>
     <!-- 编辑 -->
-    <el-dialog title="编辑课程" :visible.sync="dialogFormVisible" class="modify">
+    <el-dialog title="编辑排课" :visible.sync="dialogFormVisible" class="modify">
       <el-form :model="form" :rules="rules">
         <el-form-item label="课程名称：" :label-width="formLabelWidth">
           <el-input v-model="form.course" auto-complete="off" disabled></el-input>

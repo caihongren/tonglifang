@@ -25,7 +25,9 @@
     </div>
     <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实训二：电机点动控制实训指导书.pdf" style="width:100%;height:100%" ></iframe>
     -->
-    <iframe :src="pdfPath" class="iframe" style="width:100%;height:100%"></iframe>
+    <iframe :src="pdfPath" class="
+    
+    " style="width:100%;height:99%"></iframe>
   </div>
 
   <!-- v-if="pdfType" -->

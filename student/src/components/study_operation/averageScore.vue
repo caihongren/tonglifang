@@ -22,8 +22,8 @@
     </el-card>
     <div class="surface">
       <div class="task">
-        <el-table :data="tableData" class="Arrow" border :header-cell-style="{background:'#b2e2f8'}" stripe>
-          <el-table-column label="序号" type="index"></el-table-column>
+        <el-table :data="tableData" class="Arrow" border :header-cell-style="{background:'#ebeffb'}" stripe>
+          <el-table-column label="序号" type="index" width="50"></el-table-column>
           <el-table-column prop="accountName" label="学生" min-width="40"></el-table-column>
           <el-table-column prop="score" label="成绩" min-width="30"></el-table-column>
           <el-table-column prop="completed" label="完成进度" min-width="40"></el-table-column>
@@ -162,7 +162,7 @@ export default {
     height: 95%;
     margin-left: 415px;
     margin-right: 20px;
-    width: calc(100% - 490px);
+    width: calc(100% - 452px);
     .task {
       margin-top: 20px;
       margin-bottom: 5px;

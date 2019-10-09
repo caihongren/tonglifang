@@ -1,16 +1,15 @@
 <template>
   <div class="home">
-    <div class="conter">
-      <div class="top">请选择要进入的课程</div>
-      <ul>
-        <li
-          v-for="(item,index) in curlist"
-          :key="item.index"
-          @click="goClass(index)"
-          style="font-size:18px;"
-        >{{item.course}}</li>
-      </ul>
-    </div>
+    <el-container>
+      <el-aside width="250px">
+        <p>选择进入课程</p>
+      </el-aside>
+      <el-main>
+             <div class="leftcoures">
+          <p v-for="(item,index) in curlist" :key="item.index" @click="goClass(index)" class="bcourse" style="font-size:18px;">{{item.course}}</p>
+        </div>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -48,7 +47,7 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() { },
   created() {
     if (sessionStorage.getItem("user") == null) {
       this.$router.push("/login");
@@ -58,37 +57,52 @@ export default {
     this.course([]);
     curlist().then(res => {
       this.curlist = res.data.object;
-      this.gofirst();
+      // this.gofirst();
     });
   }
 };
 </script>
 <style lang="less" scoped>
-.home {
-  .conter {
-    width: 100%;
-    .top {
-      width: 100%;
-      height: 60px;
-      line-height: 60px;
-      padding-left: 20px;
-      background-color: #fff;
-      color: #00a0e9;
-      font-size: 20px;
-    }
-    ul {
-      margin-left: 150px;
-      li {
-        list-style: none;
-        display: inline-block;
-        width: 20%;
-        height: 100px;
-        line-height: 100px;
-        color: #fff;
-        text-align: center;
-        margin: 100px 10% 0 0;
-        background-color: #313131;
-      }
+.home{
+  height: 100%;
+  width: 101%;
+  .el-container{
+    height: 100%;
+  }
+}
+.el-aside {
+
+  background-color: #313131;
+  p {
+    cursor: pointer;
+    margin-top: 20px;
+    color: #ffd04b;
+    font-size: 20px;
+    text-align: center;
+  }
+}
+.el-main {
+  background-color: #f1f1f1;
+  padding-right: 30px;
+  .leftcoures {
+    background-color: #fff;
+    height: 875px;
+    padding-left: 120px;
+    margin-bottom: 60px;
+    overflow: auto;
+    margin-right: 9px;
+    p {
+      cursor: pointer;
+      list-style: none;
+      display: inline-block;
+      width: 250px;
+      height: 80px;
+      margin: 80px 35px;
+      line-height: 80px;
+      color: rgb(43, 42, 42);
+      text-align: center;
+      border-radius: 10px;
+      background-color: #f1f1f1;
     }
   }
 }

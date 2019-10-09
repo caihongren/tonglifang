@@ -2,21 +2,18 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from './views/Home.vue'
 import relay from './paging/relay.vue'
+
 //登录注册页面
 import register from './views/Register.vue'
 import login from './views/login.vue'
 import download from './views/download.vue'
-
-
-
-
+import resourceDownload from './views/resourceDownload.vue'
+import style from './views/style.vue'
 
 //404
 import NotFound from './views/404.vue'
 import Examine from './views/Examine.vue'
 import user from './views/user.vue'
-
-
 
 //课程学生端********************
 import simulation from './components/cur__nav/simulation.vue'
@@ -26,6 +23,8 @@ import my__notedemo from './components/cur__nav/my__notedemo.vue'
 import my__data from './components/cur__nav/my__data.vue'
 import my__Submission from './components/cur__nav/my__Submission.vue'
 import componentLibrary from './components/cur__nav/componentLibrary.vue'
+import resources from './components/cur__nav/resources.vue'
+
 
 
 
@@ -40,17 +39,22 @@ import sExperiment1 from './components/simulation__operation/guidance_path/sExpe
 
 
 
-//课程学习
+//课程管理
 import courseIntroduction from './components/study_operation/courseIntroduction.vue'
-import curriculumLearning from './components/study_operation/curriculumLearning.vue'
 import averageScore from './components/study_operation/averageScore.vue'
+import experimentDetails from './components/study_operation/experimentDetails.vue'
+import myTraining from './components/study_operation/myTraining.vue'
+import trainingCourse from './components/study_operation/trainingCourse.vue'
+import myHomework from './components/study_operation/myHomework.vue'
+import studentTrainingCourse from './components/study_operation/studentTrainingCourse.vue'
+
+
 
 
 // paging 教师端******************
 import relayteacher from './paging/relayteacher.vue'
 //relay paging
 import taskManagement from './relay_paging/taskManagement.vue'
-import experimentalTemplateLibrary from './relay_paging/experimentalTemplateLibrary.vue'
 import myTest from './components/cur__nav/myTest.vue'
 import newExperimentalTemplateLibrary from './relay_paging/newExperimentalTemplateLibrary.vue'
 import simulationDatabase from './relay_paging/simulationDatabase.vue'
@@ -86,8 +90,9 @@ import course from './components/admin/course.vue'
 // 
 // 
 Vue.use(Router)
+const title=document.title
 
-export default new Router({
+const router=new Router({
     hash: 'history',
     base: process.env.BASE_URL,
     routes: [{
@@ -101,6 +106,20 @@ export default new Router({
         },
 
         {
+            path: '/resourceDownload',
+            name: 'resourceDownload',
+            component: resourceDownload,
+            meta: {
+                title: '资源下载'
+              }
+        },
+        {
+            path: '/style',
+            name: 'style',
+            component: style
+        },
+
+        {
             path: '/home',
             name: 'home',
             component: home
@@ -109,7 +128,10 @@ export default new Router({
         {
             path: '/login',
             name: 'login',
-            component: login
+            component: login,
+            meta: {
+                title: '登录'
+              }
         },
         {
             path: '/register',
@@ -117,8 +139,8 @@ export default new Router({
             component: register
         },
 
-          // 个人中心
-          {
+        // 个人中心
+        {
             path: '/user',
             name: '/user',
             component: user
@@ -206,7 +228,7 @@ export default new Router({
 
                     ]
                 },
-              
+
                 {
                     path: '/relay/myTest',
                     name: '/relay/myTest',
@@ -230,13 +252,29 @@ export default new Router({
                             name: "courseIntroduction",
                             component: courseIntroduction
                         },
+
+                        // 课程实训
                         {
-                            path: "/relay/study/curriculumLearning",
-                            name: "curriculumLearning",
-                            component: curriculumLearning
-                        }
+                            path: "/relay/study/studentTrainingCourse",
+                            name: "studentTrainingCourse",
+                            component: studentTrainingCourse
+                        },
+                        // 教考模式
+                        {
+                            path: "/relay/study/experimentDetails",
+                            name: "/relay/study/experimentDetails",
+                            component: experimentDetails
+                        },
+                        // 我的作业
+                        {
+                            path: "/relay/study/myHomework",
+                            name: "myHomework",
+                            component: myHomework
+                        },
+
                     ]
                 },
+
                 {
                     path: '/relay/my__note',
                     name: 'my__note',
@@ -251,6 +289,12 @@ export default new Router({
                     path: '/relay/my__Submission',
                     name: 'my__Submission',
                     component: my__Submission
+                },
+                //实训资源
+                {
+                    path: '/relay/resources',
+                    name: 'resources',
+                    component: resources
                 },
                 // 我的笔记demo
                 {
@@ -299,32 +343,44 @@ export default new Router({
                             component: courseIntroduction
                         },
                         {
-                            path: "/relayteacher/study/curriculumLearning",
-                            name: "relayteacher/curriculumLearning",
-                            component: curriculumLearning
-                        },
-                        {
                             path: "/relayteacher/study/averageScore",
                             name: "relayteacher/averageScore",
                             component: averageScore
-                        }
+                        },
+                        // 课程实训
+                        {
+                            path: "/relayteacher/study/trainingCourse",
+                            name: "trainingCourse",
+                            component: trainingCourse
+                        },
+                        // 教考模式
+                        {
+                            path: "/relayteacher/study/experimentDetails",
+                            name: "/relayteacher/study/experimentDetails",
+                            component: experimentDetails
+                        },
+                        // 我的实训
+                        {
+                            path: "/relayteacher/study/myTraining",
+                            name: "myTraining",
+                            component: myTraining
+                        },
                     ]
                 },
-             
+
                 //元件库
                 {
                     path: '/relayteacher/componentLibrary',
                     name: 'relayteacher/componentLibrary',
                     component: componentLibrary
                 },
-
-                //实训模板件库
+                //实训资源
                 {
-                    path: '/relayteacher/experimentalTemplateLibrary',
-                    name: 'experimentalTemplateLibrary',
-                    component: experimentalTemplateLibrary
+                    path: '/relayteacher/resources',
+                    name: 'relayteacher/resources',
+                    component: resources
                 },
-                //新开实训模板库
+                //实训模板库
                 {
                     path: '/relayteacher/newExperimentalTemplateLibrary',
                     name: 'newExperimentalTemplateLibrary',
@@ -336,6 +392,8 @@ export default new Router({
                     name: 'simulationDatabase',
                     component: simulationDatabase
                 },
+
+
                 // 详情
                 {
                     path: '/relayteacher/Examine',
@@ -468,3 +526,16 @@ export default new Router({
 //     }
 //   }
 // })
+
+router.beforeEach((to, from, next) => {
+    if(to.meta.title==undefined||to.meta.title==null||to.meta.title==""){
+        document.title = title
+    }else{
+        document.title = to.meta.title
+    }
+  
+    next()
+  })
+
+
+  export default  router

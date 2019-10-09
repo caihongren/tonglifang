@@ -2,22 +2,22 @@
   <div class="populationgroup">
     <!-- 右边菜单栏 -->
     <div class="menus">
-      <el-menu default-active="4" class="el-menu-vertical-demo" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" style="text-align: center; font-size:18px;">
-        <el-menu-item index="2" @click="istask=true,isshowheight=true,isadd=false">已下发的任务</el-menu-item>
-        <el-menu-item index="3" @click="istask=false,isshowheight=true,isadd=false">已结束的任务</el-menu-item>
+      <el-menu default-active="1" class="el-menu-vertical-demo" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" style="text-align: center; font-size:18px;">
+        <el-menu-item index="1" @click="istask=true,isshowheight=true,isadd=false">已下发的任务</el-menu-item>
+        <el-menu-item index="2" @click="istask=false,isshowheight=true,isadd=false">已结束的任务</el-menu-item>
       </el-menu>
     </div>
 
     <!-- 正文 -->
-    <div class="population" :style="{height:isshowheight?'92%':'0px'}" v-show="isshowheight">
+    <div class="population" :style="{height:isshowheight?'95%':'0px'}" v-show="isshowheight">
       <div class="population-top " v-show="istask">
         <div class="testFormwork">
           <p class="testFormwork-left">已下发的任务</p>
           <el-button type="primary" @click="goadd" class="newlyBuild" size="mini">新增任务</el-button>
         </div>
         <div class="testFormwork-button">
-          <el-table :data="tableDatafalse" border stripe :header-cell-style="{background:'#b2e2f8'}" :default-sort="{prop:'startTime', order: 'descending'}" class="tabletop">
-            <el-table-column fixed label="序号" type="index"></el-table-column>
+          <el-table :data="tableDatafalse" stripe :header-cell-style="{background:'#ebeffb'}" :default-sort="{prop:'startTime', order: 'descending'}" class="tabletop" :row-class-name="tableRowClassName">
+            <el-table-column fixed label="序号" type="index" width="50"></el-table-column>
             <el-table-column prop="startTime" label="下发日期" sortable :formatter="formatSex" min-width="70"></el-table-column>
             <el-table-column prop="name" sortable label="任务名称" min-width="120"></el-table-column>
             <el-table-column prop="finishTime" label="截止时间" :formatter="finishTime" min-width="100"></el-table-column>
@@ -39,8 +39,8 @@
       <div class="population-button" v-show="!istask">
         <p class="built-inTemplate-top">已结束的任务</p>
         <div class="built-inTemplate-button">
-          <el-table :data="tableDatatrue" border :header-cell-style="{background:'#b2e2f8'}" :default-sort="{prop:'startTime', order: 'descending'}" class="tabletop">
-            <el-table-column fixed label="序号" type="index"></el-table-column>
+          <el-table :data="tableDatatrue" :header-cell-style="{background:'#ebeffb'}" :default-sort="{prop:'startTime', order: 'descending'}" class="tabletop" :row-class-name="tableRowClassName">
+            <el-table-column fixed label="序号" type="index" width="50"></el-table-column>
             <el-table-column prop="startTime" label="下发日期" sortable :formatter="formatSex" min-width="70"></el-table-column>
             <el-table-column prop="name" sortable label="任务名称" min-width="120"></el-table-column>
             <el-table-column prop="finishTime" label="截止时间" :formatter="finishTime" min-width="100"></el-table-column>
@@ -71,10 +71,16 @@
         <Examine ref="child" v-if="!innerVisibleNew"></Examine>
       </div>
     </el-dialog>
-    <el-dialog width="74%" title="新增任务" top="7vh" :visible.sync="innerVisibleadd" append-to-body class="additionalTasks">
+    <!-- <el-dialog width="74%" title="新增任务" top="7vh" :visible.sync="innerVisibleadd" append-to-body class="additionalTasks">
       <div class="line"></div>
       <div style="height:40vh">
         <Editor if="innerVisibleadd" @taskissue="taskissue" v-if="innerVisibleadd"></Editor>
+      </div>
+    </el-dialog> -->
+    <el-dialog width="45%" title="新增任务" top="15vh" :visible.sync="innerVisibleadd" append-to-body class="additionalTasks">
+      <div class="line"></div>
+      <div style="height:40vh">
+        <EditorCopy  @taskissue="taskissue" v-if="innerVisibleadd"></EditorCopy>
       </div>
     </el-dialog>
     <div style="width:100%;" :style="{height:!isshowheight?'100%':'0px'}" v-show="!isshowheight">
@@ -103,12 +109,14 @@ import {
   formatDate, // 时间格式转换
   deletedaTask, // 删除任务
   stopTask, // 停止任务
-  getResource_by_id // 根据资源id获取属性
+  getResource_by_id, // 根据资源id获取属性
+  
 } from "@/API/api";
 import Unity3D from "./uity3D";
 import FileSaver from "file-saver";
 import Examine from "../views/Examine";
 import Editor from "./tasks/Editor";
+import EditorCopy from "./tasks/EditorCopy";
 import newExperimentalTemplate from "./newExperimentalTemplate";
 export default {
   name: "taskManagement",
@@ -154,10 +162,19 @@ export default {
     Unity3D,
     Examine,
     Editor,
+    EditorCopy,
     newExperimentalTemplate
   },
 
   methods: {
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 !== 0) {
+        return 'warning-row';
+      } else if (rowIndex % 2 == 0) {
+        return 'success-row';
+      }
+      return '';
+    },
     // 关闭详情页面
     detpage() {
       this.isshowheight = !this.isshowheight;
@@ -249,7 +266,7 @@ export default {
       })
         .then(() => {
           stopTask({
-            taskExperimentId: id
+            taskId: id
           }).then(res => {
             if (res.data.code == "0") {
               this.$message({
@@ -275,7 +292,7 @@ export default {
             showClose: true,
             duration: 1000,
             type: "info",
-            message: "已取消删除"
+            message: "取消操作"
           });
         });
     },
@@ -323,7 +340,7 @@ export default {
       })
         .then(() => {
           deletedaTask({
-            taskExperimentId: id
+            taskId: id
           }).then(res => {
             if (res.data.code == "0") {
               this.$message({
@@ -395,27 +412,10 @@ export default {
       // }
     }
   },
-  mounted() { },
   created() {
     this.masters();
     this.newmasters();
   }
-  // 创建前设置增加滚动条
-  // beforeCreate() {
-  //   document
-  //     .querySelector("body")
-  //     .removeAttribute("style", "overflow-y:hidden ;");
-  //   document
-  //     .querySelector("body")
-  //     .setAttribute("style", "overflow-y:scroll ;background-color:#EEE9E9	");
-  //   // document.querySelector('body').setAttribute('style', 'background-color:#ccc')
-  // },
-  // 销毁前清除滚动
-  // beforeDestroy() {
-  //   document
-  //     .querySelector("body")
-  //     .removeAttribute("style", "overflow-y:scroll !important;");
-  // }
 };
 </script>
 
@@ -440,14 +440,13 @@ export default {
     }
   }
   .population {
-    width: 95%;
+    width: 97.6%;
     overflow: auto;
     background-color: #fff;
     margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 200px;
     padding-top: 20px;
-    height: 86vh;
     background-color: #fff;
 
     overflow: auto;
@@ -512,7 +511,8 @@ export default {
   margin: 0 30px;
 }
 .line {
-  margin: 0 180px 0 85px;
+  margin-left: 55px;
+  margin-right: 80px;
   height: 1px;
   background-color: #d9d9d9;
   margin-top: -30px;
@@ -520,9 +520,12 @@ export default {
 </style>
 <style >
 .additionalTasks .el-dialog__title {
-  margin-left: 85px;
+  margin-left: 55px;
 }
 .populationgroup .el-menu {
   border: 0px solid red;
+}
+.el-table .warning-row {
+  background: #f7faff;
 }
 </style>

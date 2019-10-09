@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <el-row type="flex" class="Libraryrow">
-      <el-col :span="3" style="width:250px;">
+      <el-col :span="3" style="width:250px;height:100%;">
         <div class="left">
           <div class="search">
             <el-input v-model="search" placeholder="请输入搜索内容" @keyup.enter.native="nowSearch()"></el-input>
@@ -14,26 +14,15 @@
             <el-button type="primary" class="addelement" @click="isElemenType=true">编辑元件组</el-button>
           </div>
           <div class="menu elementList">
-            <el-menu
-              default-active="0"
-              background-color="#313131"
-              text-color="#fff"
-              active-text-color="#ffd04b"
-            >
+            <el-menu default-active="0" background-color="#313131" text-color="#fff" active-text-color="#ffd04b">
               <el-menu-item index="0" @click="handleOpen()">
                 <span slot="title">全部</span>
               </el-menu-item>
 
-              <el-menu-item
-                v-bind:index="String(index+1)"
-                @click="handleOpen(item)"
-                v-for="(item,index) in original"
-                :key="item.id"
-              >
+              <el-menu-item v-bind:index="String(index+1)" @click="handleOpen(item)" v-for="(item,index) in original" :key="item.id">
                 <span slot="title">{{item.name}}</span>
               </el-menu-item>
             </el-menu>
-            <!-- <div style="height:200px"></div> -->
           </div>
         </div>
       </el-col>
@@ -42,13 +31,8 @@
         <div>
           <h2 style="margin:20px;" v-show="boxlist.length>0?false:true">没有相关元件。。。</h2>
           <ul>
-            <li
-              v-for="(item) in boxlist"
-              :key="item.id"
-              class="li"
-              @click="innerVisible=true,get_component_by_id(item.id)"
-            >
-              <div style>
+            <li v-for="(item) in boxlist" :key="item.id" class="li" @click="innerVisible=true,get_component_by_id(item.id)">
+              <div>
                 <el-card :body-style="{ padding: '0px' }">
                   <div style="width:70%;height:180px;margin:30px 15%;">
                     <img :src="item.icon" alt="暂无图片" class="image" />
@@ -72,80 +56,33 @@
             <div style=" overflow:auto;height: 100%;">
               <div class="details-t">
                 <div class="introductionComponents-t">元件介绍</div>
-                <p class="introduce">{{ elementObj.introduction}}</p>
-                <el-image
-                  :src="elementObj.schematic"
-                  class="detailslmg chongqing"
-                  style="width:80%"
-                ></el-image>
-                <el-button
-                  size="small"
-                  class="introduceButton-c"
-                  type="primary"
-                  style="right:70px"
-                  v-if="isposition"
-                  round
-                  @click="Deletecomponent(elementObj.id)"
-                  v-show="teacherStudentShow"
-                >删除元件</el-button>
-                <el-button
-                  size="small"
-                  class="introduceButton-c"
-                  type="primary"
-                  round
-                  @click="introductionRevisionButton()"
-                  v-show="teacherStudentShow"
-                >修改</el-button>
-                <el-dialog
-                  title="修改元件介绍"
-                  :visible.sync="modifyIntroduceVisible"
-                  class="modifyIntroduceForm newlyAddedForm"
-                  @open="detdialog"
-                  @close="on_click_show_unity_window"
-                  append-to-body
-                >
-                  <el-input
-                    type="textarea"
-                    :rows="5"
-                    v-model="introductionComponentsInput"
-                    autocomplete="off"
-                  ></el-input>
+                <p class="introduce" v-html="Trim( elementObj.introduction)"></p>
+                <el-image :src="elementObj.schematic" class="detailslmg chongqing" style="width:80%"></el-image>
+                <el-button size="small" class="introduceButton-c" type="primary" style="right:70px" v-if="isposition" round @click="Deletecomponent(elementObj.id)" v-show="teacherStudentShow">删除元件</el-button>
+                <el-button size="small" class="introduceButton-c" type="primary" round @click="introductionRevisionButton()" v-show="teacherStudentShow">修改</el-button>
+                <el-dialog title="修改元件介绍" :visible.sync="modifyIntroduceVisible" class="modifyIntroduceForm newlyAddedForm" @open="detdialog" @close="on_click_show_unity_window" append-to-body>
+                  <el-input type="textarea" :rows="5" v-model="introductionComponentsInput" autocomplete="off"></el-input>
                   <div slot="footer" class="dialog-footer">
-                    <el-button
-                      type="primary"
-                      @click="modifyIntroduceVisible = false"
-                      size="mini"
-                      class="cancel"
-                    >取 消</el-button>
-                    <el-button
-                      type="primary"
-                      @click="modifyComponentIntroduction()"
-                      size="mini"
-                      class="Sure"
-                    >确 定</el-button>
+                    <el-button type="primary" @click="modifyIntroduceVisible = false" size="mini" class="cancel">取 消</el-button>
+                    <el-button type="primary" @click="modifyComponentIntroduction()" size="mini" class="Sure">确 定</el-button>
                   </div>
                 </el-dialog>
               </div>
               <template>
                 <div class="introductionComponents-t">元件规格</div>
-                <el-table
-                  :data="elementObjTable"
-                  border
-                  style="width: 100%"
-                  :header-cell-style="{background:'#b2e2f8'}"
-                >
+                <el-table :data="elementObjTable" border style="width: 100%" :header-cell-style="{background:'#ebeffb'}">
                   <el-table-column fixed prop="vendor" label="厂商" min-width="20"></el-table-column>
-                  <el-table-column prop="parameter" label="规格参数" min-width="40"></el-table-column>
+                  <el-table-column label="规格参数" min-width="40">
+                    <template slot-scope="scope">
+                      <p v-html="Trim(scope.row.parameter)" style="white-space: pre-wrap;"></p>
+                    </template>
+                  </el-table-column>
                 </el-table>
               </template>
               <div class="Model" v-if="isposition">添加模型ID</div>
               <div style="margin-top:20px;" v-if="isposition">
                 <el-input placeholder="请输入模型ID" v-model="modelID" class="input-with-select option">
-                  <el-button
-                    slot="append"
-                    @click="modify_component_model(modelID)"
-                    class="bottom"
-                  >添加</el-button>
+                  <el-button slot="append" @click="modify_component_model(modelID)" class="bottom">添加</el-button>
                 </el-input>
               </div>
             </div>
@@ -153,7 +90,6 @@
         </div>
       </div>
     </el-dialog>
-
     <!-- 增加元器件弹窗 -->
     <el-dialog width="60%" title="增加元件" top="7vh" :visible.sync="isVisible" class="modify">
       <div>
@@ -162,13 +98,7 @@
             <el-input v-model="form.name"></el-input>
           </el-form-item>
           <el-form-item label="元件图片" prop="icon">
-            <el-upload
-              class="avatar-uploader"
-              action="/img/add_resource"
-              :show-file-list="false"
-              :on-progress="handleAvatarSuccessicon"
-              :before-upload="beforeAvatarUpload"
-            >
+            <el-upload class="avatar-uploader" action="/img/add_resource" :show-file-list="false" :on-progress="handleAvatarSuccessicon" :before-upload="beforeAvatarUpload">
               <img v-if="elementUrl" :src="elementUrl" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -177,13 +107,7 @@
             <el-input type="textarea" v-model="form.introduction"></el-input>
           </el-form-item>
           <el-form-item label="电路图">
-            <el-upload
-              class="avatar-uploader"
-              action="/img/add_resource"
-              :show-file-list="false"
-              :on-progress="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-            >
+            <el-upload class="avatar-uploader" action="/img/add_resource" :show-file-list="false" :on-progress="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
               <img v-if="circuitUrl" :src="circuitUrl" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -196,29 +120,12 @@
           </el-form-item>
           <el-form-item label="归属类型" prop="groupId">
             <el-select v-model="form.groupId" placeholder="请选择添加类型">
-              <el-option
-                :label="item.name"
-                :value="item.id"
-                v-for="item in original"
-                :key="item.id"
-              ></el-option>
+              <el-option :label="item.name" :value="item.id" v-for="item in original" :key="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item class="dialog-footer">
-            <el-button
-              type="primary"
-              style="float: right;margin-right:10px;"
-              class="preservation"
-              size="mini"
-              @click="add_component('form')"
-            >添 加</el-button>
-            <el-button
-              type="primary"
-              style="float: right;margin-right:10px;"
-              @click="isVisible=false"
-              class="closeButton"
-              size="mini"
-            >取 消</el-button>
+            <el-button type="primary" style="float: right;margin-right:10px;" class="preservation" size="mini" @click="add_component('form')">添 加</el-button>
+            <el-button type="primary" style="float: right;margin-right:10px;" @click="isVisible=false" class="closeButton" size="mini">取 消</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -228,36 +135,21 @@
     <el-dialog width="40%" title="编辑元件组" top="7vh" :visible.sync="isElemenType" class="modify">
       <div>
         <div style="height:120px">
-          <p style="height:40px">删除类别： 注*元件组中元件没有清空，不能删除。</p>
+          <p style="height:40px">删除类别： 注*元件组内元件没有清空，不能删除。</p>
 
-          <el-select v-model="detcomponentvalue" placeholder="请选择空元件类别">
-            <el-option
-              v-for="item in original"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-              :disabled="item.components.length>0?true:false"
-            ></el-option>
+          <el-select v-model="detcomponentvalue" placeholder="请选择空元件组">
+            <el-option v-for="item in original" :key="item.id" :label="item.name" :value="item.id" :disabled="item.components.length>0?true:false"></el-option>
           </el-select>
-          <el-button type="primary" style="margin:0 40px" @click="detcomponent()">确认删除</el-button>
+          <el-button type="primary" style="margin:0 40px" @click="detcomponent()" class="confirm">确认删除</el-button>
         </div>
         <div style="height:120px">
           <p style="height:40px">添加元件组：</p>
 
-          <el-input
-            placeholder="请输入元件组名称"
-            v-model="addcomponentinpit"
-            class="input-with-select"
-            style="width:50%"
-          ></el-input>
-          <el-button type="primary" style="margin:0 40px" @click="addcomponentgroup()">确认添加元件组</el-button>
+          <el-input placeholder="请输入元件组名称" v-model="addcomponentinpit" class="input-with-select" style="width:50%"></el-input>
+          <el-button type="primary" style="margin:0 40px" class="confirm" @click="addcomponentgroup()">确认添加元件组</el-button>
         </div>
         <div style="height:80px">
-          <el-button
-            type
-            style="float: right;margin-right:60px;margin-top:30px;"
-            @click="isElemenType=false"
-          >关闭</el-button>
+          <el-button type="primary" @click="isElemenType=false" class="closebutton">关闭</el-button>
         </div>
       </div>
     </el-dialog>
@@ -279,12 +171,14 @@ import {
   search_component, //元件搜索
   add_component_group, //添加元件组
   delete_component_group, //删除元件组
-  uploadFile // 上传
+  uploadFile, // 上传,
+  Trim
 } from "@/API/api";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
+      value: "",
       type: "", //当前服务商代号
       search: "", //搜索框内容
       original: [{ id: null, name: "", components: "[]" }], //所有元件组和元件
@@ -306,7 +200,9 @@ export default {
         type: "",
         vendor: ""
       },
-      elementObjTable: [],
+      elementObjTable: [{
+        parameter: ''
+      }],
       modifyIntroduceVisible: false, //修改元件介绍弹出框是否显示
       formLabelWidth: "120px",
       introductionComponentsInput: "", //修改元件介绍编辑框
@@ -362,6 +258,7 @@ export default {
   },
   methods: {
     ...mapActions(["element"]),
+    Trim,
 
     handleAvatarSuccessicon(res, file) {
       console.log(res, file);
@@ -376,33 +273,59 @@ export default {
     beforeAvatarUpload(file, res) {
       console.log(file);
 
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      // const isJPG = file.type === "image/jpeg";
+      // const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-        return;
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-        return;
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      //   return;
+      // }
+      // if (!isLt2M) {
+      //   this.$message.error("上传图片大小不能超过 2MB!");
+
+      // }
       //  this.imageUrl = URL.createObjectURL(file.raw);
 
-      return isJPG && isLt2M;
+      // return isJPG && isLt2M;
+      return;
     },
-
+    //提交元器件
+    // add_component(formName) {
+    //   console.log(formName);
+    //   this.$refs[formName].validate(valid => {
+    //     if (valid) {
+    //       console.log(this.from);
+    //       this.$message({
+    //         showClose: true,
+    //         duration: 1000,
+    //         message: "新增成功",
+    //         type: "success"
+    //       });
+    //     } else {
+    //       this.$message.error({
+    //         showClose: true,
+    //         duration: 1000,
+    //         message: "输入异常，请看错误提示",
+    //         type: "warning"
+    //       });
+    //       return false;
+    //     }
+    //   });
+    // },
+    //编辑元件确认删除
+    // isElemenType() {
+    //   this.isElemenType = false; //关闭弹窗
+    // },
     //获取元件组和元件
     getGroupAndComponent() {
-      get_group_and_component()
-        .then(res => {
-          if (res.data.code == 0) {
-            this.original = res.data.object;
-            this.getGroupAndComponentbox(res.data.object);
-            this.element(res.data.object);
-          }
-        })
-        .catch(function(error) {});
+      get_group_and_component().then(res => {
+        if (res.data.code == 0) {
+          this.original = res.data.object;
+          this.getGroupAndComponentbox(res.data.object);
+          this.element(res.data.object);
+        }
+      })
+        .catch(function (error) { });
     },
     getGroupAndComponentbox(row) {
       let box = [];
@@ -421,34 +344,28 @@ export default {
     get_component_by_id(id) {
       get_component_by_id({
         componentId: id
+      }).then(res => {
+        if (res.data.code == 0) {
+          this.elementObj = res.data.object;
+          this.elementObj.parameter = res.data.object.parameter.replace(
+            /\n/g,
+            "<br>"
+          );
+          this.elementObjTable = [];
+          this.elementObjTable.push({
+            manufacturer: this.elementObj.name,
+            parameter: this.elementObj.parameter,
+            vendor: this.elementObj.vendor
+          });
+          // 打开3d
+          // 处理类型
+          let type = res.data.object.type;
+          // type += "/" + res.data.object.aliasChinese;
+          this.go3D(type);
+          this.type = res.data.object.aliasChinese;
+          this.on_click_show_unity_window();
+        }
       })
-        .then(res => {
-          if (res.data.code == 0) {
-            this.elementObj = res.data.object;
-            this.elementObj.parameter = res.data.object.parameter.replace(
-              /\n/g,
-              ""
-            );
-            this.elementObjTable = [];
-            this.elementObjTable.push({
-              manufacturer: this.elementObj.name,
-              parameter: this.elementObj.parameter,
-              vendor: this.elementObj.vendor
-            });
-
-            // 打开3d
-            // 处理类型
-
-            let type = res.data.object.type;
-            type += "/" + res.data.object.aliasChinese;
-
-            this.go3D(type);
-            this.type = res.data.object.aliasChinese;
-            this.on_click_show_unity_window();
-          } else {
-          }
-        })
-        .catch(function(error) {});
     },
     nowSearch() {
       if (this.search != "") {
@@ -457,7 +374,6 @@ export default {
         }).then(res => {
           if (res.data.code == 0) {
             this.getGroupAndComponentbox(res.data.object);
-          } else {
           }
         });
       } else {
@@ -471,27 +387,35 @@ export default {
     },
     // 编辑模型ID
     modify_component_model() {
-      // console.log(this.modelID)
-      modify_component_model({
-        id: this.elementObj.id,
-        type: this.modelID
-      })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            type: "success",
-            message: "添加模型ID成功!"
-          });
-          this.get_component_by_id(this.elementObj.id);
-        })
-        .catch(() => {
-          this.$message({
-            showClose: true,
-            message: "添加模型ID失败",
-            duration: 1000,
-            type: "error"
-          });
+      if (this.modelID.length == null || this.modelID.length == "") {
+        this.$message({
+          showClose: true,
+          message: "添加模型ID为空",
+          duration: 1000,
+          type: "error"
         });
+      } else {
+        modify_component_model({
+          id: this.elementObj.id,
+          type: this.modelID
+        })
+          .then(res => {
+            this.$message({
+              type: "success",
+              message: "添加模型ID成功!"
+            });
+            // this.modelID=""
+            this.get_component_by_id(this.elementObj.id);
+          })
+          .catch(() => {
+            this.$message({
+              showClose: true,
+              message: "添加模型ID失败",
+              duration: 1000,
+              type: "error"
+            });
+          });
+      }
     },
 
     // 添加元器件
@@ -506,6 +430,8 @@ export default {
         parameter: "",
         groupId: ""
       };
+      this.elementUrl = "";
+      this.circuitUrl = "";
     },
     //提交新增元器件
     add_component(formName) {
@@ -513,9 +439,9 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(this.form);
-         console.log(this.form.name);
-         let from=this.form
-           console.log(from);
+          console.log(this.form.name);
+          let from = this.form;
+          console.log(from);
           let fd = new FormData();
           fd.append("name", from.name); //传文件
           fd.append("icon", from.icon);
@@ -524,7 +450,7 @@ export default {
           fd.append("vendor", from.vendor);
           fd.append("parameter", from.parameter);
           fd.append("groupId	", from.groupId);
-          console.log(fd)
+          console.log(fd);
           // return;
           add_component(fd).then(res => {
             if (res.data.code == 0) {
@@ -558,6 +484,15 @@ export default {
     // 编辑类别
     //删除类别元件组
     detcomponent() {
+      if (this.detcomponentvalue == "") {
+        this.$message.error({
+          showClose: true,
+          duration: 1000,
+          message: "元件组名称为空",
+          type: "warning"
+        });
+        return;
+      }
       delete_component_group({
         groupId: this.detcomponentvalue
       })
@@ -718,12 +653,14 @@ export default {
     // },
     // 获取元件组件
     get_component_group() {
-      get_component_group({}).then(res => {});
+      get_component_group({}).then(res => { });
     },
     //菜单展开时调用
     handleOpen(row) {
       if (row) {
         this.boxlist = row.components;
+        console.log(row, '000');
+
       } else {
         this.getGroupAndComponentbox(this.original);
       }
@@ -732,6 +669,7 @@ export default {
 
     detdialog() {
       this.on_click_hide_unity_window();
+      this.modelID = ""; //关闭弹窗 清空添加模型Id
     },
     on_click_show_unity_window() {
       let type = this.type;
@@ -791,7 +729,7 @@ export default {
       this.teacherStudentShow = true;
     }
   },
-  mounted() {},
+  mounted() { },
   destroyed() {
     // this.on_click_hide_unity_window();
   }
@@ -803,11 +741,11 @@ export default {
   height: 100%;
   .Libraryrow {
     height: 100%;
+    width: 101%;
     .left {
       background-color: #313131;
       height: 100%;
       overflow: hidden;
-      width: 250px;
       .search {
         position: relative;
         height: 30px;
@@ -826,8 +764,9 @@ export default {
         height: 100%;
         overflow: auto;
         width: 270px;
-        overflow-y: scroll;
+        overflow: auto;
         margin-top: 10px;
+
         .el-menu-item {
           font-size: 18px;
         }
@@ -846,7 +785,7 @@ export default {
   .introductionComponents-t {
     font-size: 20px;
     padding-bottom: 20px;
-    font-family: "微软雅黑";
+    font-family: "Microsoft YaHei";
     font-weight: 500;
     padding-left: 15px;
     color: #00a0e9;
@@ -854,7 +793,7 @@ export default {
   .Model {
     margin-top: 20px;
     font-size: 20px;
-    font-family: "微软雅黑";
+    font-family: "Microsoft YaHei";
     font-weight: 500;
     padding-left: 15px;
     color: #00a0e9;
@@ -862,6 +801,18 @@ export default {
 }
 .bottom :hover {
   color: #fff;
+}
+.confirm {
+  margin: 0 40px;
+  background-color: #00a0e9;
+  border: none;
+}
+.closebutton {
+  background-color: #66c6f2;
+  border: none;
+  float: right;
+  margin-right: 60px;
+  margin-top: 30px;
 }
 .addelement {
   background-color: #282828;
@@ -892,6 +843,7 @@ export default {
       .introduce {
         width: 90%;
         text-indent: 2em;
+        white-space: pre-wrap;
       }
       .introduceButton-c {
         background-color: #00a0e9;
@@ -915,7 +867,7 @@ export default {
   }
 }
 .li {
-  width: 230px;
+  width: 238.5px;
   float: left;
   margin: 20px;
   cursor: pointer;
@@ -953,13 +905,9 @@ export default {
 }
 .left .el-menu {
   background-color: #313131;
+  margin-bottom: 200px;
 }
-/* .menu .el-menu-item {
-  color: #747474;
-} */
-/* .menu .el-menu-item:hover {
-  background-color: #282828;
-} */
+
 .Libraryrow .el-input__inner {
   color: white;
   background-color: #282828;

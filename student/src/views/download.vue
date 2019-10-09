@@ -2,27 +2,28 @@
   <div class="login">
     <div class="top">
       <div class="downloadlogo">
-        <img src="../image/downloadlogo.png" alt />
+        <img src="../image/tonglifanglogo.png" alt />
       </div>
       <div class="logo">
-        <h1>建筑智能化虚拟仿真实训软件</h1>
+        <h1>虚拟仿真实训平台软件</h1>
       </div>
     </div>
 
     <div class="button">
-      <div class="button1">
+      <div class="eeeee">
+        <!-- <div class="button1">
         <a href="http://api.icubespace.com/chongqing/用户使用手册.pdf" download="用户使用手册.pdf">
           <el-link target="_blank" :underline="false" class="buttonCont1">用户使用手册</el-link>
-          <!-- <img src alt id="img" /> -->
+       
         </a>
       </div>
       <div class="button2">
         <a href="http://api.icubespace.com/chongqing/PLC仿真软件.zip" download="PLC仿真软件.zip">
           <el-link :underline="false" class="buttonCont2">PLC仿真软件下载</el-link>
         </a>
-      </div>
+      </div> -->
       <div class="button3">
-        <a href="http://api.icubespace.com/chongqing/建筑智能化虚拟仿真实训软件.exe" download="建筑智能化虚拟仿真实训软件.exe">
+        <a href="http://projects.icubespace.com/official/虚拟仿真实训平台.rar" download="虚拟仿真实训平台.rar">
           <el-link :underline="false" class="buttonCont3">实训软件下载</el-link>
         </a>
       </div>
@@ -39,6 +40,8 @@
       <div class="imgthree">
         <img src="../image/three.png" alt class="three" />
       </div>
+      </div>
+     
     </div>
   </div>
 </template>
@@ -51,7 +54,7 @@ export default {
     };
   },
   methods: {},
-  created() {}
+  created() { }
 };
 </script>
 
@@ -89,9 +92,13 @@ export default {
     background: url(./../image/login_02.png);
     height: 100%;
     width: 100%;
-    position: relative;
     background-size: 100% 100%;
-    .button1 {
+    .eeeee{
+      margin-left: 50%;
+      width: 50%;
+      height: 100%;
+       position: relative;
+     .button1 {
       position: absolute;
       top: 40px;
       right: 100px;
@@ -172,12 +179,15 @@ export default {
         }
       }
     }
+    }
+    
   }
 
   .loginimTion {
-    padding-top: 120px;
-    padding-left: 1120px;
-    padding-right: 20px;
+    top: 120px;
+     left: 150px;
+    right: 20px;
+    position: absolute;
   }
   .briefIntroduction {
     padding-top: 20px;

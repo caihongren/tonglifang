@@ -209,6 +209,7 @@
 </template>
 <script>
 import {
+  check_template_name, //模板名称校验
   add_template, //新增模板
   getSimulation, //获取仿真资源列表
   get_chapters, //获取所有章
@@ -548,7 +549,6 @@ export default {
           type: "error"
         });
         this.loading = false;
-
       } else {
         if (this.newName == this.oidname) {
           this.$message({
@@ -559,17 +559,34 @@ export default {
           });
           this.loading = false;
           return;
-        }
-        this.loading = true;
-        if (this.tableData2.length > 0) {
-          this.$message({
-            showClose: true,
-            duration: 2000,
-            message: "正在上传文件。。。,请勿关闭当前页面"
+        } else {
+          check_template_name({
+            id: this.id,
+            name: this.newName,
+          }).then(res => {
+            if (res.data.code == "0") {
+              // 名称验证通过
+              this.loading = true;
+              if (this.tableData2.length > 0) {
+                this.$message({
+                  showClose: true,
+                  duration: 2000,
+                  message: "正在上传文件。。。,请勿关闭当前页面"
+                });
+              }
+              this.otherAnnexsUpload1(0); //其他附件提交
+            } else {
+              this.$message({
+                showClose: true,
+                duration: 1000,
+                message: "存在相同名称",
+                type: "error"
+              });
+              this.loading = false;
+              return;
+            }
           });
         }
-
-        this.otherAnnexsUpload1(0); //其他附件提交
       }
     },
     otherAnnexsUpload1(item) {
@@ -1279,14 +1296,14 @@ export default {
       span {
         display: inline;
         line-height: 80px;
-        font-family: "微软雅黑";
+        font-family: "Microsoft YaHei";
         font-size: 18px;
       }
       .inputBox {
         margin-left: 150px;
         width: 70.5%;
         font-size: 16px;
-        font-family: "微软雅黑";
+        font-family: "Microsoft YaHei";
       }
     }
     .laboratoryInstructions {

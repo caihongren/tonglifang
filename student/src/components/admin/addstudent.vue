@@ -2,12 +2,7 @@
   <div style="height:100%" class="addstudent">
     <el-row class="main" type="flex">
       <el-col :span="4" class="left">
-        <el-menu
-          default-active="1"
-          class="el-menu-vertical-demo menuMain"
-          background-color="#313131"
-          active-text-color="#ffc113"
-        >
+        <el-menu default-active="1" class="el-menu-vertical-demo menuMain" background-color="#313131" active-text-color="#ffc113">
           <el-menu-item index="1" @click="inter(1)" class="buoom butop">
             <span class="icon iconfont menuContext" slot="title">&#xe637;　教师管理</span>
           </el-menu-item>
@@ -18,7 +13,7 @@
             <span class="icon iconfont  menuContext" slot="title">&#xe7be;　班级管理</span>
           </el-menu-item>
           <el-menu-item index="4" @click="inter(4)" class="buoom">
-            <span class="icon iconfont menuContext " slot="title">&#xe6e3;　课程管理</span>
+            <span class="icon iconfont menuContext " slot="title">&#xe6e3;　排课管理</span>
           </el-menu-item>
         </el-menu>
 
@@ -50,7 +45,7 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() { }
 };
 </script>
 
@@ -78,8 +73,8 @@ export default {
     background-color: #f1f1f1;
     width: calc(100% - 250px);
     .rightContext {
-      width: calc(100% - 70px);
-      margin: 15px;
+      // width: calc(100% - 70px);
+      margin: 20px;
 
       background-color: #ffffff;
       height: 96%;

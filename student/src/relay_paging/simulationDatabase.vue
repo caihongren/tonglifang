@@ -13,8 +13,8 @@
       <div class="simulationResourcesOverall-top" v-show="istask">
         <p class="simulationResourcesOverall-left">我的仿真资源</p>
         <el-button type="primary" icon="el-icon-plus" @click="newlyBuildButton()" class="simulationResourcesOverall-right" size="mini">新建</el-button>
-        <el-table :data="tableDataFalse" border stripe :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#b2e2f8'}" class="Simulation operation">
-          <el-table-column prop="index" label="序号" class="table1" type="index"></el-table-column>
+        <el-table :data="tableDataFalse" stripe :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#ebeffb'}" class="Simulation operation" :row-class-name="tableRowClassName">
+          <el-table-column prop="index" label="序号" type="index" width="50"></el-table-column>
           <el-table-column prop="name" label="名称" min-width="120" sortable></el-table-column>
           <el-table-column prop="createdAt" label="保存时间" min-width="120" sortable>
             <template slot-scope="scope">{{scope.row.createdAt|dateformat}}</template>
@@ -34,8 +34,8 @@
       </div>
       <div class="simulationResourcesOverall-bottom" v-show="!istask">
         <p class="simulationResourcesOverall-leftbottom">内置仿真资源</p>
-        <el-table :data="tableDataTrue" stripe border :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#b2e2f8'}" class="Simulation operation">
-          <el-table-column prop="index" label="序号" class="table1" type="index"></el-table-column>
+        <el-table :data="tableDataTrue" stripe :default-sort="{prop:'createdAt', order: 'descending'}" :header-cell-style="{background:'#ebeffb'}" class="Simulation operation" :row-class-name="tableRowClassName">
+          <el-table-column prop="index" label="序号" type="index" width="50"></el-table-column>
           <el-table-column prop="name" label="名称" min-width="120"></el-table-column>
           <el-table-column prop="typeName" label="类型" min-width="100"></el-table-column>
           <el-table-column label="操作" width="350">
@@ -146,6 +146,14 @@ export default {
     };
   },
   methods: {
+      tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 !== 0) {
+        return 'warning-row';
+      } else if (rowIndex % 2 == 0) {
+        return 'success-row';
+      }
+      return '';
+    },
     // 我的仿真资源分页
     handleSizeChange(val) {
       this.limit = val;
@@ -190,12 +198,8 @@ export default {
         inner: false
       }).then(res => {
         this.tableDataFalse = [];
-        let tableDataFalse = [];
         this.length = res.data.length;
-        for (let i = 0; i < res.data.object.length; i++) {
-          tableDataFalse.push(res.data.object[i]);
-        }
-        this.tableDataFalse = tableDataFalse;
+        this.tableDataFalse = res.data.object;
       });
     },
     // 获取内置仿真资源列表
@@ -206,12 +210,9 @@ export default {
         inner: true
       }).then(res => {
         this.tableDataTrue = [];
-        let tableDataTrue = [];
         this.lengthinner = res.data.length;
-        for (let i = 0; i < res.data.object.length; i++) {
-          tableDataTrue.push(res.data.object[i]);
-        }
-        this.tableDataTrue = tableDataTrue;
+        this.tableDataTrue = res.data.object;
+
       });
     },
 
@@ -256,7 +257,6 @@ export default {
     },
     //克隆我的仿真资源
     ReplicateTheBuiltInExperimentMy(id) {
-      // this.dialogVisiblecopyMy = false;
       let type = true;
       if (this.inputcopyname == "" || this.inputcopyname.length == 0) {
         this.$message.error({
@@ -563,8 +563,8 @@ export default {
     }
   }
   .simulationResourcesOverall {
-    height: 93%;
-    width: 95%;
+    height: 95%;
+    width: 97.6%;
     overflow: auto;
     background-color: #fff;
     margin-left: 20px;
@@ -636,6 +636,9 @@ export default {
 }
 .simulationResourcesOverallgroup .el-menu {
   border: 0px solid red;
+}
+.el-table .warning-row {
+  background: #f7faff;
 }
 </style>
 

@@ -10,23 +10,11 @@
         <!-- 实训指导书 -->
         <el-form-item label="实训指导书" class="chongqing f18">
           <span class="span">{{form.guide.name}}</span>
-          <el-button
-            icon="el-icon-plus"
-            size="mini"
-            @click="handleChange(form.guide.name, form.guide.path)"
-            class="successPreservation"
-            type="primary"
-          >打开</el-button>
+          <el-button icon="el-icon-plus" size="mini" @click="handleChange(form.guide.name, form.guide.path)" class="successPreservation" type="primary">打开</el-button>
         </el-form-item>
         <!-- 参考附件 -->
         <el-form-item label="参考附件" class="chongqing f18">
-          <el-table
-            :data="form.reference"
-            border
-            style="width: 100%;margin:5px 0;text-align:center"
-            stripe
-            :header-cell-style="{background:'#b2e2f8'}"
-          >
+          <el-table :data="form.reference" border style="width: 100%;margin:5px 0;text-align:center" stripe :header-cell-style="{background:'#b2e2f8'}">
             <el-table-column prop="name" label="附件名称" min-width="150"></el-table-column>
             <el-table-column prop="typeName" label="类型" min-width="100"></el-table-column>
             <el-table-column label="操作" min-width="150">
@@ -43,55 +31,21 @@
             <el-col :span="6">
               <div class="laboratoryBook" :title="form.report.name">
                 {{form.report.name}}
-                <i
-                  @click="deletework()"
-                  class="el-icon-circle-close"
-                  v-show="islook"
-                ></i>
+                <i @click="deletework()" class="el-icon-circle-close" v-show="islook"></i>
               </div>
             </el-col>
             <el-col :span="2">
               <div>
-                <el-upload
-                  class="upload-demo"
-                  action="/img/taskUpload"
-                  :before-upload="beforeUploadword"
-                  style
-                  :limit="5"
-                >
-                  <el-button
-                    size="mini"
-                    icon="el-icon-upload"
-                    v-if="islook"
-                    class="downPreservation"
-                    type="primary"
-                  >上传文件</el-button>
+                <el-upload class="upload-demo" action="/img/taskUpload" :before-upload="beforeUploadword" style :limit="5">
+                  <el-button size="mini" icon="el-icon-upload" v-if="islook" class="downPreservation" type="primary">上传文件</el-button>
                 </el-upload>
               </div>
             </el-col>
             <el-col :span="10">
               <div>
-                <el-button
-                  icon="el-icon-plus"
-                  size="small"
-                  @click="handleChange(form.report.name, form.report.path)"
-                  v-if="open"
-                  type="primary"
-                  class="successPreservation"
-                >打开</el-button>
-                <el-button
-                  size="mini"
-                  @click="download(form.report.name,form.report.path)"
-                  class="el-icon-top chongqing successPreservation"
-                  type="primary"
-                >导出</el-button>
-                <el-button
-                  size="mini"
-                  @click="download(form.reportTemName,form.reportTemPath)"
-                  class="el-icon-bottom chongqing downPreservation"
-                  v-show="islook"
-                  type="primary"
-                >下载模板</el-button>
+                <el-button icon="el-icon-plus" size="small" @click="handleChange(form.report.name, form.report.path)" v-if="open" type="primary" class="successPreservation">打开</el-button>
+                <el-button size="mini" @click="download(form.report.name,form.report.path)" class="el-icon-top chongqing successPreservation" type="primary">导出</el-button>
+                <el-button size="mini" @click="download(form.reportTemName,form.reportTemPath)" class="el-icon-bottom chongqing downPreservation" v-show="islook" type="primary">下载模板</el-button>
               </div>
             </el-col>
           </el-row>
@@ -99,26 +53,16 @@
         <!-- 仿真实训题 -->
         <el-form-item label="仿真实训题" class="f18">
           <template>
-            <el-table
-              :data="form.snapshoot"
-              border
-              style="width: 100%;margin:5px 0"
-              stripe
-              :header-cell-style="{background:'#b2e2f8'}"
-            >
+            <el-table :data="form.snapshoot" border style="width: 100%;margin:5px 0" stripe :header-cell-style="{background:'#b2e2f8'}">
               <el-table-column prop="name" label="附件名称" min-width="100"></el-table-column>
               <el-table-column prop="typeName" label="类型" min-width="60"></el-table-column>
               <el-table-column prop="name" label="原题" min-width="100">
                 <template slot-scope="scope">
-                  <el-button
-                    @click="compileClick(scope.row)"
-                    size="small"
-                    type="text"
-                  >{{scope.row.name}}</el-button>
+                  <el-button @click="compileClick(scope.row)" size="small" type="text">{{scope.row.name}}</el-button>
                 </template>
               </el-table-column>
 
-              <!-- <el-table-column prop="projectName" label="快照" min-width="110">
+              <el-table-column prop="projectName" label="快照" min-width="110">
                 <template slot-scope="scope" v-if="scope.row.projectId != null && scope.row.projectId != ''">
                   {{scope.row.projectName|dateformat}}
                   <el-button type="text" size="small" @click="snapshotLook(scope.row)">
@@ -128,7 +72,7 @@
                     <span class="icon iconfont">&#xeb99;</span>
                   </el-button>
                 </template>
-              </el-table-column>-->
+              </el-table-column>
             </el-table>
           </template>
         </el-form-item>
@@ -143,30 +87,13 @@
               </el-col>-->
               <el-col :span="1">
                 <div>
-                  <el-upload
-                    class="upload-demo"
-                    action="/img/taskUpload"
-                    :before-upload="beforeUpload"
-                    style
-                    :limit="5"
-                  >
-                    <el-button
-                      size="mini"
-                      icon="el-icon-upload"
-                      class="downPreservation"
-                      type="primary"
-                    >上传文件</el-button>
+                  <el-upload class="upload-demo" action="/img/taskUpload" :before-upload="beforeUpload" style :limit="5">
+                    <el-button size="mini" icon="el-icon-upload" class="downPreservation" type="primary">上传文件</el-button>
                   </el-upload>
                 </div>
               </el-col>
             </el-row>
-            <el-table
-              :data="form.otherAnnexs"
-              border
-              stripe
-              :header-cell-style="{background:'#b2e2f8'}"
-              style="margin:5px 0"
-            >
+            <el-table :data="form.otherAnnexs" border stripe :header-cell-style="{background:'#b2e2f8'}" style="margin:5px 0">
               <el-table-column prop="name" label="附件名称" min-width="170" sortable></el-table-column>
               <el-table-column prop="typeName" label="类型" min-width="120"></el-table-column>
               <el-table-column label="操作" min-width="150">
@@ -186,53 +113,18 @@
         </el-form-item>
       </el-form>
       <div class="operation">
-        <el-button
-          @click="SubmitAnExperimentReport('save')"
-          v-if="islook"
-          type="primary"
-          :loading="loading"
-          class="successPreservation fright"
-          size="mini"
-        >保存</el-button>
-        <el-button
-          @click="isSubmitAnExperimentReport('submit')"
-          v-if="islook"
-          type="primary"
-          :loading="loading"
-          class="dangerSubmission fright"
-          size="mini"
-        >提交</el-button>
-        <el-button
-          @click="$emit('detpage')"
-          v-if="!islook"
-          class="dangerSubmission2 fright"
-          type="primary"
-          size="mini"
-        >确定</el-button>
+        <el-button @click="SubmitAnExperimentReport('save')" v-if="islook" type="primary" :loading="loading" class="successPreservation fright" size="mini">保存</el-button>
+        <el-button @click="isSubmitAnExperimentReport('submit')" v-if="islook" type="primary" :loading="loading" class="dangerSubmission fright" size="mini">提交</el-button>
+        <el-button @click="$emit('detpage')" v-if="!islook" class="dangerSubmission2 fright" type="primary" size="mini">确定</el-button>
       </div>
 
       <!-- 弹窗 -->
       <!-- 新建2D弹出框 -->
-      <el-dialog
-        title="新建二维"
-        :visible.sync="testTemplateLibrary"
-        class="newBulletWindowFrame"
-        width="45%"
-      >
+      <el-dialog title="新建二维" :visible.sync="testTemplateLibrary" class="newBulletWindowFrame" width="45%">
         <div>
           <el-input placeholder="请输入新增二维名称" v-model="taskExperiment.name" class="input-with-select">
-            <el-select
-              v-model="erweiSelect"
-              slot="prepend"
-              placeholder="请选泽二维模式"
-              style="width:180px"
-            >
-              <el-option
-                :label="item.name"
-                :value="item"
-                v-for="(item) in simulationResourcesType"
-                :key="item.id"
-              ></el-option>
+            <el-select v-model="erweiSelect" slot="prepend" placeholder="请选泽二维模式" style="width:180px">
+              <el-option :label="item.name" :value="item" v-for="(item) in simulationResourcesType" :key="item.id"></el-option>
             </el-select>
           </el-input>
         </div>
@@ -245,20 +137,10 @@
       <el-dialog title="新建三维" :visible.sync="dialogVisiblecopyscene" width="45%">
         <div>
           <el-input placeholder="请输入新增场景名称" v-model="taskExperiment.name" class="input-with-select">
-            <el-select
-              v-model="sanweiSelect1"
-              slot="prepend"
-              placeholder="请选泽三维模式"
-              style="width:150px;margin-right:10px"
-            >
+            <el-select v-model="sanweiSelect1" slot="prepend" placeholder="请选泽三维模式" style="width:150px;margin-right:10px">
               <el-option :label="item.name" :value="item" v-for="item in pattern" :key="item.id"></el-option>
             </el-select>
-            <el-select
-              v-model="sanweiSelect2"
-              slot="prepend"
-              placeholder="请选泽场景模式"
-              style="width:150px"
-            >
+            <el-select v-model="sanweiSelect2" slot="prepend" placeholder="请选泽场景模式" style="width:150px">
               <el-option :label="item.name" :value="item" v-for="item in patterncon" :key="item.id"></el-option>
             </el-select>
           </el-input>
@@ -275,13 +157,7 @@
         </div>
       </el-dialog>
       <!-- 视屏文件查看 -->
-      <el-dialog
-        width="74%"
-        title="播放视屏"
-        top="8vh"
-        append-to-body
-        :visible.sync="innerVisiblevideo"
-      >
+      <el-dialog width="74%" title="播放视屏" top="8vh" append-to-body :visible.sync="innerVisiblevideo">
         <div style="height:75vh">
           <video id="player" width="100%" height="100%" controls>
             您的浏览器不支持HTML5
@@ -291,20 +167,9 @@
         </div>
       </el-dialog>
       <!-- 快照折线图查看 -->
-      <el-dialog
-        width="50%"
-        title="实训快照折线图"
-        top="8vh"
-        append-to-body
-        :visible.sync="innerVisiblePolyline"
-      >
+      <el-dialog width="50%" title="实训快照折线图" top="8vh" append-to-body :visible.sync="innerVisiblePolyline">
         <div style="height:55vh">
-          <div
-            id="myChart2"
-            :style="{width: '90%', height: '80%'}"
-            class="myChart2"
-            v-if="innerVisiblePolyline"
-          ></div>
+          <div id="myChart2" :style="{width: '90%', height: '80%'}" class="myChart2" v-if="innerVisiblePolyline"></div>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="innerVisiblePolyline=false">确 定</el-button>
@@ -849,7 +714,7 @@ export default {
               }
               this.otherAnnexsUpload1(item + 1, type);
             })
-            .catch(function(error) {
+            .catch(function (error) {
               this.$message({
                 showClose: true,
                 duration: 1000,

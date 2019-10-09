@@ -1,12 +1,16 @@
 <template>
   <div id="app">
-    <el-row type="flex" class="Navigation">
+    <el-row type="flex" class="Navigation" v-show="logintype" :style="{'background-color': (ishome==true ? '#fff':'#fff')}">
       <el-col :span="3" class="Navigation-l" v-show="logintype" style="min-width:250px">
-        <img src="./image/logo6.png" slt class="logog" />
+        <img src="./image/tonglifanglogo5.png" slt class="logog" />
       </el-col>
-      <el-col :span="19"></el-col>
-      <el-col :span="2">
+      <el-col :span="19" style="border-bottom:1px solid #4d7283 ; line-height: 61px;"></el-col>
+
+      <el-col :span="2" style="border-bottom:1px solid #4d7283; width:180px;">
+        <img src="./image/学生头像.png" style="padding-top:18px; margin-right:-35px; height:40px;" v-if="sheadPortrait">
+        <img src="./image/男老师头像.png" style="padding-top:15px; margin-right:-45px;height:45px;;" v-if="theadPortrait">
         <el-dropdown trigger="click" v-show="logintype" class="loginText">
+
           <el-button type="text">
             {{name}}
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -16,10 +20,10 @@
               <el-dropdown-item>退出登录</el-dropdown-item>
             </button>-->
             <!-- 个人中心 -->
-            
-            <el-dropdown-item >
+
+            <el-dropdown-item>
               <div @click="gouser()" v-if="status=='student'||status=='teacher'">个人中心</div>
-              
+
             </el-dropdown-item>
             <el-dropdown-item>
               <div @click="login">退出登录</div>
@@ -41,10 +45,14 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
+      sheadPortrait: false,
+      theadPortrait: false,
       logintype: false,
       isuser: false,
+      ishome: false,
       status: "",
-      name:'',
+      name: '',
+      gender: "",
     };
   },
   methods: {
@@ -70,48 +78,48 @@ export default {
       this.$router.push("/login");
     },
     // 去个人中心
-    gouser(){
-        sessionStorage.setItem(
-          "GoUser",
-          JSON.stringify({
-            path: this.$route.path,
-          
-          })
-        );
-
-        if(this.status=='student'){
-            this.$router.push('/user')
-        }else if(this.status=='teacher'){
-            this.$router.push('/user')
-        }else{
-             this.$router.push('/login')
-        }
+    gouser() {
+      sessionStorage.setItem("GoUser", JSON.stringify({
+        path: this.$route.path,
+      })
+      );
+      if (this.status == 'student') {
+        this.$router.push('/user')
+      } else if (this.status == 'teacher') {
+        this.$router.push('/user')
+      } else {
+        this.$router.push('/login')
+      }
     },
     usertype() {
       let user = JSON.parse(sessionStorage.getItem("user"));
-    
-      this.name=user.name;
+      this.name = user.name;
       if (user.role == "student") {
+        this.sheadPortrait = true;
+        this.theadPortrait = false;
         this.status = "student";
       } else if (user.role == "teacher") {
+        this.sheadPortrait = false;
+        this.theadPortrait = true;
         this.status = "teacher";
       } else {
         this.status = "";
-        // console.log(this.status);
       }
-    }
+    },
   },
   watch: {
     $route: {
-      handler: function(val, oldVal) {
+      handler: function (val, oldVal) {
         if (val.path == "/register" || val.path == "/login") {
           this.logintype = false;
         } else {
           this.logintype = true;
           if (val.path == "/home") {
             this.isuser = false;
+            this.ishome = true;
           } else {
             this.isuser = true;
+            this.ishome = false;
           }
           this.usertype();
         }
@@ -124,9 +132,9 @@ export default {
     ...mapState(["userlist"])
   },
   mounted() {
-   
+
     // 关闭浏览器窗口的时候清空浏览器缓存在localStorage的数据
-   
+
   },
   beforeDestroy() {
     // localStorage.setItem("token", '123');
@@ -138,8 +146,10 @@ export default {
       this.logintype = true;
       if (this.$route.path == "/home") {
         this.isuser = false;
+        this.ishome = true;
       } else {
         this.isuser = true;
+        this.ishome = false;
       }
       this.usertype();
     }
@@ -158,27 +168,31 @@ export default {
     //         this.$refs.autoRun.click();
     //     }
   },
-  mounted() {}
+  mounted() { }
 };
 </script>
 
 
 <style >
 .Navigation {
-  background-color: #0078d7;
+  color: #282828;
+  background-color: #fff;
+  line-height: 61px;
+  height: 61px;
 }
 .Navigation-l {
   padding-top: 5px;
-  height: 60px;
+
   background-color: #282828;
 }
 .logog {
-  margin-left: 5%;
+  margin-left: 10px;
   /* width: 100%; */
   height: 50px;
 }
-.loginText{
+.loginText {
   margin-left: 40px;
+  /* border-bottom:1px solid #4d7283 ; */
 }
 .el-icon-refresh {
   font-size: 25px;
@@ -194,6 +208,12 @@ body {
   margin: 0px;
   overflow: hidden;
   min-width: 1000px;
+  -webkit-touch-callout: none;  
+    -webkit-user-select: none;  
+    -khtml-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none;  
+    user-select: none;  
 }
 a {
   display: inline-block;
@@ -209,7 +229,8 @@ h3 {
   margin: 15px 0 !important;
 }
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "Hiragino Sans GB", "Microsoft YaHei", Helvetica, Arial,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -272,7 +293,8 @@ button {
 </style>
 <style scoped>
 .el-button--text {
-  color: #fff;
+  color: #606266;
+  margin-top: -18px;
 }
 </style>
 
