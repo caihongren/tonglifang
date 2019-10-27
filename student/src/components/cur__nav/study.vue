@@ -2,27 +2,41 @@
   <div class="box">
     <!-- 目录 -->
     <el-row type="flex" class="row-bg">
-      <el-col :span="3">
-        <div class="grid-content bg-purple left">
-          <div class="Catalog-img"><img src="./../../image/course-top1.png"></div>
+      <el-col :span="3" class="row-left">
+        <div class="left">
           <div class="top">
-            <el-menu default-active="1" class="el-menu-vertical-demo" background-color="rgb(35,38,41)" text-color="#fff" active-text-color="#ffd04b" router >
+            <el-menu default-active="1" class="el-menu-vertical-demo" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" router>
               <el-menu-item :index="courseIntroductionPath">
-                <i class="el-icon-menu"></i>
-                <span slot="title" class="introduce">课程介绍</span>
+                <span slot="title" class="icon iconfont introduce">&#xe501; 课程介绍</span>
               </el-menu-item>
-              <el-menu-item :index="curriculumLearningPath">
-                <div class="two" >
-                  <i class="el-icon-menu"></i>
-                  <span slot="title" class="introduce">课程学习</span>
-                </div>
+              <el-menu-item :index="trainingCourse" v-show="isshow">
+                <span slot="title" class="icon iconfont introduce" >&#xe622; 课程实训</span>
               </el-menu-item>
+              <el-menu-item :index="studentTrainingCourse" v-show="isstudent">
+                <span slot="title" class="icon iconfont introduce">&#xe622; 课程实训</span>
+              </el-menu-item>
+              <el-menu-item :index="myTraining" v-show="isshow">
+                <span slot="title" class="icon iconfont introduce">&#xe538; 我的实训</span>
+              </el-menu-item>
+              <el-menu-item :index="myHomework" v-show="isstudent">
+                <span slot="title" class="icon iconfont introduce">&#xe63f; 我的作业</span>
+              </el-menu-item>
+              <el-menu-item :index="averageScore" v-show="isshow">
+                <span slot="title" class="icon iconfont introduce">&#xe734; 平均成绩</span>
+              </el-menu-item>
+              <!-- <el-menu-item :index="experimentDetails">
+                <span slot="title" class="icon iconfont introduce">&#xe734; 教练考模式</span>
+              </el-menu-item> -->
+
+              <!-- <a download="下载.zip" href="http://cloud.icubespace.com/creator/download_file/PLCfangzhenruanjian.zip">
+                <button>dawdadw</button>
+              </a>-->
             </el-menu>
           </div>
         </div>
       </el-col>
-      <el-col :span="21">
-        <div class="grid-content bg-purple right">
+      <el-col :span="21" style="background-color:#f1f1f1; width:100%">
+        <div class="right">
           <router-view></router-view>
         </div>
       </el-col>
@@ -30,120 +44,99 @@
   </div>
 </template>
 <script>
-import {get_course_description} from "@/API/api";
+import { get_course_description } from "@/API/api";
 export default {
+  name:'study',
   data() {
     return {
-      //curriculumLearning: true,
-      icon:"",
-      courseIntroductionPath: "",//课程介绍路由路径
-      curriculumLearningPath: ""//课程学习路由路径
-    }
+      isshow: "true",
+      icon: "",
+      courseIntroductionPath: "", //课程介绍路由路径
+      curriculumLearningPath: "", //课程学习路由路径
+      trainingCourse:'',  //学生端课程实训
+      myTraining:'',   //我的实训
+      myHomework:'',  //我的作业
+      experimentDetails:'',  //教考练
+      studentTrainingCourse:'', //学生端课程实训
+      averageScore: "", //平均成绩路由路径
+      isstudent: "true"
+    };
   },
   methods: {
-    //判断老师还是学生
-    courseIntroductionToInit(){
-      let  user= JSON.parse( sessionStorage.getItem("user"))
-      if(user.role == "teacher"){
-       this.curriculumLearning = false;
-       this.courseIntroductionPath = "/relayteacher/study/courseIntroduction";//课程介绍老师路由地址
-       this.curriculumLearningPath ="/relayteacher/study/curriculumLearning";//课程学习老师路由地址
-      }else if(user.role == "student"){
-        this.curriculumLearning = true;
-        this.courseIntroductionPath = "/relay/study/courseIntroduction";//课程介绍学生路由地址
-        this.curriculumLearningPath ="/relay/study/curriculumLearning"; //课程学习老师路由地址
-      }else{
-         this.$router.push("/login");
+    //判断教师还是学生
+    courseIntroductionToInit() {
+      let user = JSON.parse(sessionStorage.getItem("user"));
+      if (user.role == "teacher") {
+        this.isstudent = false;
+        this.trainingCourse = "/relayteacher/study/trainingCourse";
+        this.myTraining = "/relayteacher/study/myTraining";
+        this.experimentDetails = "/relayteacher/study/experimentDetails";
+        this.courseIntroductionPath = "/relayteacher/study/courseIntroduction"; //课程介绍教师路由地址
+        this.averageScore = "/relayteacher/study/averageScore"; //课程学习教师路由地址
+      } else if (user.role == "student") {
+        this.isshow = false;
+        this.myHomework = "/relay/study/myHomework";
+        this.experimentDetails = "/relay/study/experimentDetails";
+        this.courseIntroductionPath = "/relay/study/courseIntroduction"; //课程介绍学生路由地址
+         this.studentTrainingCourse = "/relay/study/studentTrainingCourse";
+      } else {
+        this.$router.push("/login");
       }
-     
-
     }
-    
   },
   created() {
-     //获取课程介绍内容
+    //获取课程介绍内容
+    let course = JSON.parse(sessionStorage.getItem("course"));
     get_course_description({
-      courseId: "7c6684b1-b41c-467a-8706-8b5ebb31d3a0",
-    })
-      .then(res => {
-        this.icon = res.data.object.icon;//将课程介绍内容绑定到页面相应位置
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+      courseId: course.id
+    }).then(res => {
+      console.log(res,'888')
+      this.icon = res.data.object.icon; //将课程概述内容绑定到页面相应位置
+    });
     this.courseIntroductionToInit();
-  },
+  }
 };
 </script>
 <style  lang="less" scoped >
-.el-menu{
-background-color: rgb(35,38,41);
+.el-menu-vertical-demo {
+  margin-top: 18px;
 }
-.el-menu-item{
-  color: #fff;
-  font-size:16px;
-}
+
 .box {
-  margin-top: -1px;
-  height: 95%;
+  height: 100%;
+  width: 100%;
   .row-bg {
     height: 100%;
-    box-sizing: border-box;
-    .left {
-      position: relative;
-      background-color: rgb(35,38,41);
-      height: 98%;
-      .Catalog-img {
-        width: 100%;
-        height: 150px;
-        img {
-          width: 100%;
-          height: 150px;
-        }
-      }
-      .top {
-        text-align:center;
+    width: 100%;
+    .row-left {
+      min-width: 250px;
+      height: 100%;
+      .left {
+        position: relative;
         height: 100%;
-        display: flex;
-        flex-direction: column;
-        .el-menu{
-          border: 1px solid rgb(35, 38, 41)
-        }
-        span {
-
-          font-style: "微软雅黑";
-          font-size: 16px;
-        }
-        .one {
-          width: 100%;
-          height: 10%;
+        .top {
+          background-color: #313131;
+          text-align: center;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
           .introduce {
-            padding-left: 35%;
-
-          }
-        }
-        .two {
-          width: 100%;
-          height: 10%;
-          .study {
-            padding-left: 35%;
+            font-family: "Microsoft YaHei";
+            font-size: 18px;
+            text-align: center;
           }
         }
       }
-      
     }
     .right {
+      background-color: #f1f1f1;
       position: relative;
-      height: 98%;
+      height: 100%;
+      width: 100%;
     }
   }
 }
 </style>
 
-<style>
-  .two .el-menu{
-          border: 1px solid rgb(35, 38, 41)
-        }
-</style>
 
 

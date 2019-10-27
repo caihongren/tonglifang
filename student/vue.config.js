@@ -67,6 +67,11 @@
 //     }
 // }
 
+const path = require('path');
+
+function resolve(dir) {
+    return path.join(__dirname, dir);
+}
 
 // 本地使用代理
 
@@ -77,7 +82,19 @@ module.exports = {
         runtimeCompiler: true, //关键点在这  原来的 Compiler 换成了 runtimeCompiler
         // 调整内部的 webpack 配置。
         // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/webpack.md
-        chainWebpack: () => {},
+        chainWebpack: (config) => {
+            config.module
+                .rule('')
+                .test(/mxClient\.js$/)
+                .use('exports-loader')
+                .loader('exports-loader?mxClient,mxGraphModel,mxActor,mxShape,mxEventObject,mxGraph,mxPrintPreview,mxEventSource,mxRectangle,mxVertexHandler,mxMouseEvent,mxGraphView,mxImage,mxGeometry,mxRubberband,mxKeyHandler,mxDragSource,mxGraphModel,mxEvent,mxUtils,mxWindow,mxEvent,mxCodec,mxCell,mxConstants,mxPoint,mxGraphHandler,mxCylinder,mxCellRenderer,mxEvent,mxUndoManager')
+                .end();
+            config.resolve.alias
+                .set('@', resolve('src'))
+                .set('@assets', resolve('src/assets'));
+            // 按这种格式.set('', resolve('')) 自己添加
+
+        },
         configureWebpack: () => {},
         // 配置 webpack-dev-server 行为。
         devServer: {
@@ -87,25 +104,29 @@ module.exports = {
             https: false,
             hotOnly: false,
             proxy: { // 配置跨域
-                '/api': {　　　　　　　　　 //要访问的跨域的api的域名
-                    // target: 'http://192.168.2.223:8080',
-                    // target: 'http://192.168.0.104:8080',
-                    target: 'http://192.168.2.200:8080/creatoraccount',
-                    // target: 'http://sso.icubespace.com/account',
+                '/apl': { //要访问的跨域的api的域名
+                    //target: 'http://106.75.128.230:10000/zuul/creator/api/public/account',
+                    //target: 'http://192.168.2.223:10000/zuul/creator/api/public/account',
+                    //target: 'http://192.168.2.200:10000/zuul/creator/api/public/account',
+                    //target: 'http://cloud.asp0755.com/creator/api/public/account',
+                    //target: 'http://192.168.0.104:8081',
+                    //target: 'http://192.168.0.200:9051',
+                     target: 'http://106.75.128.230:9051',
                     ws: true,
-
                     changOrigin: true,
                     pathRewrite: {
-                        '^/api': ''
+                        '^/apl': ''
                     }
                 },
                 '/img': {
-                    // target: 'http://192.168.2.223:8081',
-                    //target: 'http://192.168.0.104:8081', //
-                    target: 'http://192.168.2.200:8080/creatorcourse',
-                    // target: 'http://sso.icubespace.com/course',
 
-
+                    //target: ' http://cloud.asp0755.com/creator/api/public/course1',
+                    //target: ' http://106.75.128.230:10000/creator/api/public/course1',
+                    //target: 'http://192.168.2.223:10000/zuul/creator/api/public/course',
+                    // target: 'http://192.168.2.200:8080/creatorcourse',
+                    //target: 'http://192.168.2.200:10000/zuul/creator/api/public/course',
+                    //target: 'http://192.168.0.200:9051',
+                    target: 'http://106.75.128.230:9051',
                     changeOrigin: true,
                     pathRewrite: {
                         '^/img': ''

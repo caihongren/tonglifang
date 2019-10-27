@@ -2,24 +2,18 @@
   <div class="relaybanner">
     <el-menu
       :default-active="activeIndex"
-      class="el-menu-demo"
+      class="el-menu-demo Surveybox"
       mode="horizontal"
       @select="handleSelect"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b"
+      background-color="#fff"
+      text-color="#ddd"
+      active-text-color="#ffc113"
     >
-      <router-link to="/addstudent/teacher">
-        <el-menu-item index="1" class="Surveybox">基础管理</el-menu-item>
-      </router-link>
-      <!-- <router-link to="/relayteacher/resources">
-        <el-menu-item index="2">资源管理</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/task">
-        <el-menu-item index="3">任务管理</el-menu-item>
+      <!-- <router-link to="/addstudent/teacher">
+        <el-menu-item index="1" style="font-size:18px;">基础管理</el-menu-item>
       </router-link> -->
     </el-menu>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -35,42 +29,44 @@ export default {
       console.log(key, keyPath);
     }
   },
+  created(){
+   
+      if(sessionStorage.getItem("user")==null){
+      this.$router.push('/login')
+    }
+  },
   //创建前设置增加滚动条
   beforeCreate() {
-    document
-      .querySelector("body")
-      .setAttribute("style", "overflow-y:scroll;background-color:#EEE9E9	");
-    // document.querySelector('body').setAttribute('style', 'background-color:#ccc')
+    // document.querySelector("body").setAttribute("style", "overflow-y:scroll;");
   },
   //销毁前清除滚动
   beforeDestroy() {
-    document
-      .querySelector("body")
-      .removeAttribute("style", "overflow-y:scroll;");
+    // document
+    //   .querySelector("body")
+    //   .removeAttribute("style", "overflow-y:scroll;");
   }
 };
 </script>
 
 <style lang="less" scoped>
+.relaybanner {
+  position: relative;
+    height:calc(100% - 60px);
+}
 // 分页导航条
 a {
   text-decoration: none;
   display: inline-block;
 }
-.el-menu-demo {
-  height: 50px;
-  margin-top: -1px;
-  margin-bottom: 10px;
-}
 .el-menu-item {
-  height: 48px;
+  height: 60px;
   margin-left: 35px;
+  line-height: 60px;
 }
-.Surveybox{
+.Surveybox {
+  position: absolute;
+  top: -60px;
+  left: 200px;
   margin-left: 200px;
 }
-.relaybanner{
-  // height: 100%;
-}
-
 </style>

@@ -23,7 +23,7 @@
           <el-form-item label="选择身份">
             <el-select v-model="registerUser.identity" placeholder="请选择身份">
               <el-option label="管理员" value="manager"></el-option>
-              <el-option label="老师" value="teacher"></el-option>
+              <el-option label="教师" value="teacher"></el-option>
               <el-option label="学生" value="student"></el-option>
             </el-select>
           </el-form-item>
@@ -132,8 +132,8 @@ export default {
 <style lang="less" scoped>
 .register {
   position: relative;
-  width: 90%;
-  height: 800px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
   background: url(./../image/150325rxssts2sf2ft72df.jpg);
   background-size: 100% 100%;

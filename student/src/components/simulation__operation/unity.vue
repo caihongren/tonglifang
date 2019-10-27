@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div>
-      <span>仿真实验进行中........</span>
+      <span>仿真实训进行中........</span>
     </div>
   </div>
 </template>
@@ -18,8 +18,9 @@ export default {
   methods: {
     on_click_hide_unity_window() {
       var cmd = "{'opcode':3}";
-
-      wfapp.start(cmd);
+ if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     }
   },
   created() {},

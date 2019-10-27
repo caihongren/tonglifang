@@ -1,68 +1,51 @@
 <template>
   <div class="box">
-    <router-link to="/relayteacher/taskManagement">
+    <!-- <router-link to="/relayteacher/taskManagement">
       <el-button type="primary" size="small" icon="el-icon-back" style="margin-top:20px">返回</el-button>
-    </router-link>
+    </router-link>-->
     <el-aside width="100%" border="true">
       <div style="height:50px" class="bottonbox">
-        <span class="buttombox">任务编辑器</span>
-        <!-- <el-button type="primary" icon="el-icon-search" class="search">新增任务</el-button> -->
+        <span class="buttombox" style=" color:#00a0e9">任务编辑器</span>
       </div>
-    </el-aside>
-    <ul class="ul">
-      <li class="li">说明</li>
-      <li class="li">下发对象</li>
-      <li class="li" style="width:28%">任务时间</li>
-      <li class="li" style="width:17%">实验模板选择</li>
-
-      <li class="li" style="width:14%;border-right:1px solid #ccc">操作</li>
+    </el-aside >
+    <ul class="ul" style="">
+      <li class="li headline" style="width:17%">实训模板选择</li>
+      <li class="li headline">下发对象</li>
+      <li class="li headline">备注</li>
+      <li class="li headline" style="width:28%">截止时间</li>
+      <li class="li headline" style="width:14%;border-right:1px solid #ccc">操作</li>
     </ul>
     <ul class="ul">
-      <li class="li">按要求完成任务</li>
-      <li class="li">
-        <el-button type="primary" @click="modal1 = true">选择</el-button>
-      </li>
-      <li class="li" style="width:28%">
-        <el-date-picker
-          v-model="value1"
-          type="date"
-          :picker-options="pickerOptions1"
-          format="yyyy 年 MM 月 dd 日"
-         
-          placeholder="选择截止日期时间"
-        ></el-date-picker>
-      </li>
       <li class="li" style="width:17%">
         <template>
           <el-select v-model="addIssued.taskTemplateId" clearable placeholder="请选择">
-            <el-option
-              v-for="item in tableDataBox"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
+            <el-option v-for="item in tableDataBox" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </template>
       </li>
+      <li class="li">
+        <el-button type="primary" size="mini" @click="modal1 = true" v-if="studentname.length>0?false:true" class="Arrow">选择</el-button>
+        <p class="student" v-if="studentname.length>0?true:false" @click="modal1 = true">{{studentname}}</p>
+      </li>
+      <li class="li">
+        <el-input v-model="addIssued.remark" placeholder="请输入内容" style="width:80%"></el-input>
+      </li>
+
+      <li class="li" style="width:28%">
+        <el-date-picker v-model="value1" type="date" :picker-options="pickerOptions1" format="yyyy 年 MM 月 dd 日" placeholder="选择截止日期时间"></el-date-picker>
+      </li>
+
       <li class="li" style="width:14%;border-right:1px solid #ccc">
-        <el-button type="primary" size="mini" @click="open2">下发</el-button>
-        <el-button type="primary" size="mini" @click="open4">删除取消</el-button>
+        <el-button type="primary" size="mini" @click="open2" class="Arrow">下发</el-button>
+        <!-- <el-button type="primary" size="mini" @click="open4">删除取消</el-button> -->
       </li>
     </ul>
-    <el-dialog title="选择下发对象" :visible.sync="modal1" width="30%">
-      <el-tree
-        :data="students"
-        show-checkbox
-        default-expand-all
-        node-key="id"
-        ref="tree"
-        highlight-current
-        :props="defaultProps"
-      ></el-tree>
+    <el-dialog title="选择下发对象" :visible.sync="modal1" width="30%" append-to-body class="modify">
+      <el-tree :data="students" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current :props="defaultProps"></el-tree>
       <span slot="footer" class="dialog-footer">
         <!-- <el-button @click="getCheckedNodes">通过 node 获取</el-button> -->
-        <el-button @click="modal1 = false">取 消</el-button>
-        <el-button type="primary" @click="getCheckedNodes">确 定</el-button>
+        <el-button type="primary" @click="modal1 = false" size="mini" class="closeButton"  >取 消</el-button>
+        <el-button type="primary" @click="getCheckedNodes" size="mini" class="preservation">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -70,20 +53,27 @@
 
 
 <script>
-import { Nxmission, templateList, getclass, formatDate } from "./../../API/api";
+import {
+  Nxmission,
+  getTemplateList,
+  getclass,
+  formatDate
+} from "./../../API/api";
 import { log } from "util";
 export default {
   data() {
     return {
       value1: "",
       offset: 0,
-      limit: 50,
+      limit: 10000,
+      studentname: "",
       addIssued: {
         taskTemplateId: "",
         accountIds: [],
-        annexIds: "",
+        // annexIds: "",
         startTime: "",
-        finishTime: ""
+        finishTime: "",
+        remark: ""
       },
       tableDataBox: [],
       tcourseId: "",
@@ -98,12 +88,12 @@ export default {
       },
       pickerOptions1: {
         shortcuts: [
-          {
-            text: "今天",
-            onClick(picker) {
-              picker.$emit("pick", new Date());
-            }
-          },
+          // {
+          //   text: "今天",
+          //   onClick(picker) {
+          //     picker.$emit("pick", new Date());
+          //   }
+          // },
           {
             text: "明天",
             onClick(picker) {
@@ -116,57 +106,72 @@ export default {
             text: "一周后",
             onClick(picker) {
               const date = new Date();
-              date.setTime(date.getTime() +3600 * 1000 * 24 * 7);
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            }
+          },
+          {
+            text: "一月后",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
               picker.$emit("pick", date);
             }
           }
         ],
-         disabledDate(time) {
-                    // console.log('111');
-                    return time.getTime() < Date.now();
-                }
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        }
       },
 
       students: []
     };
   },
   methods: {
-   
-    handleCurrentChange() {},
+    handleCurrentChange() { },
     open2() {
-      // console.log(formatDate(this.value1[0]));
       //  下发时间为当前时间
-      let finishTime=this.value1;
-      // console.log(finishTime,formatDate(finishTime))
-      if(finishTime==""){
+      let finishTime = this.value1
+
+      if (finishTime == "") {
         this.$message.error({
-            message: "请选择下发时间",
-            type: "warning"
-          });
-        return 
+          showClose: true,
+          duration: 1000,
+          message: "请选择下发时间",
+          type: "warning"
+        });
+        return;
       }
       this.addIssued.startTime = formatDate(new Date().setTime(new Date().getTime()));
+      finishTime.setHours(23)
+      finishTime.setMinutes(59, 59, 148)
       this.addIssued.finishTime = formatDate(finishTime);
-      // console.log(this.addIssued.startTime,this.addIssued.finishTime)
-      // console.log(this.addIssued.accountIds.length);
+
       if (this.addIssued.accountIds.length > 0) {
         if (this.addIssued.taskTemplateId != "") {
-          Nxmission(this.addIssued).then(res => {
-            // console.log(res);
-            this.$message({
-              message: "下发成功",
-              type: "success"
-            });
-            this.$router.push("/relayteacher/taskManagement");
-          });
+          Nxmission(this.addIssued)
+            .then(res => {
+              this.$message({
+                showClose: true,
+                duration: 1000,
+                message: "下发成功",
+                type: "success"
+              });
+              this.$emit('taskissue');
+              // this.$router.push("/relayteacher/taskManagement");
+            })
         } else {
           this.$message.error({
-            message: "请选择实验模板",
+            showClose: true,
+            duration: 1000,
+            message: "请选择实训模板",
             type: "warning"
           });
         }
       } else {
         this.$message.error({
+          showClose: true,
+          duration: 1000,
           message: "请选择下发对象",
           type: "warning"
         });
@@ -174,72 +179,115 @@ export default {
     },
     getCheckedNodes() {
       this.modal1 = false;
-      // console.log(this.$refs.tree.getCheckedNodes());
+      let studentname = "";
       let list = this.$refs.tree.getCheckedNodes();
       let accountIds = [];
       for (let i = 0; i < list.length; i++) {
-        // console.log(list[i]);
         if (list[i].accounts) {
         } else {
           accountIds.push(list[i].id);
+          if (i > 1) {
+            studentname += "," + list[i].name;
+          } else {
+            studentname += list[i].name;
+          }
         }
       }
-      // console.log(accountIds);
       this.addIssued.accountIds = accountIds;
+      this.studentname = studentname;
     },
     open4() {
       this.value1 = [];
       this.addIssued.accountIds = [];
       this.addIssued.taskTemplateId = "";
-      this.$message.error("删除成功");
+      this.$message.error({
+        showClose: true,
+        duration: 1000,
+        message: "删除成功",
+      });
     },
     ok() {
-      this.$Message.info("已选择");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "已选择",
+      });
     },
     cancel() {
-      this.$Message.info("重新选择");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "重新选择",
+      });
       // 关闭之后的回调
     },
     addok() {
-      this.$Message.info("添加成功");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "添加成功",
+      });
     },
     addcancel() {
-      this.$Message.info("添加失败");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "添加失败",
+      });
     },
     LOERok() {
-      this.$Message.info("选择成功");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "选择成功",
+      });
     },
     LOERcancel() {
-      this.$Message.info("选择失败");
+      this.$Message.info({
+        showClose: true,
+        duration: 1000,
+        message: "选择失败",
+      });
     }
   },
   mounted() {
-    templateList({
+    let box = [];
+    getTemplateList({
       offset: this.offset,
-      limit: this.limit
+      limit: this.limit,
+      inner: false
     }).then(res => {
-      // console.log(res.data.object, "模板列表");
-
       this.tableDataBox = res.data.object;
+      getTemplateList({
+        offset: this.offset,
+        limit: this.limit,
+        inner: true
+      }).then(res => {
+        this.tableDataBox = this.tableDataBox.concat(res.data.object);
+      });
     });
   },
   created() {
     let course = JSON.parse(sessionStorage.getItem("course"));
     this.courseId = course.id;
-    // console.log(course);
     getclass({
       courseId: this.courseId
     }).then(res => {
-      // console.log(res, "学生列表");
+
       this.students = res.data.object;
     });
   }
 };
 </script>
-
-
-
 <style lang="less" scoped>
+.modify .el-dialog__title {
+  color: #00a0e9;
+}
+.Arrow{
+  background-color: #00a0e9;
+  border: none;
+  border-radius: 0px;
+}
 @media screen and (min-width: 1200px) and (max-width: 1500px) {
   .tablebox {
     width: 1200px;
@@ -262,8 +310,10 @@ export default {
 .bottonbox {
   position: relative;
   margin-top: 20px;
-  border: 1px solid #ccc;
-  margin: 20px 40px;
+  margin: 20px 0px;
+  line-height: 50px;
+  font-size: 20px;
+  font-weight: 700;
 
   border-radius: 5px;
   span {
@@ -294,22 +344,37 @@ export default {
     right: 320px;
   }
 }
+
+.student {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  overflow: hidden; //超出的文本隐藏
+  text-overflow: ellipsis; //溢出用省略号显示
+  white-space: nowrap; //溢出不换行
+}
 .ul {
   width: 95%;
   height: 50px;
   margin: 0;
+  
   .li {
     float: left;
     width: 20%;
     background-color: #ffffff;
     height: 60px;
-
+    box-sizing: border-box;
     border: 1px solid #ccc;
     border-right: 0px solid black;
     text-align: center;
     line-height: 60px;
   }
+  .headline{
+    background-color:#b2e2f8
 }
+}
+
 .search {
   float: right;
   position: absolute;
@@ -317,12 +382,5 @@ export default {
   right: 10px;
   margin: 5px 10px;
 }
-.buttombox {
-  height: 50px;
-  line-height: 50px;
-  font-size: 20px;
-  font-weight: 700;
-}
-
 </style>
 

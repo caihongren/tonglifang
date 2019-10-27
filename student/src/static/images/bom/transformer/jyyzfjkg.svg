@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="46px" height="46px" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 0.394293 0.394333"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str3 {stroke:#1F1A17;stroke-width:0.00806276}
+    .str2 {stroke:#1F1A17;stroke-width:0.0120941}
+    .str1 {stroke:#1F1A17;stroke-width:0.012719}
+    .str0 {stroke:#1F1A17;stroke-width:0.0129004}
+    .fil0 {fill:none}
+   ]]>
+  </style>
+ </defs>
+ <g id="图层_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g>
+   <path class="fil0 str0" d="M0.153757 0.0691704c0.0431237,0 0.0780959,0.0349722 0.0780959,0.0780959 0,0.0431156 -0.0349722,0.0780838 -0.0780959,0.0780838 -0.0431237,0 -0.0780918,-0.0349682 -0.0780918,-0.0780838 0,-0.0431237 0.0349682,-0.0780959 0.0780918,-0.0780959z"/>
+  </g>
+  <g>
+   <path class="fil0 str1" d="M0.15266 0.171721c0.042523,0 0.0770034,0.0344723 0.0770034,0.0769913 0,0.0425149 -0.0344804,0.0769953 -0.0770034,0.0769953 -0.0425149,0 -0.0769953,-0.0344804 -0.0769953,-0.0769953 0,-0.0425189 0.0344804,-0.0769913 0.0769953,-0.0769913z"/>
+  </g>
+  <polyline class="fil0 str2" points="0.112197,0.0983374 0.15518,0.119756 0.196614,0.0975634 "/>
+  <line class="fil0 str2" x1="0.15441" y1="0.119369" x2="0.15441" y2= "0.161513" />
+  <polygon class="fil0 str3" points="0.152769,0.238827 0.189265,0.299318 0.116273,0.299318 "/>
+  <line class="fil0 str2" x1="0.148226" y1="0.00466027" x2="0.148226" y2= "0.0690898" />
+  <line class="fil0 str3" x1="0.173619" y1="0.01619" x2="0.124549" y2= "0.0293363" />
+  <line class="fil0 str3" x1="0.173619" y1="0.0281189" x2="0.124549" y2= "0.0412652" />
+  <line class="fil0 str3" x1="0.173619" y1="0.0404508" x2="0.124549" y2= "0.0535931" />
+  <line class="fil0 str2" x1="0.148226" y1="0.329904" x2="0.148226" y2= "0.394333" />
+  <line class="fil0 str3" x1="0.173619" y1="0.341434" x2="0.124549" y2= "0.35458" />
+  <line class="fil0 str3" x1="0.173619" y1="0.353362" x2="0.124549" y2= "0.366509" />
+  <line class="fil0 str3" x1="0.173619" y1="0.36569" x2="0.124549" y2= "0.378837" />
+  <line class="fil0 str2" x1="0.0239504" y1="0.2693" x2="0.295109" y2= "0.119413" />
+  <polyline class="fil0 str2" points="0.325768,0.141896 0.325768,0.123505 0.36869,0.123505 0.36869,0.106469 "/>
+  <rect class="fil0" width="0.394293" height="0.394293"/>
+ </g>
+</svg>

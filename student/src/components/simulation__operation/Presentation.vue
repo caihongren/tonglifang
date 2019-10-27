@@ -8,51 +8,30 @@
             <el-row>
               <el-col :span="8">
                 <div class="center">
-                  <el-button
-                    type="warning"
-                    style="width:90%"
-                    @click="initialize"
-                    :disabled="status"
-                  >将实验报告进行重置</el-button>
+                  <el-button type="warning" style="width:90%" @click="initialize" :disabled="status">将实训报告进行重置</el-button>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="center">
-                  <el-upload
-                    class="upload-demo"
-                    action="/img/add_resource"
-                    :before-upload="beforeUploadword"
-                    :on-change="handleChange"
-                    style="width:100%"
-                  >
-                    <el-button type="primary" style="width:100%" :disabled="status">更改实验报告</el-button>
+                  <el-upload class="upload-demo" action="/img/add_resource" :before-upload="beforeUploadword" :on-change="handleChange" style="width:100%">
+                    <el-button type="primary" style="width:100%" :disabled="status">更改实训报告</el-button>
                   </el-upload>
-                  <!-- <el-button type="warning" style="width:90%" >更改实验报告</el-button> -->
+                  <!-- <el-button type="warning" style="width:90%" >更改实训报告</el-button> -->
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="center">
-                  <el-button
-                    type="info"
-                    style="width:90%"
-                    @click="download(downloadSrc,name)"
-                    :disabled="status"
-                  >实验报告下载</el-button>
+                  <el-button type="info" style="width:90%" @click="download(downloadSrc,name)" :disabled="status">实训报告下载</el-button>
                 </div>
               </el-col>
             </el-row>
           </div>
-          <!-- 实验快照 -->
-          <h3 style="padding-left:100px">请选择提交的实验快照</h3>
+          <!-- 实训快照 -->
+          <h3 style="padding-left:100px">请选择提交的实训快照</h3>
           <div style class="project">
             <template>
-              <el-select v-model="projectId" placeholder="请选择实验快照" :disabled="status">
-                <el-option
-                  v-for="item in TheSnapshotList"
-                  :key="item.id"
-                  :label="item.updatedAt|dateformat"
-                  :value="item.id"
-                >{{item.updatedAt|dateformat}}</el-option>
+              <el-select v-model="projectId" placeholder="请选择实训快照" :disabled="status">
+                <el-option v-for="item in TheSnapshotList" :key="item.id" :label="item.updatedAt|dateformat" :value="item.id">{{item.updatedAt|dateformat}}</el-option>
               </el-select>
             </template>
           </div>
@@ -66,17 +45,7 @@
                 <input type="text" placeholder="备注最多20字" maxlength="20" style="border:0px solid red;height:25px" v-model='remark'>
               </div>-->
 
-              <el-upload
-                class="upload-demo twoDiv"
-                action="/img/add_resource"
-                :before-upload="beforeUpload"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                multiple
-                :limit="5"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-              >
+              <el-upload class="upload-demo twoDiv" action="/img/add_resource" :before-upload="beforeUpload" :on-preview="handlePreview" :on-remove="handleRemove" multiple :limit="5" :on-exceed="handleExceed" :file-list="fileList">
                 <el-button size="medium" type="primary" style="width:100%" :disabled="status">点击上传附件</el-button>
                 <div slot="tip" class="el-upload__tip">当前限制只能上传5个文件，文件数量多请打包上传。。。</div>
               </el-upload>
@@ -87,25 +56,12 @@
           <el-row :gutter="20">
             <el-col :span="6" :offset="12">
               <div class="grid-content bg-purple">
-                <el-button
-                  type="success"
-                  style="width:90%;"
-                  class="go"
-                  @click="saveWord('save')"
-                  :loading="isSave"
-                  :disabled="status"
-                >保存</el-button>
+                <el-button type="success" style="width:90%;" class="go" @click="saveWord('save')" :loading="isSave" :disabled="status">保存</el-button>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="grid-content bg-purple">
-                <el-button
-                  type="primary"
-                  class="go"
-                  @click="saveWord('submit')"
-                  :loading="isSubmit"
-                  :disabled="status"
-                >提交</el-button>
+                <el-button type="primary" class="go" @click="saveWord('submit')" :loading="isSubmit" :disabled="status">提交</el-button>
               </div>
             </el-col>
           </el-row>
@@ -141,7 +97,7 @@ export default {
     return {
       id: this.$route.params.id,
       remark: "11",
-      name: "实验报告",
+      name: "实训报告",
       downloadId: "",
       downloadSrc: "",
       fileList: [],
@@ -153,7 +109,7 @@ export default {
       isSave: false,
       isSubmit: false,
       downloadhttp:
-        "192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实验二：电机点动控制实验指导书.pdf"
+        "192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实训二：电机点动控制实训指导书.pdf"
     };
   },
   methods: {
@@ -162,20 +118,22 @@ export default {
       let fd = new FormData();
       fd.append("file", file); //传文件
       console.log(file);
-      fd.append("resourceTypeId", "e15356e5-79d8-11e9-a6ab-7085c206b232");
-      fd.append("resourceTypeName", "annex");
+      fd.append("resourceTypeId", "");
+      fd.append("resourceTypeName", "");
       // fd.append('id',this.srid);//传其他参数
       resource(fd).then(res => {
         console.log(res, 2224);
+        console.log(this.fileList)
         this.fileList.push({
+
           name: res.data.object.name,
           id: res.data.object.id
         });
       });
       return false; //屏蔽了action的默认上传
     },
-    handleChange() {},
-    // 上传实验报告
+    handleChange() { },
+    // 上传实训报告
     beforeUploadword(file) {
       let fd = new FormData();
       fd.append("file", file); //传文件
@@ -186,7 +144,9 @@ export default {
       resource(fd).then(res => {
         this.downloadId = res.data.object.id;
         this.$message({
-          message: "实验报告更改成功",
+          showClose: true,
+          duration: 1000,
+          message: "实训报告更改成功",
           type: "success"
         });
       });
@@ -199,7 +159,7 @@ export default {
 
     handleRemove(file, fileList) {
       console.log(file, fileList);
-      this.fileList=fileList
+      this.fileList = fileList;
     },
     handlePreview(file) {
       console.log(file);
@@ -207,7 +167,7 @@ export default {
     handleExceed(files, fileList) {
       this.$message.warning(
         `当前限制选择 3 个文件，本次选择了 ${
-          files.length
+        files.length
         } 个文件，共选择了 ${files.length + fileList.length} 个文件`
       );
     },
@@ -216,7 +176,7 @@ export default {
     },
 
     // 下载文件
-    download(src,name) {
+    download(src, name) {
       let data = src;
 
       if (!data) {
@@ -226,10 +186,16 @@ export default {
       if (JSON.parse(sessionStorage.getItem("course"))) {
         courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
         console.log(courseUrl, "课程服");
+      } else {
+        this.$message.error({
+          showClose: true,
+          duration: 1000,
+          message: "下载失败"
+        });
       }
       const fileName = name;
       let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      console.log(url)
+      console.log(url);
       const elink = document.createElement("a");
       // elink.download = fileName;
       elink.style.display = "none";
@@ -258,6 +224,8 @@ export default {
           }).then(res => {
             if (res.data.msg == "SUCCESS") console.log("重置成功");
             this.$message({
+              showClose: true,
+              duration: 1000,
               type: "success",
               message: "重置成功!"
             });
@@ -265,6 +233,8 @@ export default {
         })
         .catch(() => {
           this.$message({
+            showClose: true,
+            duration: 1000,
             type: "info",
             message: "已取消重置"
           });
@@ -273,7 +243,7 @@ export default {
     // 保存报告
     saveWord(type) {
       console.log("保存报告");
-      // 先提交word实验报告(假设提交成功)
+      // 先提交word实训报告(假设提交成功)
       // console.log(
       //   this.id,
       //   this.projectId,
@@ -283,7 +253,7 @@ export default {
       //   type
       // );
       // 判断附件信息和快照信息
-      console.log(this.fileList)
+      console.log(this.fileList);
       this.isSave = true;
       report({
         taskExperimentId: this.id,
@@ -295,19 +265,21 @@ export default {
       }).then(res => {
         if (res.data.msg == "SUCCESS") {
           this.$message({
+            showClose: true,
+            duration: 1000,
             message: "保存成功",
             type: "success"
           });
           this.isSave = false;
           this.reportlistNew();
-          this.snalistNew()
+          this.snalistNew();
         }
       });
     },
     // 提交报告
     submit(type) {
       console.log("提交报告");
-      // 先提交word实验报告(假设提交成功)
+      // 先提交word实训报告(假设提交成功)
 
       // 判断附件信息和快照信息
       this.isSubmit = true;
@@ -322,22 +294,22 @@ export default {
         if (res.data.msg == "SUCCESS") {
           this.isSubmit = false;
           // 提交报告后不准点击
-           this.$message({
+          this.$message({
+            showClose: true,
+            duration: 1000,
             message: "提交成功",
             type: "success"
           });
-           this.reportlistNew();
-          this.snalistNew()
-          // console.log("提交成功");
+          this.reportlistNew();
+          this.snalistNew();
         }
       });
     },
     reportlistNew() {
-      // 获取实验报告
+      // 获取实训报告
       reportlist({
         taskExperimentId: this.id
       }).then(res => {
-        console.log(res, 22222);
         this.name = res.data.object.report.name;
         this.downloadId = res.data.object.report.id;
         this.downloadSrc = res.data.object.report.path;
@@ -350,17 +322,16 @@ export default {
           this.status = false;
         }
         // 判断附件存在
-        if(this.fileList.length>0){
-
-        }else{
-            this.fileList = tonumber(res.data.object.annexs);
+        if (this.fileList.length > 0) {
+        } else {
+          this.fileList = tonumber(res.data.object.annexs);
         }
-        
+
         //  this.projectId = tostring(res.data.object.report.id);
       });
     },
     snalistNew() {
-      // 获取实验快照
+      // 获取实训快照
       snalist({
         taskExperimentId: this.id,
         offset: 0,

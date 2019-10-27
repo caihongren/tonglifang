@@ -1,47 +1,42 @@
 <template>
   <div class="relaybanner">
-    <div class="Breadcrumb" @click="guizone">
+    <div class="Breadcrumb" @click="guizone()">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/home' }" >首页</el-breadcrumb-item>
-        <el-breadcrumb-item>{{course}}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home' }" class="textcolor chongqing">首页</el-breadcrumb-item>
+        <el-breadcrumb-item class="textcolor">{{course}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      @select="handleSelect"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-    >
-      <router-link to="/relayteacher/study/courseIntroduction">
-        <el-menu-item index="1" class="Surveybox">课程管理</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/componentLibrary">
-        <el-menu-item index="4">元件库</el-menu-item>
-      </router-link>
-      <router-link to="/relayteacher/experimentalTemplateLibrary">
-        <el-menu-item index="5">实验模板库</el-menu-item>
-      </router-link>
-      <!-- <router-link to="/relayteacher/resources">
-        <el-menu-item index="2">课程资料</el-menu-item>
-      </router-link>-->
-      <!-- <router-link to="/relayteacher/task">
-        <el-menu-item index="3">实验任务管理</el-menu-item>
-      </router-link>-->
-      <router-link to="/relayteacher/taskManagement">
-      
-        <el-menu-item index="2">实验任务管理</el-menu-item>
-      </router-link>
-      <!-- <router-link to="/addstudent/teacher">
-        <el-menu-item index="3">学生管理</el-menu-item>
-      </router-link>-->
-      <!-- <router-link to="/relayteacher/Examine">
-        <el-menu-item index="3">详情</el-menu-item>
-      </router-link>-->
-    </el-menu>
-    <router-view @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity"/>
+    <el-radio-group v-model="activeIndex" class="tabPosition" @change="handleSelect">
+      <el-radio-button label="1"  class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/study/courseIntroduction')">课程管理</span>
+      </el-radio-button>
+      <el-radio-button label="2" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/taskManagement')">任务管理</span>
+      </el-radio-button>
+      <el-radio-button label="3" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/componentLibrary')">元器件库</span>
+      </el-radio-button>
+      <el-radio-button label="4" class="disflax">
+        <span class="nave chongqing" @click="tabPositionpath('/relayteacher/simulationDatabase')">仿真资源库</span>
+      </el-radio-button>
+      <!-- <el-radio-button label="5" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/newExperimentalTemplateLibrary')">实训模板库</span>
+      </el-radio-button> -->
+      <el-radio-button label="6" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/resources')">实训资源</span>
+      </el-radio-button>
+      <el-radio-button label="10" v-if="iswatchStorage2D" class="disflax">
+        <span class="nave" @click="tabPositionpath('/relayteacher/Dimension2')">二维设计空间</span>
+      </el-radio-button>
+      <el-radio-button label="11" v-if="iswatchStorage3D" class="disflax" >
+        <span class="nave" @click="tabPositionpath('/relayteacher/Dimension3')">
+          <el-tag closable :disable-transitions="true" class="det nave" @close="deet('3D')">三维设计空间</el-tag>
+        </span>
+      </el-radio-button>
+    </el-radio-group>
+    <keep-alive :include="['newExperimentalTemplateLibrary','taskManagement',]">
+      <router-view @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity" @threadPoxi="threadPoxi" @handleSelect="handleSelect" @deet="deet"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -50,6 +45,7 @@ export default {
   data() {
     return {
       activeIndex: "1",
+      iscourse: false,
       course: "",
       id: "",
 
@@ -80,21 +76,31 @@ export default {
         Expname: "",
         taskExperimentId: ""
       },
-      newagentData: {}
+      newagentData: {},
+      iswatchStorage2D: "", //判断2D或者3d界面
+      iswatchStorage3D: "", //判断2D或者3d界面
+      path3D: "/relayteacher/Dimension3"
     };
   },
   methods: {
+    tabPositionpath(path) {
+      console.log(path)
+      this.$router.push(path)
+    },
+    // deet() {
+    //   this.iswatchStorage3D = false;
+    // },
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);
       this.activeIndex = key;
-      console.log("存储页面", key);
+      // console.log("存储页面", key);
       sessionStorage.setItem("pageTeacher", key);
     },
     // 回首页归零
-    guizone(){
-      console.log("归零")
-         this.activeIndex = "1";
-      console.log("存储页面", "1");
+    guizone() {
+      // console.log("归零");
+      this.activeIndex = "1";
+      // console.log("存储页面", "1");
       sessionStorage.setItem("pageTeacher", "1");
     },
     gounity(row) {
@@ -117,8 +123,10 @@ export default {
     // 元件库3D
     yuangounity(type) {
       let token = localStorage.getItem("token");
+      let courseid = JSON.parse(sessionStorage.getItem("course")).id;
       let data = {
         token: token,
+        courseid: courseid,
         name: "mode",
         mode: "element_browser",
         type: type
@@ -126,10 +134,13 @@ export default {
       this.threadPoxi(data);
       let cmd =
         // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
-        "{'opcode':4,'LocationX': 755,'LocationY':135,'LocationX_Right': 15,'LocationY_Buttom':10,'SizeX': 1620,'SizeY':760}";
+        "{'opcode':4,'LocationX': 575,'LocationY':165,'LocationX_Right': 135,'LocationY_Buttom':80,'SizeX': 1210,'SizeY':700}";
+      // "{'opcode':4,'LocationX': 755,'LocationY':135,'LocationX_Right': 15,'LocationY_Buttom':10,'SizeX': 1620,'SizeY':760}";
       // "{'opcode':4,'LocationX': 950,'LocationY':150,'LocationX_Right': 10,'LocationY_Buttom':100,}";
 
-      wfapp.start(cmd);
+      //  if (typeof wfapp !== "undefined") {
+      //     wfapp.start(cmd);
+      //   }
     },
     // 关闭3D/
     derunity() {
@@ -152,7 +163,7 @@ export default {
       // 若是 正在开启状态，则等待300毫秒
       else if (this.websock.readyState === this.websock.CONNECTING) {
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 300);
       }
@@ -160,7 +171,7 @@ export default {
       else {
         this.initWebSocket();
         let that = this; //保存当前对象this
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(data);
         }, 500);
       }
@@ -190,7 +201,7 @@ export default {
       that.lockReconnect = true;
       //没连接上会一直重连，设置延迟避免请求过多
       that.timeoutnum && clearTimeout(that.timeoutnum);
-      that.timeoutnum = setTimeout(function() {
+      that.timeoutnum = setTimeout(function () {
         //新连接
         that.initWebSocket();
         that.lockReconnect = false;
@@ -210,7 +221,7 @@ export default {
       var self = this;
       self.timeoutObj && clearTimeout(self.timeoutObj);
       self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
-      self.timeoutObj = setTimeout(function() {
+      self.timeoutObj = setTimeout(function () {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.websock.readyState == 1) {
           //如果连接正常
@@ -223,7 +234,7 @@ export default {
           console.log("重连");
           self.reconnect();
         }
-        self.serverTimeoutObj = setTimeout(function() {
+        self.serverTimeoutObj = setTimeout(function () {
           //超时关闭
           self.websock.close();
         }, self.timeout);
@@ -264,8 +275,9 @@ export default {
     },
     on_click_hide_unity_window() {
       var cmd = "{'opcode':3}";
-
-      wfapp.start(cmd);
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
     },
 
     on_click_show_unity_window() {
@@ -273,55 +285,168 @@ export default {
         // "{'opcode':4,'LocationX': 300,'LocationY':200, 'SizeX': 808,'SizeY':539}";
         "{'opcode':4,'LocationX': 125,'LocationY':150,'LocationX_Right': 125,'LocationY_Buttom':100,'SizeX': 1620,'SizeY':760}";
 
-      wfapp.start(cmd);
+      if (typeof wfapp !== "undefined") {
+        wfapp.start(cmd);
+      }
+    },
+    // 2d3D信息
+    type2D3D() {
+      const watchStorage2D = JSON.parse(
+        sessionStorage.getItem("watchStorage2D")
+      );
+      const watchStorage3D = JSON.parse(
+        sessionStorage.getItem("watchStorage3D")
+      );
+      if (watchStorage2D != null) {
+        this.iswatchStorage2D = true;
+      } else {
+        this.iswatchStorage2D = false;
+      }
+      if (watchStorage3D != null) {
+        this.iswatchStorage3D = true;
+      } else {
+        this.iswatchStorage3D = false;
+      }
+    },
+    deet(type) {
+      console.log(type);
+      if (type == "3D") {
+        this.resetSetItem("watchStorage3D", null);
+        if ("/relayteacher/Dimension3" == this.$route.path) {
+          let SourcePage = JSON.parse(sessionStorage.getItem("SourcePage"));
+          this.handleSelect(SourcePage.index);
+          this.derunity();
+          console.log(SourcePage.path, "path");
+          this.$router.replace(SourcePage.path);
+        } else {
+          let page = sessionStorage.getItem("pageTeacher");
+          sessionStorage.setItem(
+            "SourcePage",
+            JSON.stringify({
+              path: this.$route.path,
+              index: page
+            })
+          );
+        }
+      } else if (type == "2D") {
+      }
+      this.iswatchStorage3D = false;
     }
   },
   created() {
     let course = JSON.parse(sessionStorage.getItem("course"));
-    // console.log(course);
+    if (sessionStorage.getItem("user") == null) {
+      this.$router.push('/login')
+    }
     this.course = course.course;
     this.initWebSocket();
-    if (sessionStorage.getItem("page")) {
-      console.log(
-        "当前页面",
-        this.activeIndex,
-        sessionStorage.getItem("pageTeacher")
-      );
+    if (sessionStorage.getItem("pageTeacher")) {
+      // console.log(
+      //   "当前页面",
+      //   this.activeIndex,
+      //   sessionStorage.getItem("pageTeacher")
+      // );
       this.activeIndex = sessionStorage.getItem("pageTeacher");
     }
+    this.type2D3D();
+    window.addEventListener("setItem", () => {
+      this.type2D3D();
+    });
   },
   destroyed() {
     console.log("离开断开websocket连接");
+    // this.guizone();
     this.websock.close(); // 离开路由之后断开websocket连接
   }
 };
 </script>
 
 <style lang="less" scoped>
+.tabPosition {
+  position: absolute;
+  text-align: center;
+  top: -54px;
+  left: 500px;
+  .nave {
+    line-height: 51px;
+    padding: 13px 25px;
+  }
+}
 // 分页导航条
 a {
   text-decoration: none;
   display: inline-block;
 }
 .el-menu-demo {
-  height: 50px;
-  margin-top: -1px;
+  height: 48px;
+  // margin-top: -1px;
   // margin-bottom: 10px;
 }
 .el-menu-item {
-  height: 48px;
-  margin-left: 35px;
-}
-.Surveybox {
-  margin-left: 200px;
+  height: 60px;
+  line-height: 65px;
+  // min-width: 100px;
+  margin: auto;
 }
 .relaybanner {
   position: relative;
-  height: 100%;
+  // height: 92%;
+  height: calc(100% - 60px);
 }
 .Breadcrumb {
   position: absolute;
-  top: -25px;
-  left: 250px;
+  top: -35px;
+  left: 280px;
+}
+.det {
+  background-color: transparent;
+  border: 0px solid red;
+  font-size: 18px;
+  color: inherit;
+  margin-top: -10px;
 }
 </style>
+
+
+<style>
+.textcolor .el-breadcrumb__inner {
+  color: rgb(78, 75, 75) !important;
+}
+.ralateacher .el-menu-item {
+  font-size: 18px;
+}
+.relaybanner .el-radio-button__inner {
+  border-color: #fff;
+  border-bottom: none;
+  border-radius: 0px;
+  padding: 0px 0px;
+  border-radius: 0px;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+
+.relaybanner
+  .tabPosition
+  .el-radio-button__orig-radio:checked
+  + .el-radio-button__inner {
+  background-color: #4d7283;
+  color: #fff;
+  border-radius: 5px 5px 0 0;
+  border-color: #4d7283;
+  box-shadow: -1px 0 0 0 #4d7283;
+  height: 53px;
+}
+.relaybanner .el-radio-button:first-child .el-radio-button__inner {
+  border-left: 1px solid #fff;
+}
+.relaybanner .tabPosition .el-tag {
+  line-height: 0px;
+  padding: 0 0;
+}
+
+.relaybanner .el-radio-button:focus:not(.is-focus):not(:active):not(.is-disabled){
+    -webkit-box-shadow: 0 0 0px 0px #409EFF;
+    box-shadow: 0 0 0px 0px #409EFF;
+}
+</style>
+

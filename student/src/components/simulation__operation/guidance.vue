@@ -23,7 +23,7 @@
         </el-col>
       </el-row>
     </div>
-    <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实验二：电机点动控制实验指导书.pdf" style="width:100%;height:100%" ></iframe>
+    <!-- <iframe src="http://192.168.2.223:8081/static/advising/7a403d640a24426a85f00d8f96cf3c68实训二：电机点动控制实训指导书.pdf" style="width:100%;height:100%" ></iframe>
    -->
   <iframe :src="pdfPath" class="iframe" style="width:100%;height:100%" ></iframe>
   
@@ -35,7 +35,7 @@
 
 
 <script>
-import { guidelist, demo, snalist,download } from "../../API/api";
+import { guidelist, demo, snalist,fileDownload } from "../../API/api";
 import { promises } from "fs";
 import { parse } from "path";
 
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      name: "实验指导",
+      name: "实训指导",
       pdfId: "",
       pdfPath:'',
       pdfType:true,
@@ -52,29 +52,55 @@ export default {
   methods: {
    
      // 下载文件
-    download(src) {
-      let data = src;
+    // download(src) {
+    //   let data = src;
 
-      if (!data) {
-        return;
-      }
-      let courseUrl = "";
-      if (JSON.parse(sessionStorage.getItem("course"))) {
-        courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
-        // console.log(courseUrl, "课程服");
-      }
-      const fileName = this.name;
-      let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
-      // console.log(url)
-      const elink = document.createElement("a");
-      // elink.download = fileName;
-      elink.style.display = "none";
-      elink.href = url;
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
-    },
+    //   if (!data) {
+    //     return;
+    //   }
+    //   let courseUrl = "";
+    //   if (JSON.parse(sessionStorage.getItem("course"))) {
+    //     courseUrl = JSON.parse(sessionStorage.getItem("course")).url;
+    //   }
+    //   const fileName = this.name;
+    //   let url = courseUrl + "/download_test?url=" + data + "&name=" + fileName;
+    //   const elink = document.createElement("a");
+    //   // elink.download = fileName;
+    //   elink.style.display = "none";
+    //   elink.href = url;
+    //   document.body.appendChild(elink);
+    //   elink.click();
+    //   URL.revokeObjectURL(elink.href); // 释放URL 对象
+    //   document.body.removeChild(elink);
+    // },
+     download(src,name){
+           fileDownload({
+              // method: "post",
+              responseType: "blob",
+              // url:`${baseUrl}/app/party-event/statistics-export?id=`+this.eventId,
+              // timeout: 10000,
+              // withCredentials: false //跨域
+              name:'demo.pdf',
+              path:"http://192.168.2.200:8080/creatorcourse/download_test?url=http://192.168.2.200:8080/creatorcourse/static/report/e9150eb0-7ff8-4b66-8e63-6a665f959d78.docx&name=实训七报告模板 .docx"
+              // headers: {'Content-Type': 'application/json;charset=UTF-8'},
+            }).then(res => {
+              // if (res.status == 200) {
+              //   const link = document.createElement("a");
+              //   let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
+              //   link.style.display = "none";
+              //   link.href = URL.createObjectURL(blob);
+              //   let num = "";
+              //   for (let i = 0; i < 10; i++) {
+              //     num += Math.ceil(Math.random() * 10);
+              //   }
+              //   link.setAttribute("download", "图例数据" + num + ".xls");
+              //   document.body.appendChild(link);
+              //   link.click();
+              //   document.body.removeChild(link);
+              // }
+          });
+
+      },
     type(puah){
 
     },
@@ -84,15 +110,12 @@ export default {
     $route: {
       handler: function(val, oldVal) {
         this.id = this.$route.params.id;
-        //  console.log(this.id);
         guidelist({
           taskExperimentId: this.id
         }).then(res => {
-          // console.log(res, 1111);
           this.name = res.data.object.name;
           this.pdfId=res.data.object.id;
       let path=res.data.object.path
-      //  console.log(res.data.object.path,path)
        this.pdfPath=path
       if(this.pdfPath.indexOf('pdf')!=-1){
           return this.pdfType=true;
@@ -106,18 +129,12 @@ export default {
     }
   },
   created() {
-    // console.log(this.id);
-
     guidelist({
       taskExperimentId: this.id
     }).then(res => {
-      // console.log(res, 1111);
       this.name = res.data.object.name;
       this.pdfId=res.data.object.id;
-    
-      // this.pdfPath=res.data.object.path;
       let path=res.data.object.path
-      //  console.log(res.data.object.path,path)
        this.pdfPath=path
       if(this.pdfPath.indexOf('pdf')!=-1){
           this.pdfType=true;

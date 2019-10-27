@@ -10,35 +10,21 @@
       <div style="height:50px" class="bottonbox">
         <span class="buttombox">已下发任务清单</span>
         <el-button type="primary" size="mini">下发批阅</el-button>
-        <el-button type="primary" size="mini" class="batch">批量下载实验报告</el-button>
+        <el-button type="primary" size="mini" class="batch">批量下载实训报告</el-button>
         <el-button type="primary" size="mini">撤回</el-button>
-        <router-link to="/task/Presentation">
+        <router-link to="/task/Presentationteacher">
           <el-button type="primary" size="mini" class="Marking">批阅报告</el-button>
         </router-link>
         <el-button type="primary" size="mini" class="details">详情</el-button>
 
         <!-- 搜索框 -->
         <el-button type="primary" icon="el-icon-delete" class="bottondel"></el-button>
-        <el-autocomplete
-          class="searchtext"
-          v-model="state4"
-          :fetch-suggestions="querySearchAsync"
-          placeholder="请输入内容"
-          @select="handleSelect"
-        ></el-autocomplete>
+        <el-autocomplete class="searchtext" v-model="state4" :fetch-suggestions="querySearchAsync" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
         <el-button type="primary" icon="el-icon-search" class="search">搜索</el-button>
       </div>
 
       <!-- 表格    后期动态渲染 -->
-      <el-table
-        ref="multipleTable"
-        :data="tableData3"
-        border
-        tooltip-effect="dark"
-        header-align="center"
-        style="width: 1500px;border='1';cellspacing='0';cellpadding='0'"
-        @selection-change="handleSelectionChange"
-      >
+      <el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" header-align="center" style="width: 1500px;border='1';cellspacing='0';cellpadding='0'" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column label="任务名称" width="120">
           <template slot-scope="scope">{{ scope.row.date }}</template>
@@ -59,14 +45,14 @@
 
 <script>
 
-import {master} from '../../API/api'
+import { master } from '../../API/api'
 export default {
   data() {
     return {
       restaurants: [],
       state4: "",
       timeout: null,
-      taskExperimentId:'',
+      taskExperimentId: '',
       tableData3: [
         {
           date: "1",
@@ -74,7 +60,7 @@ export default {
           LHtime: "2019-05-10",
           term: "2019-05-12——2019-05-20",
           Sbnam: "50/60",
-          explain: "按要求完成实验",
+          explain: "按要求完成实训",
           requirement: "有",
           noRead: "0",
           comment: "是"
@@ -85,12 +71,12 @@ export default {
           LHtime: "2019-05-10",
           term: "2019-05-12——2019-05-20",
           Sbnam: "45/70",
-          explain: "按要求完成实验",
+          explain: "按要求完成实训",
           requirement: "",
           noRead: "0",
           comment: "是"
         },
-      
+
       ],
       multipleSelection: []
     };
@@ -145,34 +131,33 @@ export default {
   created() {
     // 请求任务列表
     master({
-        taskExperimentId:"{{task_experiment_id_0}}",
-  offset:0,
-  limit:10
+      taskExperimentId: "{{task_experiment_id_0}}",
+      offset: 0,
+      limit: 10
 
-    }).then(res=>{
+    }).then(res => {
     })
   },
   mounted() {
     this.restaurants = this.loadAll();
   },
   //创建前设置增加滚动条
-beforeCreate () {
-      // document.querySelector('body').setAttribute('style', 'overflow-y:scroll;background-color:#EEE9E9	')
-      // document.querySelector('body').setAttribute('style', 'background-color:#ccc')
-},
-//销毁前清除滚动
-beforeDestroy () {
-      // document.querySelector('body').removeAttribute('style', 'overflow-y:scroll;')
-},
+  beforeCreate() {
+    // document.querySelector('body').setAttribute('style', 'overflow-y:scroll;background-color:#EEE9E9	')
+    // document.querySelector('body').setAttribute('style', 'background-color:#ccc')
+  },
+  //销毁前清除滚动
+  beforeDestroy() {
+    // document.querySelector('body').removeAttribute('style', 'overflow-y:scroll;')
+  },
 };
 </script>
 
 <style lang="less" scoped>
 // 操作属性的按钮
-.box{
+.box {
   width: 90%;
   margin: 5px 5%;
-
 }
 .bottonbox {
   position: relative;
