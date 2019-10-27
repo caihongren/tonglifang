@@ -1,6 +1,113 @@
 <template>
   <div class="box">
-    <h2>我的资料</h2>
+    <div >
+      <div class="add">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <div class="grid-content bg-purple" style="padding:15px 30px">
+              <!-- <el-button type="primary" @click="dialogFormVisibleadd = true" >新增老师</el-button> -->
+            </div>
+          </el-col>
+          <el-col :span="14">
+            <div class="grid-content bg-purple">
+              <h2>我的资料</h2>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+      <template>
+        <el-table :data="tableData" border style="width: 90%;margin:5px 3%">
+             <el-table-column fixed type="index" label="序号" :index="indexMethod" min-width="100"></el-table-column>
+          <el-table-column  prop="name" label="任务名称" min-width="200"></el-table-column>
+          <el-table-column prop="gender" label="提交时间" min-width="120"></el-table-column>
+          <el-table-column prop="age" label="实验报告" min-width="120"></el-table-column>
+          <el-table-column prop="phone" label="批阅情况" min-width="200"></el-table-column>
+          <el-table-column prop="email" label="任务信息" min-width="400"></el-table-column>
+
+          <el-table-column label="操作" min-width="200">
+            <template slot-scope="scope">
+              <el-button @click="compileClick(scope.row)" type="primary" size="small">编辑</el-button>
+              <el-button type="primary" @click="det(scope.row.id)" size="small">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+      <div style="margin:50px;">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage4"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="10"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="length"
+        ></el-pagination>
+      </div>
+      <!-- 新增加 -->
+      <el-dialog title="新增老师" :visible.sync="dialogFormVisibleadd">
+        <el-form :model="formadd" :rules="rules">
+          <el-form-item label="老师名称：" :label-width="formLabelWidth" prop="name">
+            <el-input
+              v-model="formadd.name"
+              auto-complete="off"
+              focus="true"
+              placeholder="请输入名称（必填）"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="性别：" :label-width="formLabelWidth">
+            <el-select v-model="formadd.gender" placeholder="请选择性别">
+              <el-option label="男" value="男"></el-option>
+              <el-option label="女" value="女"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="年龄：" :label-width="formLabelWidth">
+            <el-input v-model="formadd.age" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="电话：" :label-width="formLabelWidth" prop="phone">
+            <el-input
+              v-model="formadd.phone"
+              auto-complete="off"
+              maxlength="11"
+              placeholder="请输入电话号码（必填）"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱：" :label-width="formLabelWidth">
+            <el-input v-model="formadd.email" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisibleadd = false">取 消</el-button>
+          <el-button type="primary" @click="addteacher">确 定</el-button>
+        </div>
+      </el-dialog>
+      <!-- 编辑 -->
+      <el-dialog title="编辑老师" :visible.sync="dialogFormVisible">
+        <el-form :model="form" :rules="rules">
+          <el-form-item label="老师名称*：" :label-width="formLabelWidth">
+            <el-input v-model="form.name" auto-complete="off" placeholder="请输入名称（必填）"></el-input>
+          </el-form-item>
+          <el-form-item label="性别：" :label-width="formLabelWidth">
+            <el-select v-model="form.gender" placeholder="请选择性别">
+              <el-option label="男" value="man"></el-option>
+              <el-option label="女" value="woman"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="年龄：" :label-width="formLabelWidth">
+            <el-input v-model="form.age" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="电话*：" :label-width="formLabelWidth" prop="phone">
+            <el-input v-model="form.phone" auto-complete="off" placeholder="请输入电话号码（必填）"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱：" :label-width="formLabelWidth">
+            <el-input v-model="form.email" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="modifyTeacher">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
  
