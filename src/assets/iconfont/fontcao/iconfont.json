@@ -1,0 +1,254 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "305665",
+      "name": "pipi视频icon",
+      "font_class": "shipinicon",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "641983",
+      "name": "新增",
+      "font_class": "1",
+      "unicode": "e7c5",
+      "unicode_decimal": 59333
+    },
+    {
+      "icon_id": "842733",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "868626",
+      "name": "word",
+      "font_class": "word",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "983070",
+      "name": "完成",
+      "font_class": "wancheng",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "1012759",
+      "name": "搜索",
+      "font_class": "iconfontzhizuobiaozhun22",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "1225082",
+      "name": "用户名",
+      "font_class": "yonghuming",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "1693289",
+      "name": "课程管理",
+      "font_class": "kecheng",
+      "unicode": "e6e3",
+      "unicode_decimal": 59107
+    },
+    {
+      "icon_id": "2359023",
+      "name": "平均",
+      "font_class": "average",
+      "unicode": "e734",
+      "unicode_decimal": 59188
+    },
+    {
+      "icon_id": "2758263",
+      "name": "课程",
+      "font_class": "kecheng1",
+      "unicode": "e538",
+      "unicode_decimal": 58680
+    },
+    {
+      "icon_id": "2808783",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "3117395",
+      "name": "介绍",
+      "font_class": "shenme",
+      "unicode": "e501",
+      "unicode_decimal": 58625
+    },
+    {
+      "icon_id": "3156704",
+      "name": "全部",
+      "font_class": "quanbu",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "3419896",
+      "name": "实",
+      "font_class": "shi",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "3982202",
+      "name": "工",
+      "font_class": "jinpaigongyingshang",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "4074874",
+      "name": "增加人员",
+      "font_class": "zengjiarenyuan",
+      "unicode": "e6e8",
+      "unicode_decimal": 59112
+    },
+    {
+      "icon_id": "4132681",
+      "name": "虚",
+      "font_class": "xu",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "4164875",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e50e",
+      "unicode_decimal": 58638
+    },
+    {
+      "icon_id": "4570053",
+      "name": "教师管理未选",
+      "font_class": "jiaoshiguanliweixuan",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "4754714",
+      "name": "目标1",
+      "font_class": "mubiao",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "5002902",
+      "name": "老师 copy",
+      "font_class": "laoshicopy",
+      "unicode": "e584",
+      "unicode_decimal": 58756
+    },
+    {
+      "icon_id": "5160686",
+      "name": "修改",
+      "font_class": "xiugai",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "5815033",
+      "name": "学生",
+      "font_class": "xuesheng-",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "6187131",
+      "name": "txt",
+      "font_class": "txt",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "6627127",
+      "name": "学习",
+      "font_class": "xuexi",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "6924248",
+      "name": "班级管理",
+      "font_class": "banjiguanli",
+      "unicode": "e7be",
+      "unicode_decimal": 59326
+    },
+    {
+      "icon_id": "7536008",
+      "name": "学生管理",
+      "font_class": "student",
+      "unicode": "e503",
+      "unicode_decimal": 58627
+    },
+    {
+      "icon_id": "7917915",
+      "name": "课程大纲_画板 1",
+      "font_class": "kechengdagang_huaban",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "9333556",
+      "name": "PDF File",
+      "font_class": "PDFFile",
+      "unicode": "e6ba",
+      "unicode_decimal": 59066
+    },
+    {
+      "icon_id": "9766392",
+      "name": "PPT",
+      "font_class": "PPT",
+      "unicode": "e696",
+      "unicode_decimal": 59030
+    },
+    {
+      "icon_id": "9848415",
+      "name": "女老师头像",
+      "font_class": "touxiang-",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "9848419",
+      "name": "男学生头像",
+      "font_class": "touxiang",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "9848421",
+      "name": "女学生头像",
+      "font_class": "touxiang_fuzhi-",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "9850334",
+      "name": "40需求拆分-课程需求分析",
+      "font_class": "xuqiuchaifen-kechengxuqiufenxi",
+      "unicode": "e77b",
+      "unicode_decimal": 59259
+    },
+    {
+      "icon_id": "11238059",
+      "name": "微 信",
+      "font_class": "weixin",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    }
+  ]
+}
