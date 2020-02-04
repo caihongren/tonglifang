@@ -1,48 +1,7 @@
 <template>
   <div id="app">
-    <el-row
-      type="flex"
-      class="Navigation"
-      v-show="logintype"
-      :style="{'background-color': (ishome==true ? '#313131':'#313131')}"
-    >
-      <el-col :span="3" class="Navigation-l" v-show="logintype" style="min-width:250px">
-        <img src="./image/tonglifanglogo5.png" slt class="logog" />
-      </el-col>
-      <el-col :span="19" style="border-bottom:1px solid #4d7283 ; line-height: 61px;"></el-col>
-
-      <el-col :span="2" style="border-bottom:1px solid #4d7283; width:180px;">
-        <img
-          src="./image/学生头像.png"
-          style="padding-top:18px; margin-right:-35px; height:40px;"
-          v-if="sheadPortrait"
-        />
-        <img
-          src="./image/男老师头像.png"
-          style="padding-top:15px; margin-right:-45px;height:45px;;"
-          v-if="theadPortrait"
-        />
-        <el-dropdown trigger="click" v-show="logintype" class="loginText">
-          <el-button type="text" style="color:#fff">
-            {{name}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <!-- <button @click="login">
-              <el-dropdown-item>退出登录</el-dropdown-item>
-            </button>-->
-            <!-- 个人中心 -->
-
-            <el-dropdown-item>
-              <div @click="gouser()" v-if="status=='student'||status=='teacher'">个人中心</div>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <div @click="login">退出登录</div>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-col>
-    </el-row>
+    
+    
     <router-view />
   </div>
 </template>
@@ -68,8 +27,8 @@ export default {
   },
   methods: {
     ...mapActions(["user"]),
-    handleOpen(key, keyPath) {},
-    handleClose(key, keyPath) {},
+    handleOpen(key, keyPath) { },
+    handleClose(key, keyPath) { },
     login() {
       // 退出清除缓存信息
       // localStorage.removeItem("token");
@@ -101,28 +60,29 @@ export default {
       }
     },
     usertype() {
-      if(sessionStorage.getItem("user")){
+      if (sessionStorage.getItem("user")) {
         let user = JSON.parse(sessionStorage.getItem("user"));
-      this.name = user.name;
-      if (user.role == "student") {
-        this.sheadPortrait = true;
-        this.theadPortrait = false;
-        this.status = "student";
-      } else if (user.role == "teacher") {
-        this.sheadPortrait = false;
-        this.theadPortrait = true;
-        this.status = "teacher";
-      } else {
-        this.status = "";
+        this.name = user.name;
+        if (user.role == "student") {
+          this.sheadPortrait = true;
+          this.theadPortrait = false;
+          this.status = "student";
+        } else if (user.role == "teacher") {
+          this.sheadPortrait = false;
+          this.theadPortrait = true;
+          this.status = "teacher";
+        } else {
+          this.status = "";
+        }
       }
-      }
-      
-    }
+    },
+    // 单击操作
+
   },
   watch: {
     $route: {
-      handler: function(val, oldVal) {
-        if (val.path == "/register" || val.path == "/login") {
+      handler: function (val, oldVal) {
+        if (val.path == "/register" || val.path == "/login"||val.path == "/training"||val.path == "/gateway"||val.path == "/gat"||val.path == "/gatewayphone") {
           this.logintype = false;
         } else {
           this.logintype = true;
@@ -150,7 +110,8 @@ export default {
     // localStorage.setItem("token", '123');
   },
   created() {
-    if (this.$route.path == "/register" || this.$route.path == "/login") {
+
+    if (this.$route.path == "/register" || this.$route.path == "/login"||this.$route.path == "/training"||this.$route.path == "/gateway"||this.$route.path == "/gat"||this.$route.path == "/gatewayphone") {
       this.logintype = false;
     } else {
       this.logintype = true;
@@ -178,22 +139,24 @@ export default {
     //         this.$refs.autoRun.click();
     //     }
   },
-  mounted() {}
+  mounted() { }
 };
 </script>
 
 
 <style >
+
 .Navigation {
-  color: #282828;
+  color: #1c262f;
   background-color: #fff;
   line-height: 61px;
   height: 61px;
+  z-index: 99;
 }
 .Navigation-l {
   padding-top: 5px;
-
-  background-color: #282828;
+border-bottom:1px solid #1c262f;
+  background-color: #2e3d49;
 }
 .logog {
   margin-left: 10px;
@@ -217,13 +180,14 @@ body {
   padding: 0px !important;
   margin: 0px;
   overflow: hidden;
-  min-width: 1000px;
+  /* min-width: 1000px; */
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  font-family: "Open Sans", sans-serif;
 }
 a {
   display: inline-block;
@@ -294,12 +258,6 @@ button {
 }
 .el-upload-list--text {
   display: none;
-}
-
-/* 重庆分支功能隐藏 */
-
-.chongqing {
-  /* display: none !important; */
 }
 </style>
 <style scoped>

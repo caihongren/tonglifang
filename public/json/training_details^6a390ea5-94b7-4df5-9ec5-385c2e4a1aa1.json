@@ -1,0 +1,95 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "object": {
+        "examMode": {
+            "descriptions": [],
+            "report": [
+                {
+                    "createdAt": 1574834028000,
+                    "id": "47ef2b07-10da-11ea-8391-525400f44460",
+                    "name": "实验报告.doc",
+                    "path": "http://127.0.0.1:80/course_wt/report/ee0474ae-4519-45f9-bffe-29065af9044b.doc",
+                    "quote": 0,
+                    "size": "19.0 KB",
+                    "suffix": "doc",
+                    "trainingId": "6a390ea5-94b7-4df5-9ec5-385c2e4a1aa1",
+                    "trainingPattern": "EXAM",
+                    "type": "REPORT",
+                    "updatedAt": 1574834153000
+                }
+            ],
+            "simExam": [
+                {
+                    "alias": "3d",
+                    "id": "601d3b1f-0ff4-11ea-8eef-7085c206b232",
+                    "mode": "EXAM",
+                    "path": "http://127.0.0.1:80/course_wt/simulation_resource/565a8f64-0fee-11ea-8eef-7085c206b232.cc3d",
+                    "simId": "565a8f64-0fee-11ea-8eef-7085c206b232",
+                    "simName": "硬币回收箱满(更换硬币回收箱)(考核模式)",
+                    "trainingId": "6a390ea5-94b7-4df5-9ec5-385c2e4a1aa1",
+                    "typeName": "虚拟仿真"
+                }
+            ]
+        },
+        "id": "6a390ea5-94b7-4df5-9ec5-385c2e4a1aa1",
+        "name": "硬币回收箱满（更换硬币回收箱）",
+        "practiceMode": {
+            "material": [],
+            "simPractice": [
+                {
+                    "alias": "3d",
+                    "id": "601f897d-0ff4-11ea-8eef-7085c206b232",
+                    "mode": "PRACTICE",
+                    "path": "http://127.0.0.1:80/course_wt/simulation_resource/5657cb20-0fee-11ea-8eef-7085c206b232.cc3d",
+                    "simId": "5657cb20-0fee-11ea-8eef-7085c206b232",
+                    "simName": "硬币回收箱满(更换硬币回收箱)",
+                    "trainingId": "6a390ea5-94b7-4df5-9ec5-385c2e4a1aa1",
+                    "typeName": "虚拟仿真"
+                }
+            ]
+        },
+        "teachMode": {
+            "annex": [
+                {
+                    "createdAt": 1576649648000,
+                    "id": "9c82cdd2-1788-4bc3-8e33-ab2840a3a250",
+                    "name": "TVM.pdf",
+                    "path": "http://127.0.0.1:80/course_wt/annex/9c82cdd2-1788-4bc3-8e33-ab2840a3a250.pdf",
+                    "quote": 0,
+                    "size": "574.12 KB",
+                    "suffix": "pdf",
+                    "trainingId": "6a390ea5-94b7-4df5-9ec5-385c2e4a1aa1",
+                    "trainingPattern": "TEACHING",
+                    "type": "ANNEX",
+                    "updatedAt": 1576649648000
+                }
+            ],
+            "descriptions": [
+                {
+                    "name": "实训目的",
+                    "value": ""
+                },
+                {
+                    "name": "实训内容",
+                    "value": ""
+                }
+            ],
+            "guide": [
+                {
+                    "createdAt": 1574911672000,
+                    "id": "3c91251e-12ab-4c1e-a80e-f181b840bf1b",
+                    "name": "6.硬币回收箱满（更换硬币回收箱）-实训指导书.pdf",
+                    "path": "http://127.0.0.1:80/course_wt/guide/3c91251e-12ab-4c1e-a80e-f181b840bf1b.pdf",
+                    "quote": 0,
+                    "size": "434.45 KB",
+                    "suffix": "pdf",
+                    "trainingId": "6a390ea5-94b7-4df5-9ec5-385c2e4a1aa1",
+                    "trainingPattern": "TEACHING",
+                    "type": "GUIDE",
+                    "updatedAt": 1574911672000
+                }
+            ]
+        }
+    }
+}

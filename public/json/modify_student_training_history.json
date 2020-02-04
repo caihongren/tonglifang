@@ -1,0 +1,19 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "role": null,
+        "accountId": null,
+        "limit": null,
+        "offset": null,
+        "paperType": null,
+        "paperTrainingId": "4c3b723b-5c0a-47bf-b5ea-219102bb7506",
+        "answerList": [],
+        "studentId": null,
+        "totalScore": 44,
+        "chapterId": null,
+        "unitId": null,
+        "name": null
+    }
+}

@@ -1,10 +1,13 @@
+
 import Vue from 'vue'
 // 全局申明
 import VUeResource from "vue-resource"
 Vue.use(VUeResource)
-   
+import global_ from './API/Global.js'//引用文件
+Vue.prototype.GLOBAL = global_//挂载到Vue实例上面
+
 import App from './App.vue'
-import axios from './API/api'
+import axios from 'axios'
 import router from './router'
 import iView from 'iview'
 import store from './store'
@@ -27,7 +30,6 @@ import VueParticles from 'vue-particles'
 Vue.use(VueParticles)  
 
 // Vue.config.productionTip = false
-
 Vue.use(vueBeauty)
 Vue.use(ElementUI)
 Vue.use(XEUtils)
@@ -71,12 +73,33 @@ Vue.prototype.resetSetItem = function (key, newVal) {
 
 
 
+export const loadJson = (url) => {
+  return new Promise((resolve, reject) => {
+    let xhr = window.XMLHttpRequest ? new window.XMLHttpRequest() : new ActiveXObject("Micosoft.XMLHttp");
+    xhr.open("GET", url);
+    xhr.send();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        resolve(JSON.parse(xhr.response));
+      }
+    };
+  })
+}
 
+(async () => {
+  let path=process.env.NODE_ENV!=='production'?'../config.json?':'./config.json?'
+  let config = await loadJson(path + new Date().getTime());
+    store.state.config = config.target
+    window.config=config
+    if(config.danji){
+      require("./assets/css/danji.css");
+    }
+    
+    
 
-
-
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+  new Vue({
+    router,
+    store,
+    render: (h) => h(App),
+  }).$mount('#app');
+})()

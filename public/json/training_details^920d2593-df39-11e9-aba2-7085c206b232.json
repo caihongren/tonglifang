@@ -1,0 +1,35 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "id": "920d2593-df39-11e9-aba2-7085c206b232",
+        "name": "基本指令实训",
+        "teachMode": {
+            "guide": [],
+            "annex": [],
+            "descriptions": null
+        },
+        "practiceMode": {
+            "material": [],
+            "simPractice": [
+                {
+                    "id": "3f608aa0-5d30-42f8-9bf7-986bae511674",
+                    "trainingId": "920d2593-df39-11e9-aba2-7085c206b232",
+                    "simId": "55e0cf9a-fbb1-4a2e-9307-7c7470b24eeb",
+                    "mode": "PRACTICE",
+                    "typeName": "三维教学场景",
+                    "alias": "3d",
+                    "path": "http://127.0.0.1:80/course_cp\\simulation_resource\\55e0cf9a-fbb1-4a2e-9307-7c7470b24eeb.cc3d",
+                    "simName": "PLC"
+                }
+            ],
+            "descriptions": []
+        },
+        "examMode": {
+            "report": [],
+            "simExam": [],
+            "descriptions": null
+        }
+    }
+}

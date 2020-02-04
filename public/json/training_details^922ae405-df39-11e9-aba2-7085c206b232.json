@@ -1,0 +1,24 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "id": "922ae405-df39-11e9-aba2-7085c206b232",
+        "name": "多段速度选择变频调速实训",
+        "teachMode": {
+            "guide": [],
+            "annex": [],
+            "descriptions": null
+        },
+        "practiceMode": {
+            "material": [],
+            "simPractice": [],
+            "descriptions": null
+        },
+        "examMode": {
+            "report": [],
+            "simExam": [],
+            "descriptions": null
+        }
+    }
+}

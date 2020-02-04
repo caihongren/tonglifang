@@ -1,0 +1,436 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "id": "8f4f6fb6-7868-11e9-a6ab-7085c206b232",
+        "createdAt": null,
+        "updatedAt": null,
+        "deletedAt": null,
+        "course": "轨道交通自动售检票系统",
+        "url": null,
+        "description": "       自动售检票（Automatic Fare Collection,AFC）系统是通过对计算机、统计和财务等专业知识的综合运用，实现轨道交通的售票、检票、计费、收费、统计、清分结算和运行管理等全过程管理的自动化系统。    本软件全面整合轨道交通AFC系统的实务内容，软件学习内容包括自动售检票系统认知、自动售票机系统、自动检票机系统、半自动售票机系统（BOM设备）四个单元内容。本软件注重理实一体化，重点体现城市轨道交通自动售检票系统设备认知、日常维护和深度维修等内容。\n    本软件倡导学生“做中学、学中做”，故软件设计分别以教学模式、练习模式、考核模式，目的就是让学生实现教、练、考的学习模式实现高效学习。",
+        "semester": "man",
+        "icon": "http://127.0.0.1:80/course_wt/photo/8f4f6fb6-7868-11e9-a6ab-7085c206b232.png",
+        "objectives": null,
+        "alias": null,
+        "video": "http://127.0.0.1:80/course_wt/video/8f4f6fb6-7868-11e9-a6ab-7085c206b232.mp4",
+        "jobs": [
+            {
+                "id": "3f8d0f9a-1bc6-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-11T11:28:05.000+0800",
+                "updatedAt": "2019-12-17T14:50:28.000+0800",
+                "deletedAt": null,
+                "jobName": "31万岗位缺口",
+                "jobIntroduction": null,
+                "jobResponsibilities": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "3fddd0da-1bc6-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-11T11:28:05.000+0800",
+                "updatedAt": "2019-12-17T14:50:54.000+0800",
+                "deletedAt": null,
+                "jobName": "中国缺少轨道交通专业技能人才",
+                "jobIntroduction": null,
+                "jobResponsibilities": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "40360be5-1bc6-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-11T11:28:06.000+0800",
+                "updatedAt": "2019-12-17T14:51:07.000+0800",
+                "deletedAt": null,
+                "jobName": "人才供给指数 0.38：高度稀缺",
+                "jobIntroduction": null,
+                "jobResponsibilities": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "414246ab-1c87-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T10:29:39.000+0800",
+                "updatedAt": "2019-12-17T14:51:29.000+0800",
+                "deletedAt": null,
+                "jobName": "轨道交通急需八大职位之一",
+                "jobIntroduction": null,
+                "jobResponsibilities": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            }
+        ],
+        "teachers": null,
+        "trainingVOS": [
+            {
+                "menuId": "e691ac99-0b43-11ea-9b87-7085c206b232",
+                "menuName": "自动售票机正常操作互动仿真操作系统",
+                "type": "menu",
+                "menuOne": [
+                    {
+                        "menuOne": [
+                            {
+                                "menuId": "4a3764dc-33c8-4c5e-b122-cf1cd36d715a",
+                                "menuName": "开机、关机、重启",
+                                "type": "training"
+                            }
+                        ],
+                        "menuId": "1f6abfb0-0b48-11ea-9b87-7085c206b232",
+                        "menuName": "开关机、重启工作模块",
+                        "type": "menu"
+                    },
+                    {
+                        "menuOne": [
+                            {
+                                "menuId": "5296baaa-b007-48e2-a0fa-4134729e4aa3",
+                                "menuName": "补硬币找零",
+                                "type": "training"
+                            },
+                            {
+                                "menuId": "54c7049d-494a-433e-89b9-2959681f628d",
+                                "menuName": "补单程票",
+                                "type": "training"
+                            }
+                        ],
+                        "menuId": "1f6caf85-0b48-11ea-9b87-7085c206b232",
+                        "menuName": "运营前准备工作模块",
+                        "type": "menu"
+                    },
+                    {
+                        "menuOne": [
+                            {
+                                "menuId": "59d7b6a4-248d-4d64-b86d-2733bcddda81",
+                                "menuName": "硬币找零箱缺币（补硬币找零）",
+                                "type": "training"
+                            },
+                            {
+                                "menuId": "60633cee-63af-40ae-a2c2-12c92c7a69e0",
+                                "menuName": "票箱缺票（补单程票）",
+                                "type": "training"
+                            },
+                            {
+                                "menuId": "6a390ea5-94b7-4df5-9ec5-385c2e4a1aa1",
+                                "menuName": "硬币回收箱满（更换硬币回收箱）",
+                                "type": "training"
+                            },
+                            {
+                                "menuId": "6cfcab00-b1bc-4562-b59d-09f8f213e47e",
+                                "menuName": "纸币回收箱满（更换纸币回收箱）",
+                                "type": "training"
+                            }
+                        ],
+                        "menuId": "1f6e99b2-0b48-11ea-9b87-7085c206b232",
+                        "menuName": "运营期间工作模块",
+                        "type": "menu"
+                    },
+                    {
+                        "menuOne": [
+                            {
+                                "menuId": "6fa45df2-c5d2-4ed5-97ed-1d1512512bcc",
+                                "menuName": "清空硬币找零并更换硬币回收箱",
+                                "type": "training"
+                            },
+                            {
+                                "menuId": "78c94eaa-bab9-4fe4-b432-5bf5fb3bdd35",
+                                "menuName": "更换纸币回收箱",
+                                "type": "training"
+                            },
+                            {
+                                "menuId": "9e8f9bde-d60e-440e-8032-d8e76a79de9b",
+                                "menuName": "更换单程票回收箱",
+                                "type": "training"
+                            },
+                            {
+                                "menuId": "a90cc06e-9089-4910-adc4-a121b0fce795",
+                                "menuName": "换废票箱",
+                                "type": "training"
+                            }
+                        ],
+                        "menuId": "1f70909b-0b48-11ea-9b87-7085c206b232",
+                        "menuName": "运营结束工作模块",
+                        "type": "menu"
+                    }
+                ]
+            },
+            {
+                "menuId": "e720587a-0b43-11ea-9b87-7085c206b232",
+                "menuName": "自动售票机故障操作互动仿真操作系统",
+                "type": "menu",
+                "menuOne": [
+                    {
+                        "menuId": "0ab65805-1108-4c26-a600-4a75bba6b9ae",
+                        "menuName": "主控单元故障--设备死机故障处理",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "13446810-36d6-42e4-bfae-238ca7872c54",
+                        "menuName": "维护面板显示屏故障--黑屏故障处理",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "18ab40a8-ff89-4004-bc75-54691ceb81ca",
+                        "menuName": "票卡发售单元故障--卡票故障处理",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "18d1b154-5e65-4de3-a1d4-8dea43ee8cc0",
+                        "menuName": "纸币处理单元故障--卡纸币故障处理",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "23310539-7cdd-48fb-aaab-4b776ad0b7b1",
+                        "menuName": "硬币处理单元故障--卡硬币故障处理",
+                        "type": "training"
+                    }
+                ]
+            },
+            {
+                "menuId": "e7a2a732-0b43-11ea-9b87-7085c206b232",
+                "menuName": "闸机操作互动仿真操作系统",
+                "type": "menu",
+                "menuOne": [
+                    {
+                        "menuId": "289500b7-cf85-4c7e-a44b-c8c01dc77cc3",
+                        "menuName": "开关机、重启工作",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "381e851e-92ee-444a-8326-38dec919eeaa",
+                        "menuName": "更换票箱",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "39242010-dc6c-4064-8c9a-2a30865ba60c",
+                        "menuName": "卡票故障处理",
+                        "type": "training"
+                    }
+                ]
+            },
+            {
+                "menuId": "e80ceef6-0b43-11ea-9b87-7085c206b232",
+                "menuName": "BOM操作互动仿真操作系统",
+                "type": "menu",
+                "menuOne": [
+                    {
+                        "menuId": "a167639d-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "售票",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "a66cb8aa-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "充值",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "a66ed43c-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "票卡分析",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "a670588e-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "付费区异常处理",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "a67238a8-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "非付费区异常处理",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "a6744b9a-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "票卡处理",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "a676dcd3-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "行政事务",
+                        "type": "training"
+                    },
+                    {
+                        "menuId": "a6795bef-0ff8-11ea-8eef-7085c206b232",
+                        "menuName": "系统管理",
+                        "type": "training"
+                    }
+                ]
+            },
+            {
+                "menuId": "e9085423-0b43-11ea-9b87-7085c206b232",
+                "menuName": "车站票务报表多媒体互动仿真系统",
+                "type": "menu",
+                "menuOne": [
+                    {
+                        "menuId": "3d3b3400-34e9-4fff-a55b-4a89d99baa20",
+                        "menuName": "车站票务报表认知教学模块",
+                        "type": "training"
+                    }
+                ]
+            }
+        ],
+        "schools": [
+            {
+                "id": "dc6b49ee-1fa5-11ea-91a4-7085c206b232",
+                "createdAt": "2019-12-16T09:46:18.000+0800",
+                "updatedAt": "2019-12-16T09:49:40.000+0800",
+                "deletedAt": null,
+                "name": "佛山职业技术学院",
+                "photo": "http://127.0.0.1:80/course_wt/photo/dc6b49ee-1fa5-11ea-91a4-7085c206b232.png",
+                "introduction": "佛山职业技术学院于2000年6月正式挂牌成立，是一所全日制公办普通高等职业技术院校，经过多年的建设发展，学校已成广东省示范性高等职业院校建设单位、广东省一流高职院校建设单位。学校现为佛山市职业技术教育基地总部单位，佛山市职业教育校企合作联盟、园区校企协同合作育人联盟理事长单位，佛山市职业教育学会牵头单位。现有全日制在校生近万人。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "dcf1fcac-1fa5-11ea-91a4-7085c206b232",
+                "createdAt": "2019-12-16T09:46:19.000+0800",
+                "updatedAt": "2019-12-16T09:49:47.000+0800",
+                "deletedAt": null,
+                "name": "四川工程职业技术学院",
+                "photo": "http://127.0.0.1:80/course_wt/photo/dcf1fcac-1fa5-11ea-91a4-7085c206b232.png",
+                "introduction": "四川工程职业技术学院是一所公办全日制普通高等学校，隶属于四川省经济和信息化厅。学校位于成都平原东北部的“国家重大技术装备制造业基地”——四川省德阳市，建于“中国人居环境范例”的旌湖之畔。千亩校园枕水而建，因势造园，既有芳草萋萋、枝疏叶浓的园林之妙，又有小桥流水、曲径通幽处传来的琅琅书声……处处透出和谐的人文氛围和清新的现代气息。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "df81b743-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T11:59:59.000+0800",
+                "updatedAt": "2019-12-16T09:48:21.000+0800",
+                "deletedAt": null,
+                "name": "深圳职业技术学院",
+                "photo": "http://127.0.0.1:80/course_wt/photo/df81b743-1c93-11ea-9c04-7085c206b232.png",
+                "introduction": "深圳职业技术学院1993年创建，是国内最早独立举办高等职业技术教育的院校之一。建校以来，深职院人艰苦创业，开拓进取，不断创新教育教学理念、办学体制机制和人才培养模式，创造了中国高职教育的多个第一。学校依托珠三角产业发展，秉承深圳特区改革创新精神，坚持把立德树人作为学校教育的根本任务，立足于职业教育产教融合的办学特色，各项事业取得骄人成绩，被誉为中国高职教育的“一面旗帜”。为紧密契合“中国制造2025”等国家重大战略和深圳创新驱动发展战略，学校在2016年底召开的第三次党代会工作报告中提出“三个服务、五个定位、一个率先”的战略发展目标，始终坚持为党和国家服务、为深圳经济社会发展服务、为学生健康成长成才服务，努力成为职业教育创新发展的先行者、复合式创新型高素质技术技能人才的摇篮、企业家的摇篮、深圳中小微企业技术研发中心、深圳市民终身教育学校与中国职业教育师资培训重要基地，率先建成中国特色、世界一流职业院校，为世界职业教育发展贡献“深圳模式”。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "dfdee967-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T11:59:59.000+0800",
+                "updatedAt": "2019-12-16T09:48:58.000+0800",
+                "deletedAt": null,
+                "name": "郑州铁路职业技术学院",
+                "photo": "http://127.0.0.1:80/course_wt/photo/dfdee967-1c93-11ea-9c04-7085c206b232.png",
+                "introduction": "郑州铁路职业技术学院创建于1951年，1958年至1963年举办本科教育，1994年全国首批举办高等职业教育，1999年经教育部批准成为全日制普通高等学校，是河南省唯一公办轨道交通类高职院校、全国铁路系统第一所独立设置的高等职业技术学院，是国家骨干高职院校、国家级优质高职院校、国家“双高计划”建设单位。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "e030955a-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T12:00:00.000+0800",
+                "updatedAt": "2019-12-16T09:49:20.000+0800",
+                "deletedAt": null,
+                "name": "武汉铁路职业技术学院",
+                "photo": "http://127.0.0.1:80/course_wt/photo/e030955a-1c93-11ea-9c04-7085c206b232.png",
+                "introduction": "武汉铁路职业技术学院创建于1956年，2001年经湖北省人民政府批准组建高职学院，2004年由铁道部移交湖北省人民政府管理。学校是国家示范性高等职业院校、全国优质高等职业院校、第六届黄炎培职业教育奖优秀学校、全国高校毕业生就业典型经验高校、高等职业院校服务贡献50强、高等职业院校国际影响力50强、教育部首批现代学徒制试点单位、湖北省最佳文明单位、湖北省法治建设示范学校、武汉地区社会治安综合治理优秀单位，荣获世界职教院校联盟卓越奖。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "e079f0d0-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T12:00:00.000+0800",
+                "updatedAt": "2019-12-16T09:49:26.000+0800",
+                "deletedAt": null,
+                "name": "安徽交通职业技术学院",
+                "photo": "http://127.0.0.1:80/course_wt/photo/e079f0d0-1c93-11ea-9c04-7085c206b232.png",
+                "introduction": "安徽交通职业技术学院是一所以交通运输类专业为主的公办全日制普通高校，省级示范高职院校，国家骨干高职院校，隶属于安徽省交通运输厅。\r\n学院于2001年6月由原安徽大学交通分校和安徽交通学校合并组建，与安徽交通干部学校合署办公。安徽大学交通分校1988年经教育部批准设置；安徽交通学校始建于1956年，1958年曾升格为安徽交通学院；安徽交通干部学校建于1988年。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "e0d1f996-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T12:00:01.000+0800",
+                "updatedAt": "2019-12-16T09:49:33.000+0800",
+                "deletedAt": null,
+                "name": "湖南机电职业技术学院",
+                "photo": "http://127.0.0.1:80/course_wt/photo/e0d1f996-1c93-11ea-9c04-7085c206b232.png",
+                "introduction": "湖南机电职业技术学院坐落于长沙市万家丽北路，校园环境优美，生活设施完备，现有全日制高职在校学生万余人。\r\n学院是教育部人才培养工作水平评估优秀院校、全国机械行业骨干职业院校、湖南省卓越高等职业技术学院、湖南省示范性高职院校、湖南省大学生就业创业示范校、湖南省实习管理强校、湖南省职业教育先进单位、湖南省汽车制造业高级技能人才培养培训基地、湖南省机器人与智能装备职教集团理事长单位、长沙市机器人产业技术创新战略联盟秘书长单位、中国人民解放军士官直招定点院校。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            }
+        ],
+        "courseIntroductions": [
+            {
+                "id": "723d703c-1c9b-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T12:54:11.000+0800",
+                "updatedAt": "2019-12-16T13:53:22.000+0800",
+                "deletedAt": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232",
+                "summaryA": "专业知识",
+                "summaryB": "AFC日常操作",
+                "summaryC": "AFC深度维修",
+                "summaryD": null
+            },
+            {
+                "id": "72a68427-1c9b-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T12:54:12.000+0800",
+                "updatedAt": "2019-12-16T13:53:45.000+0800",
+                "deletedAt": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232",
+                "summaryA": "学习时间",
+                "summaryB": "30个课时",
+                "summaryC": null,
+                "summaryD": null
+            },
+            {
+                "id": "730f2adf-1c9b-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T12:54:13.000+0800",
+                "updatedAt": "2019-12-16T13:54:03.000+0800",
+                "deletedAt": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232",
+                "summaryA": "就业岗位",
+                "summaryB": "车站操作人员",
+                "summaryC": "车站维修人员",
+                "summaryD": null
+            },
+            {
+                "id": "74e89f43-1c9b-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T12:54:16.000+0800",
+                "updatedAt": "2019-12-16T13:54:14.000+0800",
+                "deletedAt": null,
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232",
+                "summaryA": "预计薪资",
+                "summaryB": "年薪10万至20万",
+                "summaryC": "（数据来源前程无忧）",
+                "summaryD": null
+            }
+        ],
+        "teacherList": [
+            {
+                "id": "c998d785-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T11:59:22.000+0800",
+                "updatedAt": "2019-12-20T10:44:45.000+0800",
+                "deletedAt": null,
+                "name": "城市轨道交通自动售检票系统",
+                "jobTitle": null,
+                "photo": "http://127.0.0.1:80/course_wt/photo/c998d785-1c93-11ea-9c04-7085c206b232.jpg",
+                "introduction": "《城市轨道交通自动售检票系统》结合上海地铁十余年来自动售检票系统检修工作的经验，从自动售检票系统专业的角度出发，对于车票、自动售票机、人工售票机、检票机、车站计算机和中央计算机系统等都进行了描述和概括。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "ca11c75f-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T11:59:23.000+0800",
+                "updatedAt": "2019-12-20T10:44:48.000+0800",
+                "deletedAt": null,
+                "name": "城市轨道交通自动售检票系统实务",
+                "jobTitle": null,
+                "photo": "http://127.0.0.1:80/course_wt/photo/ca11c75f-1c93-11ea-9c04-7085c206b232.jpg",
+                "introduction": "《城市轨道交通自动售检票系统实务》全面结合了城市轨道交通自动售检票系统的实务，内容包括：自动售检票系统概述、计算机系统、轨道交通票卡、自动售票系统、半自动售票机（BOM设备）、自动检票系统和运营辅助设备七个单元。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            },
+            {
+                "id": "ca786b23-1c93-11ea-9c04-7085c206b232",
+                "createdAt": "2019-12-12T11:59:23.000+0800",
+                "updatedAt": "2019-12-20T10:44:50.000+0800",
+                "deletedAt": null,
+                "name": "城市轨道交通自动售检票系统及票务处理",
+                "jobTitle": null,
+                "photo": "http://127.0.0.1:80/course_wt/photo/ca786b23-1c93-11ea-9c04-7085c206b232.jpg",
+                "introduction": "《城市轨道交通自动售检票系统及票务处理》为高等职业教育城市轨道交通类新形态一体化教材。主要针对城市轨道交通运营企业票务服务人员的岗位需求编写，全书内容围绕城市轨道自动售检票系统及票务处理展开。",
+                "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+            }
+        ],
+        "courseInfo": {
+            "id": "80b352ea-20a1-11ea-91a4-7085c206b232",
+            "createdAt": "2019-12-17T15:47:39.000+0800",
+            "updatedAt": "2019-12-17T15:51:47.000+0800",
+            "deletedAt": null,
+            "infoA": "城市轨道交通专业",
+            "infoB": "AFC日常维护与深度维修（入门）",
+            "infoC": "提供教学模式 + 练习模式 + 考核模式 ，让你快速掌握自动售检票系统知识，把握轨道交通人才缺口红利",
+            "infoD": "立即行动！抢先把握稀缺技术，成为抢手人才",
+            "infoE": "智慧教育",
+            "infoF": "领导品牌",
+            "infoG": "15周入门，掌握自动售检票岗位技能",
+            "infoH": "课程内容主要包含如下地铁车站设备：自动售票机、自动检票机、半自动售票机等，带你快速掌握自动售检票系统基础认知、日常维护操作和深度维修等岗位技能。",
+            "infoI": null,
+            "courseId": "8f4f6fb6-7868-11e9-a6ab-7085c206b232"
+        }
+    }
+}

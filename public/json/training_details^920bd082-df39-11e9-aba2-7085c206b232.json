@@ -1,0 +1,109 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "id": "920bd082-df39-11e9-aba2-7085c206b232",
+        "name": "PLC的编程软件认识和使用",
+        "teachMode": {
+            "guide": [
+                {
+                    "id": "f632fdf1-f715-41f5-8dcc-12920b37cc5f",
+                    "createdAt": "2019-12-06T17:09:39.000+0800",
+                    "updatedAt": "2019-12-06T17:09:39.000+0800",
+                    "deletedAt": null,
+                    "name": "PLC指令实训指导书 - 任务1.pdf",
+                    "path": "http://127.0.0.1:80/course_cp\\guide\\f632fdf1-f715-41f5-8dcc-12920b37cc5f.pdf",
+                    "size": "648.66 KB",
+                    "typeId": null,
+                    "suffix": "pdf",
+                    "quote": 0,
+                    "trainingId": "920bd082-df39-11e9-aba2-7085c206b232",
+                    "trainingPattern": "TEACHING",
+                    "type": "GUIDE"
+                }
+            ],
+            "annex": [
+                {
+                    "id": "bcdfcfa3-f22e-4a99-ad08-13cacb323d4e",
+                    "createdAt": "2019-12-06T17:33:09.000+0800",
+                    "updatedAt": "2019-12-06T17:33:09.000+0800",
+                    "deletedAt": null,
+                    "name": "6.星三角-PLC-编写PLC程序.mp4",
+                    "path": "http://127.0.0.1:80/course_cp\\annex\\bcdfcfa3-f22e-4a99-ad08-13cacb323d4e.mp4",
+                    "size": "5.58 MB",
+                    "typeId": null,
+                    "suffix": "mp4",
+                    "quote": 0,
+                    "trainingId": "920bd082-df39-11e9-aba2-7085c206b232",
+                    "trainingPattern": "TEACHING",
+                    "type": "ANNEX"
+                },
+                {
+                    "id": "d879f2d3-f599-4f47-8ab8-438516213ffb",
+                    "createdAt": "2019-12-06T17:02:36.000+0800",
+                    "updatedAt": "2019-12-06T17:02:36.000+0800",
+                    "deletedAt": null,
+                    "name": "S71200入门手册.pdf",
+                    "path": "http://127.0.0.1:80/course_cp\\annex\\d879f2d3-f599-4f47-8ab8-438516213ffb.pdf",
+                    "size": "10.59 MB",
+                    "typeId": null,
+                    "suffix": "pdf",
+                    "quote": 0,
+                    "trainingId": "920bd082-df39-11e9-aba2-7085c206b232",
+                    "trainingPattern": "TEACHING",
+                    "type": "ANNEX"
+                }
+            ],
+            "descriptions": []
+        },
+        "practiceMode": {
+            "material": [],
+            "simPractice": [
+                {
+                    "id": "9aa19cdc-81ad-47b3-a897-7833fd04c09c",
+                    "trainingId": "920bd082-df39-11e9-aba2-7085c206b232",
+                    "simId": "e5b22680-afe7-4e89-bbd4-772d0e7ab798",
+                    "mode": "PRACTICE",
+                    "typeName": "三维教学场景",
+                    "alias": "3d",
+                    "path": "http://127.0.0.1:80/course_cp\\simulation_resource\\e5b22680-afe7-4e89-bbd4-772d0e7ab798.cc3d",
+                    "simName": "PLC"
+                }
+            ],
+            "descriptions": []
+        },
+        "examMode": {
+            "report": [
+                {
+                    "id": "b7d8d333-8230-4207-9601-d399daad793a",
+                    "createdAt": "2019-10-23T11:15:38.000+0800",
+                    "updatedAt": "2019-10-23T11:15:38.000+0800",
+                    "deletedAt": null,
+                    "name": "新建 Microsoft Word 97-2003 文档.docx",
+                    "path": "http://127.0.0.1:80/course_cp\\report\\b7d8d333-8230-4207-9601-d399daad793a.docx",
+                    "size": "21.5 KB",
+                    "typeId": null,
+                    "suffix": "docx",
+                    "quote": 0,
+                    "trainingId": "920bd082-df39-11e9-aba2-7085c206b232",
+                    "trainingPattern": "EXAM",
+                    "type": "REPORT"
+                }
+            ],
+            "simExam": [
+                {
+                    "id": "65487eb9-cbea-4127-9f2a-3d1c1745b595",
+                    "trainingId": "920bd082-df39-11e9-aba2-7085c206b232",
+                    "simId": "f4eb0ac3-179b-4e4d-b8a2-0e2d51c88ddc",
+                    "mode": "EXAM",
+                    "typeName": "三维教学场景",
+                    "alias": "3d",
+                    "path": "http://127.0.0.1:80/course_cp\\simulation_resource\\f4eb0ac3-179b-4e4d-b8a2-0e2d51c88ddc.cc3d",
+                    "simName": "PLC"
+                }
+            ],
+            "descriptions": []
+        }
+    }
+}

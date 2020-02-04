@@ -1,0 +1,21 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "id": "091d0183-c56b-442f-a301-94b51346f925",
+        "createdAt": null,
+        "updatedAt": null,
+        "deletedAt": null,
+        "name": "接触器（CJX2-18-10-M）",
+        "groupId": "a57f3b60-bb55-11e9-b3b8-1c1b0dfbee1c",
+        "introduction": "接触器广义上是指工业电中利用线圈流过电流产生磁场，使触头闭合，以达到控制负载的电器。接触器的工作原理就是通过控制接在控制电路的辅助触点的通断来控制接在主电路的主触点的通断以达到控制电路的要求。",
+        "parameter": "名称：通用型交流接触器\n品牌：德力西电气有限公司\n电流规格：18A\n线圈电压：220V\n额定频率：50Hz\n辅助触点：一对常开触点\n",
+        "schematic": "http://127.0.0.1:80/course_cp/component_schematic/55323120-2129-42a7-8754-b1fc0e950315.png",
+        "type": "JiaoLiuJieChuQi",
+        "aliasChinese": "",
+        "aliasEnglish": "",
+        "icon": "http://127.0.0.1:80/course_cp/component_icon/a67ec296-6e72-40e4-b415-d685f67b5247.png",
+        "vendor": "德力西"
+    }
+}

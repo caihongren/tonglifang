@@ -1,0 +1,95 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "object": {
+        "examMode": {
+            "descriptions": [],
+            "report": [
+                {
+                    "createdAt": 1574834028000,
+                    "id": "47ef2e7e-10da-11ea-8391-525400f44460",
+                    "name": "实验报告.doc",
+                    "path": "http://127.0.0.1:80/course_wt/report/ee0474ae-4519-45f9-bffe-29065af9044b.doc",
+                    "quote": 0,
+                    "size": "19.0 KB",
+                    "suffix": "doc",
+                    "trainingId": "78c94eaa-bab9-4fe4-b432-5bf5fb3bdd35",
+                    "trainingPattern": "EXAM",
+                    "type": "REPORT",
+                    "updatedAt": 1574834153000
+                }
+            ],
+            "simExam": [
+                {
+                    "alias": "3d",
+                    "id": "60276bc2-0ff4-11ea-8eef-7085c206b232",
+                    "mode": "EXAM",
+                    "path": "http://127.0.0.1:80/course_wt/simulation_resource/566a6201-0fee-11ea-8eef-7085c206b232.cc3d",
+                    "simId": "566a6201-0fee-11ea-8eef-7085c206b232",
+                    "simName": "更换纸币回收箱(考核模式)",
+                    "trainingId": "78c94eaa-bab9-4fe4-b432-5bf5fb3bdd35",
+                    "typeName": "虚拟仿真"
+                }
+            ]
+        },
+        "id": "78c94eaa-bab9-4fe4-b432-5bf5fb3bdd35",
+        "name": "更换纸币回收箱",
+        "practiceMode": {
+            "material": [],
+            "simPractice": [
+                {
+                    "alias": "3d",
+                    "id": "602a6ca3-0ff4-11ea-8eef-7085c206b232",
+                    "mode": "PRACTICE",
+                    "path": "http://127.0.0.1:80/course_wt/simulation_resource/5667966d-0fee-11ea-8eef-7085c206b232.cc3d",
+                    "simId": "5667966d-0fee-11ea-8eef-7085c206b232",
+                    "simName": "更换纸币回收箱",
+                    "trainingId": "78c94eaa-bab9-4fe4-b432-5bf5fb3bdd35",
+                    "typeName": "虚拟仿真"
+                }
+            ]
+        },
+        "teachMode": {
+            "annex": [
+                {
+                    "createdAt": 1576649688000,
+                    "id": "68ab6b00-585c-4c11-a168-5066d3ddeb94",
+                    "name": "作业规范.pdf",
+                    "path": "http://127.0.0.1:80/course_wt/annex/68ab6b00-585c-4c11-a168-5066d3ddeb94.pdf",
+                    "quote": 0,
+                    "size": "594.35 KB",
+                    "suffix": "pdf",
+                    "trainingId": "78c94eaa-bab9-4fe4-b432-5bf5fb3bdd35",
+                    "trainingPattern": "TEACHING",
+                    "type": "ANNEX",
+                    "updatedAt": 1576649688000
+                }
+            ],
+            "descriptions": [
+                {
+                    "name": "实训目的",
+                    "value": ""
+                },
+                {
+                    "name": "实训内容",
+                    "value": ""
+                }
+            ],
+            "guide": [
+                {
+                    "createdAt": 1574911706000,
+                    "id": "9110f6b6-68d7-4d85-a6f1-ca977125c362",
+                    "name": "9. 更换纸币回收箱-实训指导书.pdf",
+                    "path": "http://127.0.0.1:80/course_wt/guide/9110f6b6-68d7-4d85-a6f1-ca977125c362.pdf",
+                    "quote": 0,
+                    "size": "433.42 KB",
+                    "suffix": "pdf",
+                    "trainingId": "78c94eaa-bab9-4fe4-b432-5bf5fb3bdd35",
+                    "trainingPattern": "TEACHING",
+                    "type": "GUIDE",
+                    "updatedAt": 1574911706000
+                }
+            ]
+        }
+    }
+}

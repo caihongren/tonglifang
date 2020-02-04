@@ -1,0 +1,56 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "id": "920e976b-df39-11e9-aba2-7085c206b232",
+        "name": "定时器指令实训",
+        "teachMode": {
+            "guide": [
+                {
+                    "id": "4483e733-4594-47ea-b95a-9da2b35e87d4",
+                    "createdAt": "2019-10-23T11:08:32.000+0800",
+                    "updatedAt": "2019-10-28T09:14:57.000+0800",
+                    "deletedAt": null,
+                    "name": "新建 Microsoft Word 97-2003 文档.pdf",
+                    "path": "http://127.0.0.1:80/course_cp\\guide\\4483e733-4594-47ea-b95a-9da2b35e87d4.pdf",
+                    "size": "83.0 KB",
+                    "typeId": null,
+                    "suffix": "pdf",
+                    "quote": 0,
+                    "trainingId": "920e976b-df39-11e9-aba2-7085c206b232",
+                    "trainingPattern": "TEACHING",
+                    "type": "GUIDE"
+                }
+            ],
+            "annex": [
+                {
+                    "id": "097a0f12-ffc3-4896-96b3-d81ce82b7050",
+                    "createdAt": "2019-10-28T09:14:57.000+0800",
+                    "updatedAt": "2019-10-28T09:14:57.000+0800",
+                    "deletedAt": null,
+                    "name": "nodejshoutai.rar",
+                    "path": "http://127.0.0.1:80/course_cp\\annex\\097a0f12-ffc3-4896-96b3-d81ce82b7050.rar",
+                    "size": "11.12 KB",
+                    "typeId": null,
+                    "suffix": "rar",
+                    "quote": 0,
+                    "trainingId": "920e976b-df39-11e9-aba2-7085c206b232",
+                    "trainingPattern": "TEACHING",
+                    "type": "ANNEX"
+                }
+            ],
+            "descriptions": []
+        },
+        "practiceMode": {
+            "material": [],
+            "simPractice": [],
+            "descriptions": null
+        },
+        "examMode": {
+            "report": [],
+            "simExam": [],
+            "descriptions": null
+        }
+    }
+}

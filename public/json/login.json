@@ -1,0 +1,19 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "length": null,
+    "object": {
+        "account": {
+            "id": "c41f9cc7-52ab-4244-a62c-d3bd664db730",
+            "phone": "13720275579",
+            "number": "1234556",
+            "name": "蔡宏运测试",
+            "gender": "女",
+            "age": 24,
+            "email": "13720275579@163.com",
+            "classes": "测试专业 2019 4班",
+            "role": "student"
+        },
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJjNDFmOWNjNy01MmFiLTQyNDQtYTYyYy1kM2JkNjY0ZGI3MzAiLCJyb2xlIjoic3R1ZGVudCIsImV4cCI6MTU3NjY3MjU0MCwiYWNjb3VudElwIjoiMTkyLjE2OC4wLjQ5In0.mKMZnLKYzpIBDCw5kF8afn1c8bZTzun8XBrEqmwtMyo"
+    }
+}

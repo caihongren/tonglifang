@@ -71,48 +71,49 @@ const path = require('path');
 
 
 function resolve(dir) {
-    return path.join(__dirname, dir);
+  return path.join(__dirname, dir);
 }
 
 // 本地使用代理
 
 module.exports = {
-        publicPath: './', //publicPath取代了baseUrl
-        outputDir: 'dist',
-        lintOnSave: true,
-        runtimeCompiler: true, //关键点在这  原来的 Compiler 换成了 runtimeCompiler
-        productionSourceMap: false, // 是否在构建生产包时生成 sourceMap 文件，false将提高构建速度
-        // 调整内部的 webpack 配置。
+  publicPath: './', //publicPath取代了baseUrl
+  outputDir: 'dist',
+  lintOnSave: true,
+  runtimeCompiler: true, //关键点在这  原来的 Compiler 换成了 runtimeCompiler
+  productionSourceMap: false, // 是否在构建生产包时生成 sourceMap 文件，false将提高构建速度
+  // 调整内部的 webpack 配置。
 
-        // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/webpack.md
-        chainWebpack: (config) => {
-            config.module
-                .rule('')
-                .test(/mxClient\.js$/)
-                .use('exports-loader')
-                .loader('exports-loader?mxClient,mxGraphModel,mxActor,mxShape,mxEventObject,mxGraph,mxPrintPreview,mxEventSource,mxRectangle,mxVertexHandler,mxMouseEvent,mxGraphView,mxImage,mxGeometry,mxRubberband,mxKeyHandler,mxDragSource,mxGraphModel,mxEvent,mxUtils,mxWindow,mxEvent,mxCodec,mxCell,mxConstants,mxPoint,mxGraphHandler,mxCylinder,mxCellRenderer,mxEvent,mxUndoManager')
-                .end();
-            config.resolve.alias
-                .set('@', resolve('src'))
-                .set('@assets', resolve('src/assets'))
-                .set('@c', resolve('src/components'))
-                .set('@v', resolve('src/views'));
-            // 按这种格式.set('', resolve('')) 自己添加
+  // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/webpack.md
+  chainWebpack: (config) => {
+    config.module
+      .rule('')
+      .test(/mxClient\.js$/)
+      .use('exports-loader')
+      .loader('exports-loader?mxClient,mxGraphModel,mxActor,mxShape,mxEventObject,mxGraph,mxPrintPreview,mxEventSource,mxRectangle,mxVertexHandler,mxMouseEvent,mxGraphView,mxImage,mxGeometry,mxRubberband,mxKeyHandler,mxDragSource,mxGraphModel,mxEvent,mxUtils,mxWindow,mxEvent,mxCodec,mxCell,mxConstants,mxPoint,mxGraphHandler,mxCylinder,mxCellRenderer,mxEvent,mxUndoManager')
+      .end();
+    config.resolve.alias
+      .set('@', resolve('src'))
+      .set('@assets', resolve('src/assets'))
+      .set('@c', resolve('src/components'))
+      .set('@v', resolve('src/views'))
+      .set('@A', resolve('src/API/api.js'));
+    // 按这种格式.set('', resolve('')) 自己添加
 
   },
-  
+
   configureWebpack: (config) => {
-   
+
     if (process.env.NODE_ENV === 'production') {
       // 为生产环境修改配置...
       config.mode = 'production';
       config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-     
+
     } else {
       // 为开发环境修改配置...
       config.mode = 'development'
     }
-  
+
   },
   // 配置 webpack-dev-server 行为。
   devServer: {
@@ -125,14 +126,15 @@ module.exports = {
       '/apl': { //要访问的跨域的api的域名
         // target: 'http://106.75.128.230:10000/zuul/creator/api/public/account',
         //target: 'http://192.168.0.17:10000/zuul/creator/api/public/account',
-        //target: 'http://192.168.0.200:10000/zuul/creator/api/public/account',
+        // target: 'http://192.168.0.200:10000/zuul/creator/api/public/account',
         // target: 'http://192.168.0.200:9051', //主分支
         // target: 'http://192.168.0.17:9052',  
         // target: 'http://106.75.128.230:9054',
-          target: 'http://106.75.128.230:9053', //昌平
-        // target: 'http://192.168.0.17:9053',  //张程蹦迪
+         target: 'http://106.75.128.230:9056', //陕铁
+        // target: 'http://192.168.0.17:9057', //张程蹦迪
+         //target: 'http://192.168.0.232:9055', //黄涵本地
         // target: 'http://192.168.0.200:9053',
-        // target: 'http://192.168.0.232:9054', //
+        //target: 'http://106.75.128.230:9055', //
         ws: true,
         changOrigin: true,
         pathRewrite: {
@@ -143,15 +145,16 @@ module.exports = {
         // target: ' http://106.75.128.230:10000/creator/api/public/course1',
         //target: 'http://192.168.0.17:10000/zuul/creator/api/public/course',
         // target: 'http://192.168.0.200:8080/creatorcourse',
-        //target: 'http://192.168.2.200:10000/zuul/creator/api/public/course',
+        // target: 'http://192.168.2.200:10000/zuul/creator/api/public/course',
         // target: 'http://192.168.0.200:9054',  //主分支
         // target: 'http://192.168.0.17:9052', 
         //target: 'http://106.75.128.230:9054',
-         target: 'http://106.75.128.230:9053', //昌平
-       
-          // target: 'http://192.168.0.17:9053', //张程蹦迪
+        target: 'http://106.75.128.230:9056', //陕铁
+
+        //  target: 'http://192.168.0.17:9057', //张程蹦迪
+       //target: 'http://192.168.0.232:9055',  //黄涵本地
         // target: 'http://192.168.0.200:9053',
-        // target: 'http://192.168.0.232:9054', 
+        //target: 'http://106.75.128.230:9055', 
         changeOrigin: true,
         pathRewrite: {
           '^/img': ''
@@ -163,12 +166,14 @@ module.exports = {
         pathRewrite: {
           '^/top': ''
         }
+      }
     }
-  }}}
-  
-    // module.exports = {
-    //   devServer: {
-    //     proxy: "http://sso.icubespace.com/account",
-    //     https: false
-    //   }
-    // }
+  }
+}
+
+// module.exports = {
+//   devServer: {
+//     proxy: "http://sso.icubespace.com/account",
+//     https: false
+//   }
+// }

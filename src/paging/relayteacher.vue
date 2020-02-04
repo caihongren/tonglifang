@@ -2,9 +2,13 @@
   <div class="relaybanner">
     <div class="Breadcrumb" @click="guizone()">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/relayteacher/home' }" class="textcolor">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/relayteacher/teacherhome' }" class="textcolor">首页</el-breadcrumb-item>
         <el-breadcrumb-item class="textcolor">{{course}}</el-breadcrumb-item>
-        <el-breadcrumb-item class="textcolor" v-for="(item) in breadcrumb" v-bind:key="item">{{item}}</el-breadcrumb-item>
+        <el-breadcrumb-item
+          class="textcolor"
+          v-for="(item) in breadcrumb"
+          v-bind:key="item"
+        >{{item}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 上侧导航栏 -->
@@ -19,11 +23,11 @@
         <span class="nave" @click="tabPositionpath('/relayteacher/componentLibrary')">元器件库</span>
       </el-radio-button>
       <el-radio-button label="4" class="disflax">
-        <span class="nave chongqing" @click="tabPositionpath('/relayteacher/simulationDatabase')">仿真资源库</span>
+        <span
+          class="nave chongqing"
+          @click="tabPositionpath('/relayteacher/simulationDatabase')"
+        >仿真资源库</span>
       </el-radio-button>
-      <!-- <el-radio-button label="5" class="disflax">
-        <span class="nave" @click="tabPositionpath('/relayteacher/newExperimentalTemplateLibrary')">实训模板库</span>
-      </el-radio-button>-->
       <el-radio-button label="6" class="disflax">
         <span class="nave" @click="tabPositionpath('/relayteacher/resources')">实训资源</span>
       </el-radio-button>
@@ -38,13 +42,32 @@
 
     <div class="leftNavigation">
       <div class="leftbox">
-        <el-menu :default-active="pagepath" class="el-menu-vertical-demo" @open="handleOpen" @select="handleClose" background-color="#313131" text-color="#fff" active-text-color="#ffd04b" style="width:252px;border:0px;">
-          <el-menu-item index="-1" @click="tabPositionpath('/relayteacher/home')">首页</el-menu-item>
-          <el-menu-item index=" -3" @click="tabPositionpath('/relayteacher/home')" v-if="iswatchStorage3D">
-            <el-tag closable :disable-transitions="true" class="det" style="font-size:16px" @close="deet('3D')">三维设计空间</el-tag>
+        <el-menu
+          :default-active="pagepath"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @select="handleClose"
+          background-color="#2e3d49"
+          text-color="#7a8892"
+          active-text-color="#ffffff"
+          style="width:252px;border:0px;"
+        >
+          <el-menu-item index="-1" @click="tabPositionpath('/relayteacher/teacherhome')">首页</el-menu-item>
+          <el-menu-item
+            index=" -3"
+            @click="tabPositionpath('/relayteacher/Dimension3')"
+            v-if="iswatchStorage3D"
+          >
+            <el-tag
+              closable
+              :disable-transitions="true"
+              class="det"
+              style="font-size:16px"
+              @close="deet('3D')"
+            >三维设计空间</el-tag>
           </el-menu-item>
 
-          <el-submenu :index="'-4#设备库管理'" v-if="issupervisor">
+          <!-- <el-submenu :index="'-4#设备库管理'" v-if="issupervisor">
             <template slot="title">
               <span>设备库管理</span>
             </template>
@@ -53,119 +76,164 @@
             <el-menu-item :index=" '-4#设备库#工具'" @click="tabPositionpath('/relayteacher/componentLibrary',null,index)">工具</el-menu-item>
             <el-menu-item :index=" '-4#设备库#场景'" @click="tabPositionpath('/relayteacher/componentLibrary',null,index)">场景</el-menu-item>
             <el-menu-item :index=" '-4#设备库#设备'" @click="tabPositionpath('/relayteacher/componentLibrary',null,index)">设备</el-menu-item>
-          </el-submenu>
+          </el-submenu>-->
 
-          <el-submenu v-bind:index="String(index)" v-for="(item,index) in courselist" v-bind:key="item.id">
+          <el-submenu
+            v-bind:index="String(index)"
+            v-for="(item,index) in courselist"
+            v-bind:key="item.id"
+          >
             <template slot="title">
               <span>{{item.course}}</span>
             </template>
-            <!-- <el-submenu :index="index+'-课程管理'">
+
+            <el-menu-item
+              :index=" index+'#课程介绍'"
+              @click="tabPositionpath('/relayteacher/study/courseIntroduction',index)"
+            >课程介绍</el-menu-item>
+            <!-- 任务列表 -->
+            <!-- <el-menu-item
+              :index=" index+'#'+items.name"
+              @click="tabPositionpathparams('/relayteacher/study/experimentDetails',items,'practice',false,true)"
+              v-for="(items,indexs ) in item.mymodule"
+            >{{items.name}}</el-menu-item> -->
+
+             <el-submenu
+              class="jiantou"
+              :index=" index+'#'+items.menuName"
+              v-for="(items,indexs) in  item.mymodule"
+              v-bind:key="items.menuId"
+            >
               <template slot="title">
-                <span>课程管理</span>
-            </template>-->
-            <el-menu-item :index=" index+'#课程介绍'" @click="tabPositionpath('/relayteacher/study/courseIntroduction',index)">课程介绍</el-menu-item>
+                <span :title="items.menuName">{{indexs+1}}{{"."}} {{items.menuName}}</span>
+              </template>
+              <components
+                class="subset"
+                :is="item2.type=='menu'?'el-submenu':'el-menu-item'"
+                :index=" index+'#'+items.menuName+'#'+item2.menuName"
+                v-for="(item2,index2) in items.menuOne"
+                :key="item2.menuId+'submenu'"
+                @click="tabPositionpathparams('/relayteacher/study/experimentDetails',item2,'practice',false,true)"
+              >
+                <template slot="title">
+                  <span :title="item2.menuName">{{indexs+1}}{{"."}}{{index2+1}}.{{item2.menuName}}</span>
+                </template>
+                <el-menu-item
+                  :index=" index+'#'+items.menuName+'#'+item2.menuName+'#'+item3.menuName"
+                  v-for="(item3,index3) in item2.menuOne"
+                  :key="item3.menuId+'submenu'"
+                  @click="tabPositionpathparams('/relayteacher/study/experimentDetails',item3,'practice',false,true)"
+                >
+                  <template slot="title">
+                    <span :title="item3.menuName">{{item3.menuName}}</span>
+                  </template>
+                </el-menu-item>
+              </components>
+
+              <!-- <el-menu-item :index=" index+'#'+items.menuName+'#'+itemss.name+'^'+itemss.id" v-for="(itemss ,indexss) in  items.trainings" v-bind:key="itemss.id" @click="tabPositionpathparams('/relayteacher/study/experimentDetails',itemss,'teaching',false)" :title="itemss.name">{{indexs+1}}{{"."}}{{indexss+1}}{{"."}}{{itemss.name}}</el-menu-item>
+              -->
+            </el-submenu>
 
             <!-- 内置实验模板库 -->
-            <el-menu-item
-              :index=" index+'#内置实训模板库'"
-              @click="tabPositionpath('/relayteacher/study/trainingCourse',index)"
-            >内置实训模板库</el-menu-item>
-            <!-- <el-submenu :index=" index+'#内置实验模板库'">
-              <template slot="title">内置实验模板库</template>
-                <el-menu-item
-                :index=" index+'#内置实验模板库#全部'"
-                @click="tabPositionpath('/relayteacher/study/trainingCourse',index)"
-              >全部</el-menu-item>
-              <el-menu-item-group  v-for="(items) in  item.module" v-bind:key="items.moduleId">
-                <el-menu-item
-                  :index=" index+'#内置实验模板库#'+itemss.name"
-                  v-for="(itemss) in  items.trainings"
-                  v-bind:key="itemss.id"
-                  @click="tabPositionpathparams('/relayteacher/study/experimentDetails',itemss,'teaching',false,true)"
-                  :title="itemss.name"
-                >{{itemss.name}}</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>-->
+            <!-- <el-menu-item :index=" index+'#内置实训模板库'" @click="tabPositionpath('/relayteacher/study/trainingCourse',index)">内置实训模板库</el-menu-item> -->
 
             <!-- 实验模板库 -->
-            <el-menu-item
-              :index=" index+'#我的实训模板库'"
-              @click="tabPositionpath('/relayteacher/study/myTraining',index)"
-              v-if="!issupervisor"
-            >我的实训模板库</el-menu-item>
-            <!-- <el-submenu :index=" index+'#我的实训模板库'" v-if="!issupervisor" >
-              <template slot="title">我的实训模板库</template>
-              <el-menu-item
-                :index=" index+'#我的实训模板库#全部'"
-                @click="tabPositionpath('/relayteacher/study/myTraining',index)"
-              >全部</el-menu-item>
-              <el-menu-item
-                :index=" index+'#我的实训模板库#'+items.name"
-                v-for="(items) in  item.mymodule"
-                v-bind:key="items.id"
-                :title="items.name"
-                @click="tabPositionpathparams('/relayteacher/study/experimentDetails',items,'examine',false,false)"
-              >{{items.name}}</el-menu-item>
-              <el-submenu :index=" index+'#我的实训模板库#故障模板'">
-                <template slot="title">故障模板</template>
-              </el-submenu>
-            </el-submenu>-->
+            <!-- <el-menu-item :index=" index+'#我的实训模板库'" @click="tabPositionpath('/relayteacher/study/myTraining',index)" v-if="!issupervisor">我的实训模板库</el-menu-item> -->
 
             <!-- 实训评估 -->
-            <el-menu-item
-              :index=" index+'#实训评估'"
-              @click="tabPositionpath('/relayteacher/study/averageScore',index)"
-              v-if="!issupervisor"
-            >实训评估</el-menu-item>
+
             <!-- </el-submenu> -->
-            <el-submenu :index=" index+'#任务管理'" v-if="!issupervisor">
+            <!-- <el-submenu :index=" index+'#任务管理'" v-if="!issupervisor">
               <template slot="title">
                 <span>任务管理</span>
               </template>
               <el-menu-item :index=" index+'#任务管理#已下发任务'" @click="tabPositionpath('/relayteacher/taskManagement',1,index)">已下发任务</el-menu-item>
               <el-menu-item :index=" index+'#任务管理#已结束任务'" @click="tabPositionpath('/relayteacher/taskManagement',2,index)">已结束任务</el-menu-item>
-            </el-submenu>
-            <el-submenu :index=" index+'#课程设备库'" v-if="issupervisor">
+            </el-submenu>-->
+            <!-- <el-submenu :index=" index+'#课程设备库'">
               <template slot="title">
                 <span>课程设备库</span>
               </template>
-              <el-menu-item :index=" index+'#课程设备库#全部'" @click="tabPositionpath('/relayteacher/componentLibrary',null,index)">全部</el-menu-item>
-              <el-menu-item :index=" index+'#课程设备库#'+items.name" v-for="(items) in  item.componentGroup" v-bind:key="items.id" @click="tabPositionpath('/relayteacher/componentLibrary',items.id,index)" :title="items.name">{{items.name}}</el-menu-item>
-            </el-submenu>
+              <el-menu-item
+                :index=" index+'#课程设备库#全部'"
+                @click="tabPositionpath('/relayteacher/componentLibrary',null,index)"
+              >全部</el-menu-item>
+              <el-menu-item
+                :index=" index+'#课程设备库#'+items.name"
+                v-for="(items) in  item.componentGroup"
+                v-bind:key="items.id"
+                @click="tabPositionpath('/relayteacher/componentLibrary',items.id,index)"
+                :title="items.name"
+              >{{items.name}}</el-menu-item>
+            </el-submenu>-->
+            <!-- 模型库 -->
+
+            <el-menu-item
+              :index=" index+'#模型库'"
+              @click="tabPositionpath('/relayteacher/newcomponentLibrary',null,index)"
+            >模型库</el-menu-item>
+            <!-- 图纸库 -->
+
+            <!-- <el-menu-item
+              :index=" index+'#图纸库'"
+              @click="tabPositionpath('/relayteacher/drawing',null,index)"
+            >图纸库</el-menu-item>-->
             <el-submenu :index=" index+'#虚拟实验资源库'" v-if="issupervisor">
               <template slot="title">
                 <span>虚拟实验资源库</span>
               </template>
-              <el-menu-item :index=" index+'#虚拟实验资源库#仿真资源'" @click="tabPositionpath('/relayteacher/simulationDatabase',1,index)">仿真资源</el-menu-item>
-              <!-- <el-menu-item
-                :index=" index+'#虚拟实验资源库#内置仿真资源'"
-                @click="tabPositionpath('/relayteacher/simulationDatabase',2)"
-              >内置仿真资源</el-menu-item>-->
-              <!-- 试题库 -->
+              <el-menu-item
+                :index=" index+'#虚拟实验资源库#仿真资源'"
+                @click="tabPositionpath('/relayteacher/simulationDatabase',1,index)"
+              >仿真资源</el-menu-item>
             </el-submenu>
-            <el-submenu :index=" index+'#试题库'" v-if="issupervisor">
+            <!-- 试题库 -->
+            <el-submenu :index=" index+'#试题库'">
               <template slot="title">
                 <span>试题库</span>
               </template>
-              <el-menu-item :index=" index+'#试题库#题库管理'" @click="tabPositionpath('/relayteacher/taskBank',1,index)">题库管理</el-menu-item>
-              <el-menu-item :index=" index+'#试题库#组卷管理'" @click="tabPositionpath('/relayteacher/taskBank',2,index)">组卷管理</el-menu-item>
+              <el-menu-item
+                :index=" index+'#试题库#题库管理'"
+                @click="tabPositionpath('/relayteacher/taskBank',index)"
+              >题库管理</el-menu-item>
+              <el-menu-item
+                :index=" index+'#试题库#组卷管理'"
+                @click="tabPositionpath('/relayteacher/testPaperGeneration',index)"
+              >组卷管理</el-menu-item>
             </el-submenu>
-            <el-menu-item v-if="!issupervisor" :index=" index+'#自由创新实验'" @click="tabPositionpath('/relayteacher/freeTest',1,index)">自由创新实验</el-menu-item>
-          </el-submenu>
 
-          <!-- //课程2 -->
-          <!-- 传感器综合实训 -->
-          <!-- <el-submenu index="-5">
-            <template slot="title">
-              <span>传感器综合实训</span>
-            </template>
-            <el-menu-item index="-5#传感器应用实训" @click="tasks('/relayteacher/newdimension3')">传感器应用实训</el-menu-item>
-          </el-submenu>-->
+            <!-- 试卷库 -->
+            <el-submenu :index=" index+'#试卷'">
+              <template slot="title">
+                <span>试卷</span>
+              </template>
+             <el-menu-item
+              :index=" index+'#试卷#练习试卷'"
+              @click="tabPositionpath('/relayteacher/lowerHair',index)"
+              v-if="!issupervisor"
+            >练习试卷</el-menu-item>
+            <el-menu-item
+              :index=" index+'#试卷#考试试卷'"
+              @click="tabPositionpath('/relayteacher/Examination',index)"
+              v-if="!issupervisor"
+            >考试试卷</el-menu-item>
+            </el-submenu>
+           
+            <!-- <el-menu-item :index=" index+'#实训评估'" @click="tabPositionpath('/relayteacher/study/averageScore',index)" v-if="!issupervisor">实训评估</el-menu-item> -->
+            <!-- <el-menu-item v-if="!issupervisor" :index=" index+'#自由创新实验'" @click="tabPositionpath('/relayteacher/freeTest',1,index)">自由创新实验</el-menu-item> -->
+          </el-submenu>
         </el-menu>
       </div>
     </div>
     <keep-alive :include="['newExperimentalTemplateLibrary',]">
-      <router-view @gounity="gounity" @derunity="derunity" @yuangounity="yuangounity" @threadPoxi="threadPoxi" @handleSelect="handleSelect" @deet="deet"></router-view>
+      <router-view
+        @gounity="gounity"
+        @derunity="derunity"
+        @yuangounity="yuangounity"
+        @threadPoxi="threadPoxi"
+        @handleSelect="handleSelect"
+        @deet="deet"
+      ></router-view>
     </keep-alive>
   </div>
 </template>
@@ -175,6 +243,8 @@ import {
   get_component_group, //元件组
   get_training_module, //获取实训模块
   getModuleAndTrainingInner, //课程实训列表
+  get_menu_and_training,
+  get_training_inner,
   getModuleAndTrainingSelf, // 获取课程实训列表
   curlist //课程列表
 } from "../API/api";
@@ -234,36 +304,42 @@ export default {
         let course = this.courselist[key];
         this.course = course.course;
         sessionStorage.setItem("course", JSON.stringify(course));
-        //获取实训模块
-
-        getModuleAndTrainingInner().then(res => {
-          if (res.data.code == 0) {
-            this.courselist[key].module = res.data.object;
-          }
-        });
-        // 获取我的实训
-        getModuleAndTrainingSelf().then(res => {
-          if (res.data.code == 0) {
-            this.courselist[key].mymodule = res.data.object;
-          }
-        });
-        //获取元件库
-        get_component_group().then(res => {
-          if (res.data.code == 0) {
-            this.courselist[key].componentGroup = res.data.object;
-          }
-        });
+        this.getlist(key);
       }
     },
+    // 请求数据
+    getlist(key) {
+      //获取实训模块
+
+      //获取实训模块
+
+      getModuleAndTrainingInner().then(res => {
+        if (res.data.code == 0) {
+          this.courselist[key].module = res.data.object;
+        }
+      });
+      // 获取我的实训
+      get_menu_and_training().then(res => {
+        console.log(res);
+        if (res.data.code == 0) {
+          this.courselist[key].mymodule = res.data.object;
+        }
+      });
+      //获取元件库
+      get_component_group().then(res => {
+        if (res.data.code == 0) {
+          this.courselist[key].componentGroup = res.data.object;
+        }
+      });
+    },
     handleClose(key, keyPath) {
-      console.log(key, keyPath, "999");
       let list = keyPath[keyPath.length - 1].split("#");
       let index = list.shift();
       if (list[list.length - 1].search("^") != -1) {
         list[list.length - 1] = list[list.length - 1].split("^")[0];
       }
       this.breadcrumb = list;
-      console.log(index);
+
       if (keyPath[0] >= 0 && keyPath.length >= 1) {
         let course = this.courselist[index];
         this.course = course.course;
@@ -314,15 +390,18 @@ export default {
       let teaching = true;
       let practice = true;
       let examine = true;
-      if (inlay) {
-        teaching = true;
-        practice = true;
-        examine = false;
-      } else {
-        teaching = false;
-        practice = false;
-        examine = true;
-      }
+      // if (inlay) {
+      //   teaching = true;
+      //   practice = true;
+      //   examine = false;
+      // } else {
+      //   teaching = false;
+      //   practice = false;
+      //   examine = true;
+      // }
+      teaching = false;
+      practice = true;
+      examine = false;
       //教导主任
       if (this.issupervisor) {
         teaching = true;
@@ -332,7 +411,7 @@ export default {
       this.$router.push({
         path: path,
         query: {
-          id: row.id,
+          id: row.menuId,
           name: row.name,
           type: type,
           teaching: teaching,
@@ -408,7 +487,7 @@ export default {
       // 若是 正在开启状态，则等待300毫秒
       else if (this.websock.readyState === this.websock.CONNECTING) {
         let that = this; //保存当前对象this
-        setTimeout(function () {
+        setTimeout(function() {
           that.websocketsend(data);
         }, 300);
       }
@@ -416,7 +495,7 @@ export default {
       else {
         this.initWebSocket();
         let that = this; //保存当前对象this
-        setTimeout(function () {
+        setTimeout(function() {
           that.websocketsend(data);
         }, 500);
       }
@@ -446,7 +525,7 @@ export default {
       that.lockReconnect = true;
       //没连接上会一直重连，设置延迟避免请求过多
       that.timeoutnum && clearTimeout(that.timeoutnum);
-      that.timeoutnum = setTimeout(function () {
+      that.timeoutnum = setTimeout(function() {
         //新连接
         that.initWebSocket();
         that.lockReconnect = false;
@@ -466,7 +545,7 @@ export default {
       var self = this;
       self.timeoutObj && clearTimeout(self.timeoutObj);
       self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
-      self.timeoutObj = setTimeout(function () {
+      self.timeoutObj = setTimeout(function() {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.websock.readyState == 1) {
           //如果连接正常
@@ -479,7 +558,7 @@ export default {
           console.log("重连");
           self.reconnect();
         }
-        self.serverTimeoutObj = setTimeout(function () {
+        self.serverTimeoutObj = setTimeout(function() {
           //超时关闭
           self.websock.close();
         }, self.timeout);
@@ -595,8 +674,17 @@ export default {
         this.courselist = res.data.object;
         if (res.data.object.length > 0) {
           if (sessionStorage.getItem("course")) {
+            let course = JSON.parse(sessionStorage.getItem("course"));
+            let list = this.courselist;
+            for (let i = 0; i < list.length; i++) {
+              if (list[i].id == course.id) {
+                this.getlist(i);
+                break;
+              }
+            }
           } else {
             this.course = res.data.object[0].course;
+            this.getlist(0);
             sessionStorage.setItem(
               "course",
               JSON.stringify(res.data.object[0])
@@ -608,8 +696,11 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (val, oldVal) {
-        if (val.path == "/relayteacher/home" || val.path == "/relay/home") {
+      handler: function(val, oldVal) {
+        if (
+          val.path == "/relayteacher/teacherhome" ||
+          val.path == "/relay/home"
+        ) {
           console.log("回首页");
           this.breadcrumb = [];
           this.course = "";
@@ -627,7 +718,7 @@ export default {
   mounted() {
     if (sessionStorage.getItem("breadcrumb")) {
       let page = JSON.parse(sessionStorage.getItem("breadcrumb"));
-      console.log(page, "333");
+
       this.breadcrumb = page.pagelist;
       this.course = page.course;
       this.pagepath = page.path;
@@ -697,6 +788,7 @@ a {
   position: absolute;
   top: -35px;
   left: 280px;
+  z-index: 100;
 }
 .det {
   background-color: transparent;
@@ -711,14 +803,17 @@ a {
   width: 250px;
   position: absolute;
   height: 100%;
-  z-index: 30;
-  background-color: #313131;
+  z-index: 3;
+  background-color: #2e3d49;
   overflow: hidden;
   .leftbox {
     width: 260px;
     height: 100%;
     overflow-y: scroll;
   }
+}
+.el-menu-item.is-active {
+  background-color: #1c262f !important;
 }
 </style>
 

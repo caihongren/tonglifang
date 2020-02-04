@@ -1,0 +1,95 @@
+{
+    "code": 0,
+    "msg": "SUCCESS",
+    "object": {
+        "examMode": {
+            "descriptions": [],
+            "report": [
+                {
+                    "createdAt": 1574820649000,
+                    "id": "26b09b68-e5e5-4fe8-903d-50cbd9c565e2",
+                    "name": "实验报告.doc",
+                    "path": "http://127.0.0.1:80/course_wt/report/26b09b68-e5e5-4fe8-903d-50cbd9c565e2.doc",
+                    "quote": 0,
+                    "size": "19.0 KB",
+                    "suffix": "doc",
+                    "trainingId": "381e851e-92ee-444a-8326-38dec919eeaa",
+                    "trainingPattern": "EXAM",
+                    "type": "REPORT",
+                    "updatedAt": 1574834153000
+                }
+            ],
+            "simExam": [
+                {
+                    "alias": "3d",
+                    "id": "58b20e28-0ff4-11ea-8eef-7085c206b232",
+                    "mode": "EXAM",
+                    "path": "http://127.0.0.1:80/course_wt/simulation_resource/56a3389d-0fee-11ea-8eef-7085c206b232.cc3d",
+                    "simId": "56a3389d-0fee-11ea-8eef-7085c206b232",
+                    "simName": "闸机-更换票箱(考核模式)",
+                    "trainingId": "381e851e-92ee-444a-8326-38dec919eeaa",
+                    "typeName": "虚拟仿真"
+                }
+            ]
+        },
+        "id": "381e851e-92ee-444a-8326-38dec919eeaa",
+        "name": "更换票箱",
+        "practiceMode": {
+            "material": [],
+            "simPractice": [
+                {
+                    "alias": "3d",
+                    "id": "58b408c5-0ff4-11ea-8eef-7085c206b232",
+                    "mode": "PRACTICE",
+                    "path": "http://127.0.0.1:80/course_wt/simulation_resource/56a089c8-0fee-11ea-8eef-7085c206b232.cc3d",
+                    "simId": "56a089c8-0fee-11ea-8eef-7085c206b232",
+                    "simName": "闸机-更换票箱",
+                    "trainingId": "381e851e-92ee-444a-8326-38dec919eeaa",
+                    "typeName": "虚拟仿真"
+                }
+            ]
+        },
+        "teachMode": {
+            "annex": [
+                {
+                    "createdAt": 1576649872000,
+                    "id": "da4812ee-f794-4395-aaf5-58df3f395167",
+                    "name": "AGM.pdf",
+                    "path": "http://127.0.0.1:80/course_wt/annex/da4812ee-f794-4395-aaf5-58df3f395167.pdf",
+                    "quote": 0,
+                    "size": "522.53 KB",
+                    "suffix": "pdf",
+                    "trainingId": "381e851e-92ee-444a-8326-38dec919eeaa",
+                    "trainingPattern": "TEACHING",
+                    "type": "ANNEX",
+                    "updatedAt": 1576649872000
+                }
+            ],
+            "descriptions": [
+                {
+                    "name": "实训目的",
+                    "value": ""
+                },
+                {
+                    "name": "实训内容",
+                    "value": ""
+                }
+            ],
+            "guide": [
+                {
+                    "createdAt": 1574911878000,
+                    "id": "56167e09-992e-46dc-b12d-f631e89e5d05",
+                    "name": "18. 更换票箱-实训指导书.pdf",
+                    "path": "http://127.0.0.1:80/course_wt/guide/56167e09-992e-46dc-b12d-f631e89e5d05.pdf",
+                    "quote": 0,
+                    "size": "440.19 KB",
+                    "suffix": "pdf",
+                    "trainingId": "381e851e-92ee-444a-8326-38dec919eeaa",
+                    "trainingPattern": "TEACHING",
+                    "type": "GUIDE",
+                    "updatedAt": 1574911878000
+                }
+            ]
+        }
+    }
+}
